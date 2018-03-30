@@ -57,7 +57,7 @@
               <!-- sidebar menu start-->
               <ul class="sidebar-menu" id="nav-accordion">
 
-              	  <p class="centered"><a href="profile.html"><img src="assets/img/ui-sam.jpg" class="img-circle" width="60"></a></p>
+              	  <p class="centered"><a href="profile.html"><img src="{% static 'img/ui-sam.jpg' %}" class="img-circle" width="60"></a></p>
 
                   <div id="profileImage"></div>
 
@@ -182,14 +182,14 @@
 
 
     <!--common script for all pages-->
-    <script src="assets/js/common-scripts.js"></script>
+    <script src="{% static 'js/common-scripts.js' %}"></script>
 
-    <script type="text/javascript" src="assets/js/gritter/js/jquery.gritter.js"></script>
-    <script type="text/javascript" src="assets/js/gritter-conf.js"></script>
+    <script type="text/javascript" src="{% static 'js/gritter/js/jquery.gritter.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/gritter-conf.js' %}"></script>
 
     <!--script for this page-->
-    <script src="assets/js/sparkline-chart.js"></script>
-	<script src="assets/js/zabuto_calendar.js"></script>
+    <script src="{% static 'js/sparkline-chart.js' %}"></script>
+	<script src="{% static 'js/zabuto_calendar.js' %}"></script>
 	<script type="application/javascript">
         $(document).ready(function () {
             $("#date-popover").popover({html: true, trigger: "manual"});
