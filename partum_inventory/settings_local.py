@@ -5,9 +5,9 @@ for security purposes
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'partum_inventory',
+        'NAME': 'pis_db',
         'USER': 'root',
-        'PASSWORD': '123456'
+        'PASSWORD': 'asfandyar'
     }
 }
 
