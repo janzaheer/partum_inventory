@@ -18,4 +18,4 @@
 # testing related files
 .coverage
 
-/partum_hms/settings_local.py
+/partum_inventory/settings_local.py
