@@ -252,27 +252,6 @@ ul.top-menu > li > .logout {
     padding-bottom: 10px;
 }
 
-/*LEFT NAVIGATION ICON*/
-.dcjq-icon {
-    height:17px;
-    width:17px;
-    display:inline-block;
-    background: url("../img/nav-expand.png") no-repeat top;
-    border-radius:3px;
-    -moz-border-radius:3px;
-    -webkit-border-radius:3px;
-    position:absolute;
-    right:10px;
-    top:15px;
-}
-.active .dcjq-icon {
-    background: url("../img/nav-expand.png") no-repeat bottom;
-    border-radius:3px;
-    -moz-border-radius:3px;
-    -webkit-border-radius:3px;
-}
-/*---*/
-
 .nav-collapse.collapse {
     display: inline;
 }
@@ -506,13 +485,6 @@ ul.top-menu > li > a:hover, ul.top-menu > li > a:focus {
     -webkit-border-radius: 4px;
 }
 
-@media screen and (-webkit-min-device-pixel-ratio:0) {
-    /* Safari and Chrome */
-    .dropdown-menu.extended  {
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.176) !important;
-    };
-    }
-
 .dropdown-menu.extended li p {
     background-color: #F1F2F7;
     color: #666666;
@@ -692,15 +664,6 @@ ul.top-menu > li > a:hover, ul.top-menu > li > a:focus {
 .top-nav ul.top-menu > li > a:hover .caret {
     border-bottom-color: #000;
     border-top-color: #000;
-}
-
-.log-arrow-up {
-    background: url("../img/arrow-up.png") no-repeat;
-    width: 20px;
-    height: 11px;
-    position: absolute;
-    right: 20px;
-    top: -10px;
 }
 
 /*----*/
@@ -1937,7 +1900,7 @@ label {
 	margin: 0;
 	padding: 25px 20px;
 	text-align: center;
-	background: #68dff0;
+	background: #295D84;
 	border-radius: 5px 5px 0 0;
 	-webkit-border-radius: 5px 5px 0 0;
 	color: #fff;
@@ -2102,7 +2065,7 @@ label {
     /* Safari and Chrome */
     .panel-footer.revenue-foot {
         margin-bottom: -4px;
-    };
+    }
     }
 
 
