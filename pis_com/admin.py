@@ -1,41 +1,30 @@
 from __future__ import unicode_literals
 from django.contrib import admin
 
-from pis_retailer.models import Retailer
-from pis_retailer.models import RetailerUser
+from pis_com.models import UserProfile
 
 
-class RetailerAdmin(admin.ModelAdmin):
-    list_display = ('__unicode__', 'created_at', 'updated_at')
-    search_fields = ('name', 'slug',)
-
-
-class RetailerUserAdmin(admin.ModelAdmin):
+class UserProfileAdmin(admin.ModelAdmin):
     list_display = (
-        '__unicode__', 'retailer', 'email', 'phone_no', 'mobile_no',)
+        '__unicode__', 'first_name', 'last_name', 'phone_no',
+        'email', 'user_type'
+    )
     search_fields = (
         'user__username', 'user__first_name', 'user__last_name',
-        'user__email', 'user__user_profile__phone_no',
-        'user__user_profile__mobile_no', 'retailer__name'
+        'user__email', 'phone_no'
     )
-    raw_id_fields = ('retailer', 'user')
 
     @staticmethod
-    def retailer(obj):
-        return obj.retailer.name
+    def first_name(obj):
+        return obj.user.first_name
+
+    @staticmethod
+    def last_name(obj):
+        return obj.user.last_name
 
     @staticmethod
     def email(obj):
         return obj.user.email
 
-    @staticmethod
-    def phone_no(obj):
-        return obj.user.user_profile.phone_no
 
-    @staticmethod
-    def mobile_no(obj):
-        return obj.user.user_profile.mobile_no
-
-
-admin.site.register(Retailer, RetailerAdmin)
-admin.site.register(RetailerUser, RetailerUserAdmin)
+admin.site.register(UserProfile, UserProfileAdmin)
