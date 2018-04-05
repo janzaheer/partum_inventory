@@ -1,12 +1,5 @@
-(function($){
-	"use strict";
-
-$(document).ready(function(){
-  var firstName = "Hasnan";
-  var lastName = "Amin";
-  var abc = firstName.charAt(0) + lastName.charAt(0);
-  
-  var profileImage = $('#profileImage').text(abc);
+$(function(){
+  var profile_name = $('.profile_name').text().split(" ");
+  var image_text = profile_name[0].charAt(0) + profile_name[1].charAt(0);
+  $('#profileImage').text(image_text);
 });
-
-})(jQuery);
