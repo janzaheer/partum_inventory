@@ -58,20 +58,20 @@
               	  <h5 class="centered profile_name">{{ request.user.retailer_user.retailer.name|title }}</h5>
 
                   <li class="mt">
-                      <a class="active" href="{% url 'index' %}">
+                      <a class="{% block menu_dashboard %}{% endblock %}" href="{% url 'index' %}">
                           <i class="fa fa-dashboard"></i>
                           <span>Dashboard</span>
                       </a>
                   </li>
                   <li class="sub-menu">
-                      <a href="javascript:;" >
+                      <a class="{% block menu_product %}{% endblock %}" href="javascript:;" >
                           <i class="fa fa-desktop"></i>
                           <span>Products</span>
                       </a>
                       <ul class="sub">
-                          <li><a  href="general.html">Add Items</a></li>
-                          <li><a  href="buttons.html">List Items</a></li>
-                          <li><a  href="panels.html">Purchased Items</a></li>
+                          <li class="{% block submenu_add_product %}{% endblock %}"><a  href="#">Add Items</a></li>
+                          <li class="{% block submenu_list_items %}{% endblock %}"><a  href="{% url 'product:items_list' %}">List Items</a></li>
+                          <li><a  href="#">Purchased Items</a></li>
                       </ul>
                   </li>
               </ul>
@@ -84,18 +84,6 @@
               {% block content %}{% endblock %}
           </section>
       </section>
-
-      <!--main content end-->
-      <!--footer start-->
-      <footer class="site-footer">
-          <div class="text-center">
-              2014 - Alvarez.is
-              <a href="index.html#" class="go-top">
-                  <i class="fa fa-angle-up"></i>
-              </a>
-          </div>
-      </footer>
-      <!--footer end-->
   </section>
 
     <!-- js placed at the end of the document so the pages load faster -->
