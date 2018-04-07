@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block submenu_add_product %}active{% endblock %}
+{% block menu_product %}active{% endblock %}
+{% block content %}
+    <div class="col-md-6">
+        <br>
+        <a href="{% url 'product:items_list' %}"><button type="button" class="btn btn-primary" style="float: left">Back to Product List</button></a>
+        <br><br><br>
+        <div class="content-panel">
+            <h3 class="text-center">{{ request.user.retailer_user.retailer.name }} Product</h3>
+            <div class="panel-body">
+                <form class="form-horizontal" action="{% url 'product:add_product' retailer_id=request.user.retailer_user.retailer.id %}" method="post" >
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            {% csrf_token %}
+                            <input type="text" class="form-control product_name" name="name" placeholder="Product Name"><br>
+                            <input type="text" class="form-control brand_name" name="brand_name" placeholder="Brand Name"><br>
+                            <input type="text" class="form-control retail_price" name="retail_price" placeholder="Retail Price"><br>
+                            <input type="text" class="form-control consumer_price" name="consumer_price" placeholder="Consumer Price"><br>
+                            <input type="text" class="form-control available_item" name="available_item" placeholder="Available Item"><br>
+                            <input type="text" class="form-control purchased_item" name="purchased_item" placeholder="Purchased Item"><br>
+                            <input type="hidden" name="retailer" value="{{ request.user.retailer_user.retailer.id }}">
+                            <button type="submit" class="btn btn-primary" style="float: right">Save Product</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

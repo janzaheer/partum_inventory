@@ -19,7 +19,8 @@ from django.contrib import admin
 from django.conf.urls.static import static
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^', include('pis_com.urls'))
+    url(r'^', include('pis_com.urls')),
+    url(r'^product/', include('pis_product.urls', namespace='product')),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

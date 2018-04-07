@@ -12,6 +12,9 @@ class Product(models.Model):
         related_name='retailer_product'
     )
 
+    def __unicode__(self):
+        return self.name
+
 
 class ProductDetail(DatedModel):
     product = models.ForeignKey(
@@ -25,6 +28,9 @@ class ProductDetail(DatedModel):
     )
     available_item = models.IntegerField(default=1)
     purchased_item = models.IntegerField(default=0)
+
+    def __unicode__(self):
+        return self.product.name
 
 
 class PurchasedProduct(DatedModel):
@@ -40,3 +46,6 @@ class PurchasedProduct(DatedModel):
     purchase_amount = models.DecimalField(
         max_digits=8, decimal_places=2, default=0
     )
+
+    def __unicode__(self):
+        return self.product.name
