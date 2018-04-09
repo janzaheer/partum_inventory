@@ -4,6 +4,7 @@ from pis_product.views import ProductItemList
 from pis_product.views import ProductDetailList
 from pis_product.views import AddNewProduct
 from pis_product.views import AddProductItems
+from pis_product.views import PurchasedItems
 
 
 urlpatterns = [
@@ -22,5 +23,9 @@ urlpatterns = [
         r'^item/(?P<product_id>\d+)/add/$',
         AddProductItems.as_view(),
         name='add_product_items'
+    ),
+    url(
+        r'^items/purchased/$', PurchasedItems.as_view(),
+        name='purchased_items'
     ),
 ]
