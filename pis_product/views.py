@@ -8,7 +8,7 @@ from django.core.urlresolvers import reverse, reverse_lazy
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 
-from pis_product.models import ProductDetail
+from pis_product.models import PurchasedProduct
 from pis_product.forms import ProductForm, ProductDetailsForm
 
 
@@ -125,4 +125,20 @@ class AddProductItems(FormView):
         context.update({
             'product': product
         })
+        return context
+
+
+class PurchasedItems(TemplateView):
+    template_name = 'products/purchased_items.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(PurchasedItems, self).get_context_data(**kwargs)
+        purchased_product = PurchasedProduct.objects.filter(
+            product__retailer=self.request.user.retailer_user.retailer
+        )
+
+        context.update({
+            'purchased_products': purchased_product
+        })
+
         return context
