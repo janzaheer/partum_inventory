@@ -22,10 +22,7 @@
                     <tr>
                         <th><i class="fa fa-bullhorn"></i> Item Name</th>
                         <th class="hidden-phone"><i class="fa fa-question-circle"></i> Brand Name</th>
-                        <th><i class="fa fa-bookmark"></i> Profits</th>
-                        <th><i class=" fa fa-edit"></i> Total Amount</th>
-                        <th><i class=" fa fa-edit"></i> Total Discounts</th>
-                        <th><i class=" fa fa-edit"></i> Available Items</th>
+                        <th><i class=" fa fa-bookmark"></i> Available Items</th>
                         <th><i class=" fa fa-edit"></i> Purchased Items</th>
                         <th>Actions</th>
                     </tr>
@@ -35,11 +32,8 @@
                         <tr>
                             <td><a href="#">{{ item.name}}</a></td>
                             <td class="#">{{ item.brand_name }}</td>
-                            <td>5003</td>
-                            <td>89245</td>
-                            <td>550</td>
-                            <td>89</td>
-                            <td>43</td>
+                            <td>{{ item.product_available_items }}</td>
+                            <td>{{ item.product_purchased_items }}</td>
                             <td>
                                 <a href="{% url 'product:add_product_items' product_id=item.id %}"><button class="btn btn-primary btn-xs"><i class="fa fa-plus"></i></button></a>
                                 <a href="{% url 'product:item_details' pk=item.id %}"><button class="btn btn-success btn-xs"><i class="fa fa-eye"></i></button></a>
