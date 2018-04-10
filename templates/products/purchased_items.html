@@ -46,9 +46,9 @@
     </div>
     <script>
         $(document).ready(function(){
-            $(".search-patient").on("keyup", function() {
+            $(".search-purchased").on("keyup", function() {
                 var value = $(this).val().toLowerCase();
-                $(".patient-table-body tr").filter(function() {
+                $(".purchased-table-body tr").filter(function() {
                     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
                 });
             });
