@@ -13,7 +13,7 @@ from pis_product.forms import ProductForm, ProductDetailsForm
 
 
 class ProductItemList(TemplateView):
-    template_name = 'products/item_list.html'
+    template_name = 'products/product_list.html'
 
     def dispatch(self, request, *args, **kwargs):
         if not self.request.user.is_authenticated():
