@@ -25,6 +25,7 @@
     <script src="{% static 'js/chart-master/Chart.js' %}"></script>
 
     <link href="{% static 'css/profileImage.css' %}" rel="stylesheet" type="text/css"/>
+    <script src="{% static 'js/jquery-3.3.1.js' %}"></script>
   </head>
 
   <body>
@@ -69,8 +70,8 @@
                           <span>Products</span>
                       </a>
                       <ul class="sub">
-                          <li class="{% block submenu_add_product %}{% endblock %}"><a  href="{% url 'product:add_product' retailer_id=request.user.retailer_user.retailer.id %}">Add Items</a></li>
-                          <li class="{% block submenu_list_items %}{% endblock %}"><a  href="{% url 'product:items_list' %}">List Items</a></li>
+                          <li class="{% block submenu_add_product %}{% endblock %}"><a  href="{% url 'product:add_product' retailer_id=request.user.retailer_user.retailer.id %}">Add Product</a></li>
+                          <li class="{% block submenu_list_items %}{% endblock %}"><a  href="{% url 'product:items_list' %}">List Products</a></li>
                           <li class="{% block submenu_purchased_items %}{% endblock %}"><a  href="{% url 'product:purchased_items' %}">Purchased Items</a></li>
                       </ul>
                   </li>
