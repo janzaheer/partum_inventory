@@ -37,6 +37,10 @@ class SalesHistory(DatedModel):
         max_digits=8, decimal_places=2, default=0, blank=True, null=True
     )
 
+    remaining_payment = models.DecimalField(
+        max_digits=8, decimal_places=2, default=0, blank=True, null=True
+    )
+
     discount = models.DecimalField(
         max_digits=8, decimal_places=2, default=0, blank=True, null=True
     )
