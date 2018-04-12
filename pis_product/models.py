@@ -48,16 +48,13 @@ class PurchasedProduct(DatedModel):
         Product, related_name='purchased_product'
     )
     quantity = models.DecimalField(
-        max_digits=8, decimal_places=2, default=1
-    )
-    manual_discount = models.DecimalField(
-        max_digits=8, decimal_places=2, default=0
+        max_digits=8, decimal_places=2, default=1, blank=True, null=True
     )
     discount_percentage = models.DecimalField(
-        max_digits=8, decimal_places=2, default=0
+        max_digits=8, decimal_places=2, default=0, blank=True, null=True
     )
     purchase_amount = models.DecimalField(
-        max_digits=8, decimal_places=2, default=0
+        max_digits=8, decimal_places=2, default=0, blank=True, null=True
     )
 
     def __unicode__(self):
