@@ -47,6 +47,9 @@ class PurchasedProduct(DatedModel):
     product = models.ForeignKey(
         Product, related_name='purchased_product'
     )
+    quantity = models.DecimalField(
+        max_digits=8, decimal_places=2, default=1
+    )
     manual_discount = models.DecimalField(
         max_digits=8, decimal_places=2, default=0
     )
