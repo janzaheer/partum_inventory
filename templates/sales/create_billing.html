@@ -70,13 +70,6 @@
                                     <a id="addRow" href="javascript:;" title="Add Item" class="btn btn-primary">Add Item</a>
                                 </td>
                             </tr>
-                            <!-- Here should be the item row -->
-                            <!--<tr class="item-row">
-                                <td><input class="form-control item" placeholder="Item" type="text"></td>
-                                <td><input class="form-control price" placeholder="Price" type="text"></td>
-                                <td><input class="form-control qty" placeholder="Quantity" type="text"></td>
-                                <td><span class="total">0.00</span></td>
-                            </tr>-->
                             <tr>
                                 <td></td>
                                 <td></td>
@@ -108,6 +101,7 @@
                             </tbody>
                         </table>
                     </div>
+                    <a id="create-invoice" href="javascript:;" title="Create Invoice" class="btn btn-primary pull-right">Create Invoice</a>
                 </div>
             </div>
         </div>
@@ -140,7 +134,42 @@
            $('.invoice-item').live('focusout', function(){
                 var item_price = $(this).parent().parent().find("option[value='" + $(this).val() + "']").data('price');
                 $(this).parent().parent().parent().find('.price').val(item_price);
-            });
+           });
+
+           $('#create-invoice').live('click', function () {
+               var customer_name = $('.customer_name').val();
+               var customer_phone = $('.customer_phone').val();
+               var items = [];
+                for (var i=1; i<$('.item-row').length; i+=1) {
+                    var products = {};
+                    products['item'] = $('.item-row').eq(i).find('#invoice-item').val();
+                    products['price'] = $('.item-row').eq(i).find('.price').val();
+                    products['qty'] = $('.item-row').eq(i).find('.qty').val();
+                    products['perdiscount'] = $('.item-row').eq(i).find('.perdiscount').val();
+                    products['total'] = $('.item-row').eq(i).find('.total').text();
+                    items.push(products);
+                }
+                var sub_total = $('#subtotal').text();
+                var discount = $('#discount').val();
+                var shipping = $('#shipping').val();
+                var grand_total = $('#grandTotal').text();
+                var totalQty = $('#totalQty').text();
+
+                $.post("{% url 'sales:create_invoice' %}", {
+                        customer_name: customer_name,
+                        customer_phone: customer_phone,
+                        sub_total: sub_total,
+                        discount: discount,
+                        shipping: shipping,
+                        grand_total: grand_total,
+                        totalQty: totalQty,
+                        items: JSON.stringify(items)
+                    }, function (key, result) {
+                        console.log('API working fine');
+                    }
+                )
+           })
+
         });
     </script>
 
