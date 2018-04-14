@@ -1,104 +1,7 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block menu_dashboard %}active{% endblock %}
 {% block content %}
-    <div class="row">
-        <div class="col-lg-9 main-chart">
-
-        <div class="row">
-            <!-- TWITTER PANEL -->
-            <div class="col-md-4 mb">
-                <div class="darkblue-panel pn">
-                    <div class="darkblue-header">
-                        <h5>Total No. of Patients</h5>
-                    </div>
-                    <canvas id="serverstatus02" height="120" width="120"></canvas>
-                    <script>
-                        var doughnutData = [
-                            {
-                                value: 60,
-                                color:"#68dff0"
-                            },
-                            {
-                                value : 40,
-                                color : "#444c57"
-                            }
-                        ];
-                        var myDoughnut = new Chart(document.getElementById("serverstatus02").getContext("2d")).Doughnut(doughnutData);
-                    </script>
-                    <p>June 17, 2014</p>
-                    <footer>
-                        <div class="pull-left">
-                            <h5><i class="fa fa-hdd-o"></i> 576 Patient</h5>
-                        </div>
-                        <div class="pull-right">
-                            <h5>Last Month</h5>
-                        </div>
-                    </footer>
-                </div><! -- /darkblue panel -->
-            </div><!-- /col-md-4 -->
-
-            <div class="col-md-4 mb">
-                <div class="darkblue-panel pn">
-                    <div class="darkblue-header">
-                        <h5>No. of Patients last Month</h5>
-                    </div>
-                    <canvas id="serverstatus03" height="120" width="120"></canvas>
-                    <script>
-                        var doughnutData = [
-                            {
-                                value: 45,
-                                color:"#68dff0"
-                            },
-                            {
-                                value : 55,
-                                color : "#444c57"
-                            }
-                        ];
-                        var myDoughnut = new Chart(document.getElementById("serverstatus03").getContext("2d")).Doughnut(doughnutData);
-                    </script>
-                    <p>March 01, 2018</p>
-                    <footer>
-                        <div class="pull-left">
-                            <h5><i class="fa fa-hdd-o"></i> 169 Patient</h5>
-                        </div>
-                        <div class="pull-right">
-                            <h5>Last Month</h5>
-                        </div>
-                    </footer>
-                </div><! -- /darkblue panel -->
-            </div><!-- /col-md-4 -->
-
-            <div class="col-md-4 mb">
-                <div class="darkblue-panel pn">
-                    <div class="darkblue-header">
-                        <h5>No. of Patients this Month</h5>
-                    </div>
-                    <canvas id="serverstatus04" height="120" width="120"></canvas>
-                    <script>
-                        var doughnutData = [
-                            {
-                                value: 30,
-                                color:"#68dff0"
-                            },
-                            {
-                                value : 70,
-                                color : "#444c57"
-                            }
-                        ];
-                        var myDoughnut = new Chart(document.getElementById("serverstatus04").getContext("2d")).Doughnut(doughnutData);
-                    </script>
-                    <p>April 01, 2018</p>
-                    <footer>
-                        <div class="pull-left">
-                            <h5><i class="fa fa-hdd-o"></i> 13 Patient</h5>
-                        </div>
-                        <div class="pull-right">
-                            <h5>This Month</h5>
-                        </div>
-                    </footer>
-                </div>
-            </div>
-        </div>
 
         <div class="row mt">
             <!-- SERVER STATUS PANELS -->
@@ -186,69 +89,211 @@
         </div>
 
         <div class="row mt">
-            <!--CUSTOM CHART START -->
-            <div class="border-head">
-                <h3>PROFITS PER MONTH</h3>
-            </div>
-            <div class="custom-bar-chart">
-                <ul class="y-axis">
-                    <li><span>10.000</span></li>
-                    <li><span>8.000</span></li>
-                    <li><span>6.000</span></li>
-                    <li><span>4.000</span></li>
-                    <li><span>2.000</span></li>
-                    <li><span>0</span></li>
-                </ul>
-                <div class="bar">
-                    <div class="title">JAN</div>
-                    <div class="value tooltips" data-original-title="8.500" data-toggle="tooltip" data-placement="top">85%</div>
-                </div>
-                <div class="bar ">
-                    <div class="title">FEB</div>
-                    <div class="value tooltips" data-original-title="5.000" data-toggle="tooltip" data-placement="top">50%</div>
-                </div>
-                <div class="bar ">
-                    <div class="title">MAR</div>
-                    <div class="value tooltips" data-original-title="6.000" data-toggle="tooltip" data-placement="top">60%</div>
-                </div>
-                <div class="bar ">
-                    <div class="title">APR</div>
-                    <div class="value tooltips" data-original-title="4.500" data-toggle="tooltip" data-placement="top">45%</div>
-                </div>
-                <div class="bar">
-                    <div class="title">MAY</div>
-                    <div class="value tooltips" data-original-title="3.200" data-toggle="tooltip" data-placement="top">32%</div>
-                </div>
-                <div class="bar ">
-                    <div class="title">JUN</div>
-                    <div class="value tooltips" data-original-title="6.200" data-toggle="tooltip" data-placement="top">62%</div>
-                </div>
-                <div class="bar">
-                    <div class="title">JUL</div>
-                    <div class="value tooltips" data-original-title="7.500" data-toggle="tooltip" data-placement="top">75%</div>
-                </div>
-            </div>
-            <!--custom chart end-->
-        </div><!-- /row -->
 
-    </div><!-- /col-lg-9 END SECTION MIDDLE -->
-        <div class="col-lg-3 ds">
-            <div id="calendar" class="mb">
-                <div class="panel green-panel no-margin">
-                    <div class="panel-body">
-                        <div id="date-popover" class="popover top" style="cursor: pointer; disadding: block; margin-left: 33%; margin-top: -50px; width: 175px;">
-                            <div class="arrow"></div>
-                            <h3 class="popover-title" style="disadding: none;"></h3>
-                            <div id="date-popover-content" class="popover-content"></div>
-                        </div>
-                        <div id="my-calendar"></div>
-                    </div>
-                </div>
-            </div>
+            <div class="col-md-8 col-sm-8 mb">
 
+                <div id="graph01" style="min-width: 310px; height: 400px; margin: 0 auto "></div>
+
+                </div>
+
+            <div class="col-md-4 col-sm-4 mb">
+                <div class="content-panel" style="height:400px; overflow: auto;">
+
+                    <table class="table table-striped table-advance table-hover item-table">
+                        <thead>
+                            <tr>
+                                <th><i class="fa fa-bullhorn"></i> Item Name</th>
+                                <th><i class="fa fa-question-circle"></i> Brand Name</th>
+                            </tr>
+                        </thead>
+                        <tbody class="patient-table-body">
+                            <tr>
+                                <td>January</td>
+                                <td>12345</td>
+                            </tr>
+                            <tr>
+                                <td>January</td>
+                                <td>12345</td>
+                            </tr>
+                            <tr>
+                                <td>January</td>
+                                <td>12345</td>
+                            </tr>
+                            <tr>
+                                <td>January</td>
+                                <td>12345</td>
+                            </tr>
+                            <tr>
+                                <td>January</td>
+                                <td>12345</td>
+                            </tr>
+                        <tr>
+                                <td>January</td>
+                                <td>12345</td>
+                            </tr><tr>
+                                <td>January</td>
+                                <td>12345</td>
+                            </tr><tr>
+                                <td>January</td>
+                                <td>12345</td>
+                            </tr><tr>
+                                <td>January</td>
+                                <td>12345</td>
+                            </tr><tr>
+                                <td>January</td>
+                                <td>12345</td>
+                            </tr><tr>
+                                <td>January</td>
+                                <td>12345</td>
+                            </tr><tr>
+                                <td>January</td>
+                                <td>12345</td>
+                            </tr><tr>
+                                <td>January</td>
+                                <td>12345</td>
+                            </tr><tr>
+                                <td>January</td>
+                                <td>12345</td>
+                            </tr><tr>
+                                <td>January</td>
+                                <td>12345</td>
+                            </tr><tr>
+                                <td>January</td>
+                                <td>12345</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+              </div><!-- /col-lg-9 END SECTION MIDDLE -->
+            </div>
+    </div>
+</div>
+
+    <div class="row mt">
+        <div class="col-md-8 col-sm-8 mb">
+        <div id="graph2" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
         </div>
+        <div class="col-md-4 col-sm-4 mb">
+                <div class="content-panel" style="height:400px; overflow: auto;">
+                    <table class="table table-striped table-advance table-hover item-table">
+                        <thead>
+                            <tr>
+                                <th><i class="fa fa-bullhorn"></i> Item Name</th>
+                                <th><i class="fa fa-question-circle"></i> Brand Name</th>
+                            </tr>
+                        </thead>
+                        <tbody class="patient-table-body">
+                            <tr>
+                                <td>January</td>
+                                <td>12345</td>
+                            </tr>
+                            <tr>
+                                <td>January</td>
+                                <td>12345</td>
+                            </tr>
+                            <tr>
+                                <td>January</td>
+                                <td>12345</td>
+                            </tr>
+                            <tr>
+                                <td>January</td>
+                                <td>12345</td>
+                            </tr> <tr>
+                                <td>January</td>
+                                <td>12345</td>
+                            </tr> <tr>
+                                <td>January</td>
+                                <td>12345</td>
+                            </tr> <tr>
+                                <td>January</td>
+                                <td>12345</td>
+                            </tr> <tr>
+                                <td>January</td>
+                                <td>12345</td>
+                            </tr> <tr>
+                                <td>January</td>
+                                <td>12345</td>
+                            </tr> <tr>
+                                <td>January</td>
+                                <td>12345</td>
+                            </tr> <tr>
+                                <td>January</td>
+                                <td>12345</td>
+                            </tr> <tr>
+                                <td>January</td>
+                                <td>12345</td>
+                            </tr> <tr>
+                                <td>January</td>
+                                <td>12345</td>
+                            </tr>
+                            <tr>
+                                <td>January</td>
+                                <td>12345</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+              </div><!-- /col-lg-9 END SECTION MIDDLE -->
+            </div>
     </div>
 
+<div class="row mt">
+        <div class="col-md-8 col-sm-8 mb">
+        <div id="graph3" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+        </div>
 
-
+    <div class="col-md-4 col-sm-4 mb">
+                <div class="content-panel" style="height:400px; overflow: auto;">
+                    <table class="table table-striped table-advance table-hover item-table">
+                        <thead>
+                            <tr>
+                                <th><i class="fa fa-bullhorn"></i> Item Name</th>
+                                <th><i class="fa fa-question-circle"></i> Brand Name</th>
+                            </tr>
+                        </thead>
+                        <tbody class="patient-table-body">
+                            <tr>
+                                <td>January</td>
+                                <td>12345</td>
+                            </tr>
+                            <tr>
+                                <td>January</td>
+                                <td>12345</td>
+                            </tr>
+                            <tr>
+                                <td>January</td>
+                                <td>12345</td>
+                            </tr>
+                            <tr>
+                                <td>January</td>
+                                <td>12345</td>
+                            </tr> <tr>
+                                <td>January</td>
+                                <td>12345</td>
+                            </tr> <tr>
+                                <td>January</td>
+                                <td>12345</td>
+                            </tr> <tr>
+                                <td>January</td>
+                                <td>12345</td>
+                            </tr> <tr>
+                                <td>January</td>
+                                <td>12345</td>
+                            </tr> <tr>
+                                <td>January</td>
+                                <td>12345</td>
+                            </tr>
+                            <tr>
+                                <td>January</td>
+                                <td>12345</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+              </div><!-- /col-lg-9 END SECTION MIDDLE -->
+            </div>
+    </div>
+    <script src="{% static 'js/graph3.js' %}"></script>
+    <script src="{% static 'js/graph2.js' %}"></script>
+     <script src="{%static   'js/graph1.js' %}"></script>
 {% endblock %}
