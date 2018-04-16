@@ -1,22 +1,60 @@
- var chart = Highcharts.chart('graph01', {
 
+Highcharts.chart('graph01', {
+    chart: {
+        type: 'area'
+    },
     title: {
-        text: 'Chart.update'
+        text: 'Partum Inventory Graph on Daily bases'
     },
-
     subtitle: {
-        text: 'Plain'
+        text: 'Partum Inventory'
     },
-
     xAxis: {
-        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        categories: ['1750', '1800', '1850', '1900', '1950', '1999', '2050'],
+        tickmarkPlacement: 'on',
+        title: {
+            enabled: false
+        }
     },
-
+    yAxis: {
+        title: {
+            text: 'Billions'
+        },
+        labels: {
+            formatter: function () {
+                return this.value / 1000;
+            }
+        }
+    },
+    tooltip: {
+        split: true,
+        valueSuffix: ' millions'
+    },
+    plotOptions: {
+        area: {
+            stacking: 'normal',
+            lineColor: '#666666',
+            lineWidth: 1,
+            marker: {
+                lineWidth: 1,
+                lineColor: '#666666'
+            }
+        }
+    },
     series: [{
-        type: 'column',
-        colorByPoint: true,
-        data: [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4],
-        showInLegend: false
+        name: 'Asia',
+        data: [502, 635, 809, 947, 1402, 3634, 5268]
+    }, {
+        name: 'Africa',
+        data: [106, 107, 111, 133, 221, 767, 1766]
+    }, {
+        name: 'Europe',
+        data: [163, 203, 276, 408, 547, 729, 628]
+    }, {
+        name: 'America',
+        data: [18, 31, 54, 156, 339, 818, 1201]
+    }, {
+        name: 'Oceania',
+        data: [2, 2, 2, 6, 13, 30, 46]
     }]
-
 });
