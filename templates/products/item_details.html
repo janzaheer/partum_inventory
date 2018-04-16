@@ -8,7 +8,7 @@
             <br><br><br>
             <div class="content-panel">
                 <table class="table table-striped table-advance table-hover item-table">
-                    <h2 class="text-center">Product List</h2>
+                    <h2 class="text-center">Product Item List</h2>
                     <div class="input-group custom-search-form col-md-4" style="left: 5px">
                         <input type="text" class="form-control search-item" placeholder="Search...">
                         <span class="input-group-btn">
@@ -29,7 +29,7 @@
                         <th>Actions</th>
                     </tr>
                     </thead>
-                    <tbody class="patient-table-body">
+                    <tbody class="item-table-body">
                     {% for detail in items_details %}
                         <tr>
                             <td><a href="#">{{ detail.product.name}}</a></td>
@@ -51,12 +51,15 @@
         </div>
         <script>
             $(document).ready(function(){
-              $(".search-patient").on("keyup", function() {
+              $(".search-item").on("keyup", function() {
                 var value = $(this).val().toLowerCase();
-                $(".patient-table-body tr").filter(function() {
+                $(".item-table-body tr").filter(function() {
                   $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
                 });
               });
             });
+
+
+
         </script>
 {% endblock %}
