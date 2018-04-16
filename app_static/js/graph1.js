@@ -10,7 +10,7 @@ Highcharts.chart('graph01', {
         text: 'Partum Inventory'
     },
     xAxis: {
-        categories: ['1750', '1800', '1850', '1900', '1950', '1999', '2050'],
+        categories: ['1750', '1800', '1850', '1900', '1950', '1999', '2050', '8000'],
         tickmarkPlacement: 'on',
         title: {
             enabled: false
