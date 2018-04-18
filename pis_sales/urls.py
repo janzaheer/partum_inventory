@@ -2,7 +2,7 @@ from django.conf.urls import url, include
 
 from pis_sales.views import (
     CreateBillingView, ProductItemAPIView, CreateInvoiceView,
-    InvoiceDetailView
+    InvoiceDetailView, InvoicesList
 )
 
 urlpatterns = [
@@ -11,6 +11,11 @@ urlpatterns = [
         r'^product/items/details/$',
         ProductItemAPIView.as_view(),
         name='product_item_api'
+    ),
+    url(
+        r'^invoice/list/$',
+        InvoicesList.as_view(),
+        name='invoice_list'
     ),
     url(
         r'^create/invoice/$',
