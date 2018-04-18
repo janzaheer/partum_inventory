@@ -142,7 +142,7 @@
                var items = [];
                 for (var i=1; i<$('.item-row').length; i+=1) {
                     var products = {};
-                    products['item'] = $('.item-row').eq(i).find('#invoice-item').val();
+                    products['item_name'] = $('.item-row').eq(i).find('#invoice-item').val();
                     products['price'] = $('.item-row').eq(i).find('.price').val();
                     products['qty'] = $('.item-row').eq(i).find('.qty').val();
                     products['perdiscount'] = $('.item-row').eq(i).find('.perdiscount').val();
