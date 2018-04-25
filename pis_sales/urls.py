@@ -22,6 +22,9 @@ urlpatterns = [
         CreateInvoiceView.as_view(),
         name='create_invoice'
     ),
-    # TODO: This url needs invoice ID to show the invoice detail
-    url(r'^invoice/detail/$', InvoiceDetailView.as_view(), name='invoice_detail'),
+    url(
+        r'^invoice/(?P<invoice_id>\d+)/detail/$',
+        InvoiceDetailView.as_view(),
+        name='invoice_detail'
+    ),
 ]
