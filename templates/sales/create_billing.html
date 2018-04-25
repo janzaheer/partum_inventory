@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block menu_sales %}active{% endblock %}
+{% block submenu_create_bill %}active{% endblock %}
+{% block content %}
+    <style>
+        .item-row th {
+            background: #eee;
+        }
+
+        .delete-btn {
+            position: relative;
+        }
+
+        .delete {
+            display: block;
+            color: #000;
+            text-decoration: none;
+            position: absolute;
+            background: #EEEEEE;
+            font-weight: bold;
+            padding: 0px 3px;
+            border: 1px solid;
+            top: -6px;
+            left: -6px;
+            font-family: Verdana;
+            font-size: 12px;
+        }
+    </style>
+
+    <div class="col-lg-10 col-md-10 col-sm-10">
+        <br>
+        <div class="content-panel" style="padding: 5px">
+            <div class="row">
+                <div class="col-xs-12 col-md-12">
+                    <div>
+                        <h2 class="text-center">Invoice</h2>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-12">
+                    <hr>
+                    <div class="row">
+                        <div class="col-xs-6 col-md-6">
+                            <div><strong>Billed To:</strong><span style="float: right">Jan 05, 2017</span></div><br>
+                            <input type="text" class="form-control customer_name" name="customer_name" placeholder="Customer Name"><br>
+                            <input type="text" class="form-control customer_phone" name="customer_phone" placeholder="Customer Phone"><br>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr class="item-row">
+                                <th>Item</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Discount %</th>
+                                <th>Total</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr id="hiderow">
+                                <td colspan="4">
+                                    <a id="addRow" href="javascript:;" title="Add Item" class="btn btn-primary">Add Item</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td class="text-right"><strong>Sub Total</strong></td>
+                                <td><span id="subtotal">0.00</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Total Quantity: </strong><span id="totalQty" style="color: red; font-weight: bold">0</span> Units</td>
+                                <td></td>
+                                <td></td>
+                                <td class="text-right"><strong>Discount</strong></td>
+                                <td><input class="form-control" id="discount" value="0" type="text"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td class="text-right"><strong>Shipping</strong></td>
+                                <td><input class="form-control" id="shipping" value="0" type="text"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td class="text-right"><strong>Grand Total</strong></td>
+                                <td><span id="grandTotal">0</span></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <a id="create-invoice" href="javascript:;" title="Create Invoice" class="btn btn-primary pull-right">Create Invoice</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script src="{% static 'js/jquery.invoice.js' %}"></script>
+    <script>
+        jQuery(document).ready(function(){
+            jQuery().invoice({
+                addRow : "#addRow",
+                delete : ".delete",
+                parentClass : ".item-row",
+
+                price : ".price",
+                qty : ".qty",
+                total : ".total",
+                totalQty: "#totalQty",
+
+                subtotal : "#subtotal",
+                discount: "#discount",
+                shipping : "#shipping",
+                grandTotal : "#grandTotal"
+            });
+
+        });
+        $(function () {
+           $('.invoice-item').live('focusout', function(){
+                var item_price = $(this).parent().parent().find("option[value='" + $(this).val() + "']").data('price');
+                $(this).parent().parent().parent().find('.price').val(item_price);
+           });
+
+           $('#create-invoice').live('click', function () {
+               var customer_name = $('.customer_name').val();
+               var customer_phone = $('.customer_phone').val();
+               var items = [];
+                for (var i=1; i<$('.item-row').length; i+=1) {
+                    var products = {};
+                    products['item_name'] = $('.item-row').eq(i).find('#invoice-item').val();
+                    products['price'] = $('.item-row').eq(i).find('.price').val();
+                    products['qty'] = $('.item-row').eq(i).find('.qty').val();
+                    products['perdiscount'] = $('.item-row').eq(i).find('.perdiscount').val();
+                    products['total'] = $('.item-row').eq(i).find('.total').text();
+                    items.push(products);
+                }
+                var sub_total = $('#subtotal').text();
+                var discount = $('#discount').val();
+                var shipping = $('#shipping').val();
+                var grand_total = $('#grandTotal').text();
+                var totalQty = $('#totalQty').text();
+
+                $.post("{% url 'sales:create_invoice' %}", {
+                        customer_name: customer_name,
+                        customer_phone: customer_phone,
+                        sub_total: sub_total,
+                        discount: discount,
+                        shipping: shipping,
+                        grand_total: grand_total,
+                        totalQty: totalQty,
+                        items: JSON.stringify(items)
+                    }, function (result, status) {
+                        window.location.href = '/sales/invoice/'+ result.invoice_id +/detail/;
+                    }
+                )
+           })
+
+        });
+    </script>
+
+{% endblock %}
