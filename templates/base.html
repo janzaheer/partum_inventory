@@ -25,6 +25,8 @@
     <script src="{% static 'js/chart-master/Chart.js' %}"></script>
 
     <link href="{% static 'css/profileImage.css' %}" rel="stylesheet" type="text/css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
+{#    <script src="{% static 'js/jquery-3.3.1.js' %}"></script>#}
 
       <script src="https://code.highcharts.com/highcharts.js"></script>
       <script src="https://code.highcharts.com/modules/exporting.js"></script>
@@ -34,7 +36,6 @@
       <script src="https://code.highcharts.com/modules/drilldown.js"></script>
       <script src="https://code.highcharts.com/highcharts.js"></script>
       <script src="https://code.highcharts.com/modules/exporting.js"></script>
-      <script src="{% static 'js/jquery-3.3.1.js' %}"></script>
   </head>
 
   <body>
@@ -84,6 +85,16 @@
                           <li class="{% block submenu_purchased_items %}{% endblock %}"><a  href="{% url 'product:purchased_items' %}">Purchased Items</a></li>
                       </ul>
                   </li>
+                  <li class="sub-menu">
+                      <a class="{% block menu_sales %}{% endblock %}" href="javascript:;" >
+                          <i class="fa fa-desktop"></i>
+                          <span>Sales</span>
+                      </a>
+                      <ul class="sub">
+                          <li class="{% block submenu_create_invoice %}{% endblock %}"><a  href="{% url 'sales:bill_create' %}">Create Invoice</a></li>
+                          <li class="{% block submenu_list_invoice %}{% endblock %}"><a  href="{% url 'sales:invoice_list' %}">Invoices</a></li>
+                      </ul>
+                  </li>
               </ul>
               <!-- sidebar menu end-->
           </div>
@@ -97,6 +108,7 @@
   </section>
 
     <!-- js placed at the end of the document so the pages load faster -->
+    {% block scripts %}
     <script src="{% static 'js/jquery.js' %}"></script>
     <script src="{% static 'js/jquery-1.8.3.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
@@ -115,6 +127,7 @@
     <!--script for this page-->
     <script src="{% static 'js/sparkline-chart.js' %}"></script>
 	<script src="{% static 'js/zabuto_calendar.js' %}"></script>
+{#    <script src="{% static 'js/jquery.invoice.js' %}"></script>#}
 	<script type="application/javascript">
         $(document).ready(function () {
             $("#date-popover").popover({html: true, trigger: "manual"});
@@ -152,6 +165,7 @@
 
     <script src="{% static 'js/javascript-functions.js' %}" type="text/javascript"></script>
 
+    {% endblock %}
 
 
 

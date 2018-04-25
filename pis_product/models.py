@@ -1,7 +1,6 @@
 from __future__ import unicode_literals
 from django.db import models
 from django.db.models import Sum
-from django.db.models.signals import post_save
 
 from pis_com.models import DatedModel
 
@@ -47,14 +46,14 @@ class PurchasedProduct(DatedModel):
     product = models.ForeignKey(
         Product, related_name='purchased_product'
     )
-    manual_discount = models.DecimalField(
-        max_digits=8, decimal_places=2, default=0
+    quantity = models.DecimalField(
+        max_digits=8, decimal_places=2, default=1, blank=True, null=True
     )
     discount_percentage = models.DecimalField(
-        max_digits=8, decimal_places=2, default=0
+        max_digits=8, decimal_places=2, default=0, blank=True, null=True
     )
     purchase_amount = models.DecimalField(
-        max_digits=8, decimal_places=2, default=0
+        max_digits=8, decimal_places=2, default=0, blank=True, null=True
     )
 
     def __unicode__(self):

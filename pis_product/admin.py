@@ -69,7 +69,7 @@ class ProductDetailAdmin(admin.ModelAdmin):
 
 class PurchasedProductAdmin(admin.ModelAdmin):
     list_display = (
-        '__unicode__', 'retailer', 'discount', 'created_at'
+        '__unicode__', 'retailer', 'discount_percentage', 'created_at'
     )
 
     search_fields = ('product__name', 'product__retailer__name')
@@ -78,10 +78,6 @@ class PurchasedProductAdmin(admin.ModelAdmin):
     @staticmethod
     def retailer(obj):
         return obj.product.retailer.name
-
-    @staticmethod
-    def discount(obj):
-        return obj.manual_discount + obj.discount_percentage
 
 
 admin.site.register(Product, ProductAdmin)

@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <style>
+        .item-row th {
+            background: #eee;
+        }
+    </style>
+
+    <div class="col-lg-10 col-md-10 col-sm-10">
+        <br>
+        <div class="content-panel" style="padding: 5px">
+            <div class="row">
+                <div class="col-xs-12 col-md-12">
+                    <div>
+                        <h2 class="text-center"><strong>Invoice</strong> <small style="float: right">Receipt No. <span style="color:red">{{ invoice.receipt_no }}</span></small></h2>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-12">
+                    <hr>
+                    <div class="row">
+                        <div class="col-xs-6 col-md-6">
+                            <strong>Billed To:</strong><span style="float: right">Jan 05, 2017</span><br>
+                            <label><strong>Customer Name:</strong></label> <span style="float: right">{{ invoice.customer_name }}</span><br>
+                            <label><strong>Customer Phone:</strong></label> <span style="float: right">{{ invoice.customer_phone }}</span><br>
+                            <br>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr class="item-row">
+                                <th>Item</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Discount %</th>
+                                <th>Total</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for item in  invoice.purchased_items.all %}
+                                <tr id="hiderow">
+                                    <td>
+                                        {{ item.product.name}}
+                                    </td>
+                                    <td>
+                                        40000
+                                    </td>
+                                    <td>
+                                        {{ item.quantity}}
+                                    </td>
+                                    <td>
+                                        {{ item.discount_percentage }} %
+                                    </td>
+                                    <td>
+                                        {{ item.purchase_amount }}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            <tr><td colspan="5" style="color:white">Need to change this properly</td></tr>
+                            <tr style="border-top: 3px solid">
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td class="text-right"><strong>Sub Total</strong></td>
+                                <td><span id="subtotal">{{ invoice.sub_total }}</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Total Quantity: </strong><span id="totalQty" style="color: red; font-weight: bold">{{ invoice.total_quantity }}</span> Units</td>
+                                <td></td>
+                                <td></td>
+                                <td class="text-right"><strong>Discount</strong></td>
+                                <td>{{ invoice.discount }}</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td class="text-right"><strong>Shipping</strong></td>
+                                <td>{{ invoice.shipping }}</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td class="text-right"><strong>Grand Total</strong></td>
+                                <td><span id="grandTotal">{{ invoice.grand_total }}</span></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
