@@ -164,8 +164,8 @@
                         grand_total: grand_total,
                         totalQty: totalQty,
                         items: JSON.stringify(items)
-                    }, function (key, result) {
-                        console.log('API working fine');
+                    }, function (result, status) {
+                        window.location.href = '/sales/invoice/'+ result.invoice_id +/detail/;
                     }
                 )
            })

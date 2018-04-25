@@ -39,7 +39,7 @@
                             <td>Paid</td>
                             <td>
                                 <a href="#"><button class="btn btn-primary btn-xs"><i class="fa fa-plus"></i></button></a>
-                                <a href="#"><button class="btn btn-success btn-xs"><i class="fa fa-eye"></i></button></a>
+                                <a href="{% url 'sales:invoice_detail' invoice_id=invoice.id %}"><button class="btn btn-success btn-xs"><i class="fa fa-eye"></i></button></a>
                                 <a href="#"><button class="btn btn-danger btn-xs"><i class="fa fa-trash-o "></i></button></a>
                             </td>
                         </tr>
