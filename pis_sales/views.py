@@ -123,13 +123,22 @@ class CreateInvoiceView(View):
 
         billing_form = BillingForm(billing_form_kwargs)
         if billing_form.is_valid():
-            billing_form.save()
+            invoice = billing_form.save()
 
-        return JsonResponse(request.POST)
+        return JsonResponse({'invoice_id': invoice.id})
 
 
 class InvoiceDetailView(TemplateView):
     template_name = 'sales/invoice_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(InvoiceDetailView, self).get_context_data(**kwargs)
+        invoice = SalesHistory.objects.get(id=self.kwargs.get('invoice_id'))
+        context.update({
+            'invoice': invoice,
+            'product_details': invoice.product_details
+        })
+        return context
 
 
 class InvoicesList(TemplateView):
