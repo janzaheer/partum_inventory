@@ -16,12 +16,10 @@ class SalesHistory(DatedModel):
         max_length=20, unique=True, blank=True, null=True
     )
 
-    customer_name = models.CharField(
-        max_length=100, blank=True, null=True
-    )
-
-    customer_phone = models.CharField(
-        max_length=20, null=True, blank=True
+    customer = models.ForeignKey(
+        'pis_sales.Customer',
+        related_name='customer_sales',
+        blank=True, null=True
     )
 
     product_details = models.TextField(
@@ -58,6 +56,15 @@ class SalesHistory(DatedModel):
 
     def __unicode__(self):
         return self.retailer.name
+
+
+class Customer(models.Model):
+    retailer = models.ForeignKey(
+        'pis_retailer.Retailer',
+        related_name='retailer_customer'
+    )
+    customer_name = models.CharField(max_length=200)
+    customer_phone = models.CharField(max_length=20, blank=True, null=True)
 
 
 # Signals Function
