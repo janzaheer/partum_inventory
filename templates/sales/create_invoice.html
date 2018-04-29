@@ -144,21 +144,21 @@
                     return;
                 }
                  var error = false;
-                console.log("part1");
+
                 if ($('.invoice-item').val() == ""){
                     $(".item-error").show();
-                    console.log("part2");
+
                    error=true;
                     $('.invoice-item').css('border-color', 'red');
                 }
 
                 else {
                     $('.invoice-item').css('border' ,'none');
-                     console.log("part3");
+
                 }
 
                 if ($('.price').val()=="") {
-                    console.log("part4");
+
                     $('.item-error').show();
                     $('.price').css('border-color', 'red');
                     error=true;
@@ -166,9 +166,9 @@
                 else {
                     $('.item-error').hide();
                     $('.price').css('border', 'none');
-                    console.log("part5");
+
                 }
-                console.log("part6");
+
                 if (error == true){
                     return;
                 }
