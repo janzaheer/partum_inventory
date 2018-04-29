@@ -6,7 +6,7 @@ from pis_sales.views import (
 )
 
 urlpatterns = [
-    url(r'^bill/create/$', CreateBillingView.as_view(), name='bill_create'),
+    url(r'^create/invoice$', CreateBillingView.as_view(), name='bill_create'),
     url(
         r'^product/items/details/$',
         ProductItemAPIView.as_view(),
