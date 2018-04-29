@@ -15,7 +15,7 @@ from pis_sales.forms import BillingForm
 
 
 class CreateBillingView(FormView):
-    template_name = 'sales/create_billing.html'
+    template_name = 'sales/create_invoice.html'
     form_class = BillingForm
 
     def get_context_data(self, **kwargs):
