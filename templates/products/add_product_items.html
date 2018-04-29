@@ -29,76 +29,69 @@
     </div>
 
 <script>
-
     $(document).ready(function(){
-    $(".product-sub-btn").on ('click', function(){
+        $(".product-sub-btn").on ('click', function(){
             var error= false;
 
-        if($('.retail_price').val () == ""){
-            $('.retail-error').show();
-            error= true;
-        }
+            if($('.retail_price').val () == ""){
+                $('.retail-error').show();
+                error= true;
+            }
             else {
-            $('.retail-error').hide();
-        }
-        if ($('.consumer_price').val() == ""){
-            $('.consumer-error').show();
-            error = true;
-        }
-        else {
-            $('.consumer-error').hide();
-        }
-        if ($('.Quantity_item').val () == ""){
-            $('.item-error').show();
-            error = true;
-        }
-        else {
-            $('.item-error').hide();
-        }
-        if (error == true) {
-         return;
-        }
+                $('.retail-error').hide();
+            }
+            if ($('.consumer_price').val() == ""){
+                $('.consumer-error').show();
+                error = true;
+            }
+            else {
+                $('.consumer-error').hide();
+            }
+            if ($('.Quantity_item').val () == ""){
+                $('.item-error').show();
+                error = true;
+            }
+            else {
+                $('.item-error').hide();
+            }
+            if (error == true) {
+                return;
+            }
 
-    });
+        });
     });
 
-        $('.retail_price').keyup (function(){
+    $('.retail_price').keyup (function(){
         $('.retail-error').hide();
-        });
-        function checkDec(el){
+    });
+
+    function checkDec(el){
         var ex = /^[0-9]+\.?[0-9]*$/;
         if(ex.test(el.value)==false){
-        el.value = el.value.substring(0,el.value.length - 1);
+            el.value = el.value.substring(0,el.value.length - 1);
         }
-        }
-        $('.consumer_price').keyup (function(){
+    }
+
+    $('.consumer_price').keyup (function(){
         $('.consumer-error').hide();
-        });
-        function checkDec(el){
+    });
+
+    function checkDec(el){
         var ex = /^[0-9]+\.?[0-9]*$/;
         if(ex.test(el.value)==false){
-        el.value = el.value.substring(0,el.value.length - 1);
+            el.value = el.value.substring(0,el.value.length - 1);
         }
-        }
-        $('.Quantity_item').keyup (function(){
+    }
+
+    $('.Quantity_item').keyup (function(){
         $('.item-error').hide();
-        });
-        function checkDec(el){
+    });
+
+    function checkDec(el){
         var ex = /^[0-9]+\.?[0-9]*$/;
         if(ex.test(el.value)==false){
-        el.value = el.value.substring(0,el.value.length - 1);
+            el.value = el.value.substring(0,el.value.length - 1);
         }
-        }
-
-
-
-    // Allow only 1 decimal point
-
+    }
 </script>
-
-
-
-
-
-
 {% endblock %}
