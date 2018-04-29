@@ -20,9 +20,9 @@
                     <hr>
                     <div class="row">
                         <div class="col-xs-6 col-md-6">
-                            <strong>Billed To:</strong><span style="float: right">Jan 05, 2017</span><br>
-                            <label><strong>Customer Name:</strong></label> <span style="float: right">{{ invoice.customer_name }}</span><br>
-                            <label><strong>Customer Phone:</strong></label> <span style="float: right">{{ invoice.customer_phone }}</span><br>
+                            <label><strong>Billed To:</strong></label><span style="float: right">{{ invoice.created_at.date }}</span><br>
+                            <label><strong>Customer Name:</strong></label> <span style="float: right">{{ invoice.customer.customer_name }}</span><br>
+                            <label><strong>Customer Phone:</strong></label> <span style="float: right">{{ invoice.customer.customer_phone }}</span><br>
                             <br>
                         </div>
                     </div>

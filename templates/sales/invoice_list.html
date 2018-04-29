@@ -31,8 +31,8 @@
                     <tbody class="invoice-table-body">
                     {% for invoice in invoices %}
                         <tr>
-                            <td><a href="#">{{ invoice.customer_name}}</a></td>
-                            <td class="#">{{ invoice.customer_phone }}</td>
+                            <td><a href="#">{{ invoice.customer.customer_name}}</a></td>
+                            <td>{{ invoice.customer.customer_phone }}</td>
                             <td>{{ invoice.receipt_no }}</td>
                             <td>{{ invoice.total_quantity }}</td>
                             <td>{{ invoice.grand_total }}</td>

@@ -44,9 +44,21 @@
 					<div class="row">
 						<div class="col-xs-6 col-md-6">
 							<div><strong>Billed To:</strong> <span style="float: right" >29 april 2018</span></div><br>
-							<span class="item-error" style="color: red; display: none"> Please Fill The Below Items....</span>
-							<input type="text" class="form-control customer_name" name="customer_name" placeholder="Customer Name"><br>
-							<input type="text" class="form-control customer_phone" name="customer_phone" placeholder="Customer Phone"><br>
+							<div class="existing-customer">
+                                <input class="form-control customer" placeholder="Customer" list="customer-list">
+                                <datalist id="customer-list">
+                                    {% for customer in customers %}
+                                        <option data-id="{{ customer.id }}" value="{{ customer.customer_name }}">
+                                    {% endfor %}
+                                </datalist><br>
+                                <a class="new-customer" style="cursor: pointer;">New Customer</a><br>
+                                <br>
+                            </div>
+                            <div id="new-customer-form" class="new-customer-form" style="display: none">
+                                <input type="text" class="form-control customer_name" name="customer_name" placeholder="Customer Name"><br>
+                                <input type="text" class="form-control customer_phone" name="customer_phone" placeholder="Customer Phone"><br>
+                                <a class="added-customer" style="cursor: pointer;">Existing Customer</a><br><br>
+                            </div>
 						</div>
 					</div>
 				</div>
@@ -195,21 +207,38 @@
                 var grand_total = $('#grandTotal').text();
                 var totalQty = total_quantity;
 
+                var customer_value = $('.customer').val();
+                var customer_id = $('#customer-list [value="' + customer_value + '"]').data('id');
+
                 $.post("{% url 'sales:create_invoice' %}", {
-                        customer_name: customer_name,
-                        customer_phone: customer_phone,
-                        sub_total: sub_total,
-                        discount: discount,
-                        shipping: shipping,
-                        grand_total: grand_total,
-                        totalQty: totalQty,
-                        items: JSON.stringify(items)
+                    customer_id: customer_id,
+                    customer_name: customer_name,
+                    customer_phone: customer_phone,
+                    sub_total: sub_total,
+                    discount: discount,
+                    shipping: shipping,
+                    grand_total: grand_total,
+                    totalQty: totalQty,
+                    items: JSON.stringify(items)
                     }, function (result, status) {
 
                         window.location.href = '/sales/invoice/'+ result.invoice_id +/detail/;
                     }
                 )
-            })
+            });
+
+            $('.new-customer').on('click', function () {
+                $('.existing-customer').hide();
+                $('.new-customer-form').show();
+                $('.customer').val('');
+           });
+
+           $('.added-customer').on('click', function () {
+                $('.existing-customer').show();
+                $('.new-customer-form').hide();
+                $('.customer_name').val('');
+                $('.customer_phone').val('');
+           });
 
         });
 

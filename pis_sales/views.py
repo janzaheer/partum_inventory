@@ -7,11 +7,13 @@ from django.db.models import Sum
 from django.http import JsonResponse, HttpResponse, Http404
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import FormView, View, TemplateView
+from django.utils import timezone
 
 from pis_product.models import Product
 from pis_sales.models import SalesHistory
 from pis_product.forms import PurchasedProductForm
 from pis_sales.forms import BillingForm
+from pis_sales.forms import CustomerForm
 
 
 class CreateBillingView(FormView):
@@ -20,9 +22,18 @@ class CreateBillingView(FormView):
 
     def get_context_data(self, **kwargs):
         context = super(CreateBillingView, self).get_context_data(**kwargs)
-        products = self.request.user.retailer_user.retailer.retailer_product.all()
+        products = (
+            self.request.user.retailer_user.retailer.
+                retailer_product.all()
+        )
+        customers = (
+            self.request.user.retailer_user.
+            retailer.retailer_customer.all()
+        )
         context.update({
-            'products': products
+            'products': products,
+            'customers': customers,
+            'present_date': timezone.now().date(),
         })
         return context
 
@@ -111,8 +122,6 @@ class CreateInvoiceView(View):
                 product_details.save()
 
         billing_form_kwargs = {
-            'customer_name': customer_name,
-            'customer_phone': customer_phone,
             'sub_total': sub_total,
             'discount': discount,
             'grand_total': grand_total,
@@ -121,6 +130,23 @@ class CreateInvoiceView(View):
             'purchased_items': purchased_items_id,
             'retailer': self.request.user.retailer_user.retailer.id,
         }
+
+        if self.request.POST.get('customer_id'):
+            billing_form_kwargs.update({
+                'customer': self.request.POST.get('customer_id')
+            })
+        else:
+            customer_form_kwargs = {
+                'customer_name': customer_name,
+                'customer_phone': customer_phone,
+                'retailer': self.request.user.retailer_user.retailer.id
+            }
+            customer_form = CustomerForm(customer_form_kwargs)
+            if customer_form.is_valid():
+                customer = customer_form.save()
+                billing_form_kwargs.update({
+                    'customer': customer.id
+                })
 
         billing_form = BillingForm(billing_form_kwargs)
         if billing_form.is_valid():
@@ -147,7 +173,7 @@ class InvoicesList(TemplateView):
 
     @staticmethod
     def get_sales_history():
-        return SalesHistory.objects.all()
+        return SalesHistory.objects.all().order_by('-created_at')
 
     def get_context_data(self, **kwargs):
         context = super(InvoicesList, self).get_context_data(**kwargs)
