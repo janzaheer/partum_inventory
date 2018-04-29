@@ -29,7 +29,7 @@ class CreateBillingView(FormView):
 
 class ProductItemAPIView(View):
     def get(self, request, *args, **kwargs):
-        print 'coming here brother -----'
+
         products = (
             self.request.user.retailer_user.retailer.
             retailer_product.all()
