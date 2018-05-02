@@ -14,7 +14,10 @@ class LoginView(FormView):
     form_class = auth_forms.AuthenticationForm
     
     def dispatch(self, request, *args, **kwargs):
+
         if self.request.user.is_authenticated():
+
+
             return HttpResponseRedirect(reverse('index'))
 
         return super(LoginView, self).dispatch(request, *args, **kwargs)
@@ -47,6 +50,20 @@ class HomePageView(TemplateView):
     def dispatch(self, request, *args, **kwargs):
         if not self.request.user.is_authenticated():
             return HttpResponseRedirect(reverse('login'))
+        else:
+
+            if self.request.user.retailer_user:
+                if (
+                    self.request.user.retailer_user.role_type ==
+                        self.request.user.retailer_user.ROLE_TYPE_SALESMAN
+                ):
+                    return HttpResponseRedirect(reverse('sales:invoice_list'))
+            if self.request.user.retailer_user:
+                if (
+                        self.request.user.retailer_user.role_type ==
+                        self.request.user.retailer_user.ROLE_TYPE_DATA_ENTRY_USER
+                ):
+                    return HttpResponseRedirect(reverse('product:items_list'))
 
         return super(
             HomePageView, self).dispatch(request, *args, **kwargs)

@@ -59,13 +59,15 @@
                     <div id="profileImage"></div>
                   {% endif %}
               	  <h5 class="centered profile_name">{{ request.user.retailer_user.retailer.name|title }}</h5>
-
+                   {% if request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_OWNER or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_VIEW_ACCOUNT %}
                   <li class="mt">
                       <a class="{% block menu_dashboard %}{% endblock %}" href="{% url 'index' %}">
                           <i class="fa fa-dashboard"></i>
                           <span>Dashboard</span>
                       </a>
                   </li>
+                  {% endif %}
+                  {% if request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_DATA_ENTRY_USER or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_OWNER or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_VIEW_ACCOUNT %}
                   <li class="sub-menu">
                       <a class="{% block menu_product %}{% endblock %}" href="javascript:;" >
                           <i class="fa fa-desktop"></i>
@@ -77,6 +79,8 @@
                           <li class="{% block submenu_purchased_items %}{% endblock %}"><a  href="{% url 'product:purchased_items' %}">Purchased Items</a></li>
                       </ul>
                   </li>
+                  {% endif %}
+                  {% if request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_SALESMAN or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_OWNER or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_VIEW_ACCOUNT %}
                   <li class="sub-menu">
                       <a class="{% block menu_sales %}{% endblock %}" href="javascript:;" >
                           <i class="fa fa-desktop"></i>
@@ -87,6 +91,7 @@
                           <li class="{% block submenu_list_invoice %}{% endblock %}"><a  href="{% url 'sales:invoice_list' %}">Invoices</a></li>
                       </ul>
                   </li>
+                  {% endif %}
               </ul>
               <!-- sidebar menu end-->
           </div>
