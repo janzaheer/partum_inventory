@@ -171,7 +171,7 @@
                     {% for customer in customers %}
                         existing_customers_id.push({{ customer.id }});
                     {% endfor %}
-                    
+
                     var cus_val = $('.customer').val();
                     var cus_id = $('#customer-list [value="' + cus_val + '"]').data('id');
                     if(jQuery.inArray( cus_id, existing_customers_id ) == -1) {
@@ -199,7 +199,6 @@
                     {% for customer in customers %}
                         if ($('.customer_name').val() == '{{ customer.customer_name }}' && $('.customer_phone').val()== '{{ customer.customer_phone }}') {
                             $('.already-error').show();
-                            console.log('');
                             return;
                         }
                     {% endfor %}
@@ -262,8 +261,6 @@
                         totalQty: totalQty,
                         items: JSON.stringify(items)
                     }, function (result, status) {
-                        console.log(result);
-                        console.log(status);
                         window.location.href = '/sales/invoice/'+ result.invoice_id +/detail/;
                     }
                 )
