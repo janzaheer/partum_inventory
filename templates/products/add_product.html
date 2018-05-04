@@ -86,7 +86,6 @@
             if (error == true) {
                 return;
             } else {
-                // Call API Here
                 $.get('{% url 'retailer:retailer_products' retailer_id=request.user.retailer_user.retailer.id %}', function(data, status){
                     $.each(data.retailer_products, function(index, value){
                         if ($('.product_name').val() == value.product_name && $('.brand_name').val() == value.brand_name && {{ request.user.retailer_user.retailer.id }} == value.retailer){
