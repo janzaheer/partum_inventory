@@ -45,16 +45,18 @@
 						<div class="col-xs-6 col-md-6">
 							<div><strong>Billed To:</strong> <span style="float: right" >29 april 2018</span></div><br>
 							<div class="existing-customer">
-                                <input class="form-control customer" placeholder="Customer" list="customer-list">
+                                <span class="customer-error" style="color: red; display: none">Customer Doesn't exist please add Customer</span>
+                                <input class="form-control customer" id="customer-id" placeholder="Customer" list="customer-list" >
                                 <datalist id="customer-list">
                                     {% for customer in customers %}
-                                        <option data-id="{{ customer.id }}" value="{{ customer.customer_name }}">
+                                        <option data-id="{{ customer.id }}" value="{{ customer.customer_name }}">{{ customer.customer_phone }}</option>
                                     {% endfor %}
                                 </datalist><br>
                                 <a class="new-customer" style="cursor: pointer;">New Customer</a><br>
                                 <br>
                             </div>
                             <div id="new-customer-form" class="new-customer-form" style="display: none">
+                                <span class="already-error" style="color: red; display: none">This Customer Already exist</span>
                                 <input type="text" class="form-control customer_name" name="customer_name" placeholder="Customer Name"><br>
                                 <input type="text" class="form-control customer_phone" name="customer_phone" placeholder="Customer Phone"><br>
                                 <a class="added-customer" style="cursor: pointer;">Existing Customer</a><br><br>
@@ -81,7 +83,7 @@
 							<tr id="hiderow">
 								<td colspan="4">
 
-									<a id="addRow" href="javascript:;" title="Add Item" class="btn btn-primary">Add Item</a>
+									<a id="addRow" href="javascript:;" title="Add Item" class="btn btn-primary">Add Item</a> <span class="item-error" style="color: red; display: none">please add Item</span>
 								</td>
 							</tr>
 							<tr>
@@ -156,19 +158,61 @@
                     return;
                 }
                 var error = false;
-
-                if ($('.invoice-item').val() == ""){
+                if ($('.customer').is(":visible") == true)
+                {
+                    if ($('.customer').val() =="")
+                    {
+                        $('.customer').css('border-color', 'red');
+                        error = true;
+                    } else {
+                        $('.customer').css('border', 'none');
+                    }
+                    var existing_customers_id = [];
+                    {% for customer in customers %}
+                        existing_customers_id.push({{ customer.id }});
+                    {% endfor %}
+                    
+                    var cus_val = $('.customer').val();
+                    var cus_id = $('#customer-list [value="' + cus_val + '"]').data('id');
+                    if(jQuery.inArray( cus_id, existing_customers_id ) == -1) {
+                        $('.customer-error').show();
+                        $('.customer').css('border-color', 'red');
+                        return;
+                    } else {
+                        $('.customer-error').hide();
+                    }
+                }
+                if ($('.customer_name').is(":visible") == true) {
+                    if ($('.customer_name').val() == "") {
+                        $('.customer_name').css('border-color', 'red');
+                        error = true;
+                    }
+                    else {
+                        $('.customer_name').css('border', 'none');
+                    }
+                    if ($('.customer_phone').val() == "") {
+                        $('.customer_phone').css('border-color', 'red');
+                    }
+                    else {
+                        $('.customer_phone').css('border', 'none');
+                    }
+                    {% for customer in customers %}
+                        if ($('.customer_name').val() == '{{ customer.customer_name }}' && $('.customer_phone').val()== '{{ customer.customer_phone }}') {
+                            $('.already-error').show();
+                            console.log('');
+                            return;
+                        }
+                    {% endfor %}
+                }
+                if       ($('.invoice-item').val() == ""){
                     $(".item-error").show();
-
                     error=true;
                     $('.invoice-item').css('border-color', 'red');
                 }
-
                 else {
                     $('.invoice-item').css('border' ,'none');
 
                 }
-
                 if ($('.price').val()=="") {
 
                     $('.item-error').show();
@@ -178,9 +222,7 @@
                 else {
                     $('.item-error').hide();
                     $('.price').css('border', 'none');
-
                 }
-
                 if (error == true){
                     return;
                 }
@@ -200,7 +242,6 @@
                         total_quantity += Number(products['qty']);
                     }
                 }
-
                 var sub_total = $('#subtotal').text();
                 var discount = $('#discount').val();
                 var shipping = $('#shipping').val();
@@ -210,18 +251,19 @@
                 var customer_value = $('.customer').val();
                 var customer_id = $('#customer-list [value="' + customer_value + '"]').data('id');
 
-                $.post("{% url 'sales:create_invoice' %}", {
-                    customer_id: customer_id,
-                    customer_name: customer_name,
-                    customer_phone: customer_phone,
-                    sub_total: sub_total,
-                    discount: discount,
-                    shipping: shipping,
-                    grand_total: grand_total,
-                    totalQty: totalQty,
-                    items: JSON.stringify(items)
+                $.post("{% url 'sales:generate_invoice_api' %}", {
+                        customer_id: customer_id,
+                        customer_name: customer_name,
+                        customer_phone: customer_phone,
+                        sub_total: sub_total,
+                        discount: discount,
+                        shipping: shipping,
+                        grand_total: grand_total,
+                        totalQty: totalQty,
+                        items: JSON.stringify(items)
                     }, function (result, status) {
-
+                        console.log(result);
+                        console.log(status);
                         window.location.href = '/sales/invoice/'+ result.invoice_id +/detail/;
                     }
                 )
@@ -231,17 +273,19 @@
                 $('.existing-customer').hide();
                 $('.new-customer-form').show();
                 $('.customer').val('');
-           });
+            });
 
-           $('.added-customer').on('click', function () {
+            $('.added-customer').on('click', function () {
                 $('.existing-customer').show();
                 $('.new-customer-form').hide();
                 $('.customer_name').val('');
                 $('.customer_phone').val('');
-           });
+            });
 
         });
-
+        $('.btn-primary').on('click', function () {
+            $('.item-error').hide();
+        });
 
 	</script>
 
