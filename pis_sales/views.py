@@ -5,7 +5,8 @@ import json
 
 from django.db.models import Sum
 from django.http import JsonResponse, HttpResponse, Http404
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
+from django.utils.decorators import method_decorator
 from django.views.generic import FormView, View, TemplateView
 from django.utils import timezone
 
@@ -16,12 +17,12 @@ from pis_sales.forms import BillingForm
 from pis_sales.forms import CustomerForm
 
 
-class CreateBillingView(FormView):
+class CreateInvoiceView(FormView):
     template_name = 'sales/create_invoice.html'
     form_class = BillingForm
 
     def get_context_data(self, **kwargs):
-        context = super(CreateBillingView, self).get_context_data(**kwargs)
+        context = super(CreateInvoiceView, self).get_context_data(**kwargs)
         products = (
             self.request.user.retailer_user.retailer.
                 retailer_product.all()
@@ -76,12 +77,12 @@ class ProductItemAPIView(View):
         return JsonResponse({'products': items})
 
 
-class CreateInvoiceView(View):
+class GenerateInvoiceAPIView(View):
 
     @csrf_exempt
     def dispatch(self, request, *args, **kwargs):
         return super(
-            CreateInvoiceView, self).dispatch(request, *args, **kwargs)
+            GenerateInvoiceAPIView, self).dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         customer_name = self.request.POST.get('customer_name')
