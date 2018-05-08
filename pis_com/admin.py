@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 from django.contrib import admin
 
 from pis_com.models import UserProfile
+from pis_com.models import Customer
 
 
 class UserProfileAdmin(admin.ModelAdmin):
@@ -27,4 +28,11 @@ class UserProfileAdmin(admin.ModelAdmin):
         return obj.user.email
 
 
+class CustomerAdmin(admin.ModelAdmin):
+    list_display = (
+        '__unicode__', 'customer_phone', 'retailer'
+    )
+
+
 admin.site.register(UserProfile, UserProfileAdmin)
+admin.site.register(Customer, CustomerAdmin)

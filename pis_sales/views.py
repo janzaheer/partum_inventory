@@ -5,7 +5,8 @@ import json
 
 from django.db.models import Sum
 from django.http import JsonResponse, HttpResponse, Http404
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
+from django.utils.decorators import method_decorator
 from django.views.generic import FormView, View, TemplateView
 from django.utils import timezone
 
@@ -13,16 +14,20 @@ from pis_product.models import Product
 from pis_sales.models import SalesHistory
 from pis_product.forms import PurchasedProductForm
 from pis_sales.forms import BillingForm
+<<<<<<< HEAD
 from pis_sales.forms import CustomerForm
 from pis_product.forms import ExtraItemForm
+=======
+# from pis_com.forms import CustomerForm
+>>>>>>> 82b3cf6fd619854a8972ab357b87f777080784bf
 
 
-class CreateBillingView(FormView):
-    template_name = 'sales/create_billing.html'
+class CreateInvoiceView(FormView):
+    template_name = 'sales/create_invoice.html'
     form_class = BillingForm
 
     def get_context_data(self, **kwargs):
-        context = super(CreateBillingView, self).get_context_data(**kwargs)
+        context = super(CreateInvoiceView, self).get_context_data(**kwargs)
         products = (
             self.request.user.retailer_user.retailer.
                 retailer_product.all()
@@ -41,6 +46,7 @@ class CreateBillingView(FormView):
 
 class ProductItemAPIView(View):
     def get(self, request, *args, **kwargs):
+
         products = (
             self.request.user.retailer_user.retailer.
             retailer_product.all()
@@ -76,12 +82,12 @@ class ProductItemAPIView(View):
         return JsonResponse({'products': items})
 
 
-class CreateInvoiceView(View):
+class GenerateInvoiceAPIView(View):
 
     @csrf_exempt
     def dispatch(self, request, *args, **kwargs):
         return super(
-            CreateInvoiceView, self).dispatch(request, *args, **kwargs)
+            GenerateInvoiceAPIView, self).dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         customer_name = self.request.POST.get('customer_name')
@@ -161,12 +167,12 @@ class CreateInvoiceView(View):
                 'customer_phone': customer_phone,
                 'retailer': self.request.user.retailer_user.retailer.id
             }
-            customer_form = CustomerForm(customer_form_kwargs)
-            if customer_form.is_valid():
-                customer = customer_form.save()
-                billing_form_kwargs.update({
-                    'customer': customer.id
-                })
+            # customer_form = CustomerForm(customer_form_kwargs)
+            # if customer_form.is_valid():
+            #     customer = customer_form.save()
+            #     billing_form_kwargs.update({
+            #         'customer': customer.id
+            #     })
 
         billing_form = BillingForm(billing_form_kwargs)
         if billing_form.is_valid():
