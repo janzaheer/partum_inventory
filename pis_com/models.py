@@ -39,6 +39,18 @@ class UserProfile(models.Model):
         return self.user.username
 
 
+class Customer(models.Model):
+    retailer = models.ForeignKey(
+        'pis_retailer.Retailer',
+        related_name='retailer_customer'
+    )
+    customer_name = models.CharField(max_length=200)
+    customer_phone = models.CharField(max_length=20, blank=True, null=True)
+
+    def __unicode__(self):
+        return self.customer_name
+
+
 # Signal Functions
 def create_profile(sender, instance, created, **kwargs):
     """
