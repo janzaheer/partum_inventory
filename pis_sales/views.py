@@ -14,12 +14,7 @@ from pis_product.models import Product
 from pis_sales.models import SalesHistory
 from pis_product.forms import PurchasedProductForm
 from pis_sales.forms import BillingForm
-<<<<<<< HEAD
-from pis_sales.forms import CustomerForm
 from pis_product.forms import ExtraItemForm
-=======
-# from pis_com.forms import CustomerForm
->>>>>>> 82b3cf6fd619854a8972ab357b87f777080784bf
 
 
 class CreateInvoiceView(FormView):
