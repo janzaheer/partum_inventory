@@ -83,8 +83,8 @@ class PurchasedProductAdmin(admin.ModelAdmin):
 
 class ExtraItemsAdmin(admin.ModelAdmin):
     list_display = (
-        '__unicode__', 'retailer', 'quantity', 'price', 'total'
-    )
+        '__unicode__', 'retailer', 'quantity', 'price', 'discount_percentage',
+        'total')
 
     search_fields = ('item_name', 'retailer__name')
     raw_id_fields = ('retailer', )

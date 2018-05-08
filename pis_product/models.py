@@ -70,11 +70,13 @@ class ExtraItems(DatedModel):
         max_length=100, blank=True, null=True)
     price = models.DecimalField(
         max_digits=8, decimal_places=2, default=0, blank=True, null=True)
+    discount_percentage = models.DecimalField(
+        max_digits=8, decimal_places=2, default=0, blank=True, null=True)
     total = models.DecimalField(
         max_digits=8, decimal_places=2, default=0, blank=True, null=True)
 
     def __unicode__(self):
-        return self.item_name
+        return self.item_name or ''
 
 
 # Signals
