@@ -16,7 +16,7 @@ class DailySalesAPI(View):
             total_sales=Sum('grand_total')
         )
         data = {
-            'sales': sales.get('total_sales') or 0,
+            'sales': int(sales.get('total_sales')) if sales.get('total_sales') else 0,
             'profit': 200,
             'date': date.strftime('%d-%b-%Y')
         }
