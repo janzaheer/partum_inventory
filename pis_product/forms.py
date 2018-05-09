@@ -1,9 +1,7 @@
 from django import forms
 
 from pis_product.models import (
-    Product, ProductDetail, PurchasedProduct,
-    ExtraItems
-)
+    Product, ProductDetail, PurchasedProduct, ExtraItems)
 
 
 class ProductForm(forms.ModelForm):

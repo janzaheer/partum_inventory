@@ -15,6 +15,7 @@ from pis_sales.models import SalesHistory
 from pis_product.forms import PurchasedProductForm
 from pis_sales.forms import BillingForm
 from pis_product.forms import ExtraItemForm
+from pis_com.forms import CustomerForm
 
 
 class CreateInvoiceView(FormView):
@@ -162,12 +163,12 @@ class GenerateInvoiceAPIView(View):
                 'customer_phone': customer_phone,
                 'retailer': self.request.user.retailer_user.retailer.id
             }
-            # customer_form = CustomerForm(customer_form_kwargs)
-            # if customer_form.is_valid():
-            #     customer = customer_form.save()
-            #     billing_form_kwargs.update({
-            #         'customer': customer.id
-            #     })
+            customer_form = CustomerForm(customer_form_kwargs)
+            if customer_form.is_valid():
+                customer = customer_form.save()
+                billing_form_kwargs.update({
+                    'customer': customer.id
+                })
 
         billing_form = BillingForm(billing_form_kwargs)
         if billing_form.is_valid():
