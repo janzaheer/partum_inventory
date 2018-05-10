@@ -11,15 +11,25 @@ from django.db.models import Sum
 class DailySalesAPI(View):
 
     @staticmethod
-    def sales_data(obj, date):
+    def sales_data(obj, date=None, week_date=None):
         sales = obj.aggregate(
             total_sales=Sum('grand_total')
         )
         data = {
-            'sales': int(sales.get('total_sales')) if sales.get('total_sales') else 0,
+            'sales': (
+                int(sales.get('total_sales')) if
+                sales.get('total_sales') else 0
+            ),
             'profit': 200,
-            'date': date.strftime('%d-%b-%Y')
         }
+        if week_date:
+            data.update({
+                'date': week_date.strftime('%a %d, %b')
+            })
+        else:
+            data.update({
+                'date': date.strftime('%d-%b-%Y')
+            })
         return data
 
     def get(self, request, *args, **kwargs):
@@ -36,3 +46,31 @@ class DailySalesAPI(View):
         return JsonResponse(
             {'sales_data': sales}
         )
+
+
+class WeeklySalesAPI(DailySalesAPI):
+
+    def get(self, request, *args, **kwargs):
+        sales = []
+        for week in xrange(1, 7):
+            sales_start_week = timezone.now() - relativedelta(weeks=week)
+            sales_end_week = timezone.now() - relativedelta(weeks=week - 1)
+
+            retailer_sales = (
+                self.request.user.retailer_user.retailer.retailer_sales.filter(
+                    created_at__gte=sales_start_week,
+                    created_at__lt=sales_end_week
+                )
+            )
+            data = self.sales_data(
+                obj=retailer_sales, week_date=sales_end_week
+            )
+            sales.append(data)
+
+        return JsonResponse(
+            {'sales_data': sales}
+        )
+
+
+class MonthlySalesAPI(DailySalesAPI):
+    pass
