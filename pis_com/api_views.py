@@ -38,7 +38,7 @@ class DailySalesAPI(View):
 
     def get(self, request, *args, **kwargs):
         sales = []
-        for day in range(7):
+        for day in range(12):
             sales_day = timezone.now() - relativedelta(days=day)
             retailer_sales = (
                 self.request.user.retailer_user.retailer.
@@ -56,7 +56,7 @@ class WeeklySalesAPI(DailySalesAPI):
 
     def get(self, request, *args, **kwargs):
         sales = []
-        for week in xrange(1, 7):
+        for week in xrange(1, 13):
             sales_start_week = timezone.now() - relativedelta(weeks=week)
             sales_end_week = timezone.now() - relativedelta(weeks=week - 1)
 
@@ -79,7 +79,7 @@ class WeeklySalesAPI(DailySalesAPI):
 class MonthlySalesAPI(DailySalesAPI):
     def get(self, request, *args, **kwargs):
         sales = []
-        for month in xrange(1, 12):
+        for month in xrange(1, 13):
             sales_start_month = timezone.now() - relativedelta(months=month)
             sales_end_month = timezone.now() - relativedelta(months=month - 1)
 
