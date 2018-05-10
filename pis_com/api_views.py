@@ -11,7 +11,7 @@ from django.db.models import Sum
 class DailySalesAPI(View):
 
     @staticmethod
-    def sales_data(obj, date=None, week_date=None):
+    def sales_data(obj, date=None, week_date=None, month_date=None):
         sales = obj.aggregate(
             total_sales=Sum('grand_total')
         )
@@ -25,6 +25,10 @@ class DailySalesAPI(View):
         if week_date:
             data.update({
                 'date': week_date.strftime('%a %d, %b')
+            })
+        elif month_date:
+            data.update({
+                'date': month_date.strftime('%d, %B')
             })
         else:
             data.update({
@@ -73,4 +77,28 @@ class WeeklySalesAPI(DailySalesAPI):
 
 
 class MonthlySalesAPI(DailySalesAPI):
-    pass
+    def get(self, request, *args, **kwargs):
+        sales = []
+        for month in xrange(1, 12):
+            sales_start_month = timezone.now() - relativedelta(months=month)
+            sales_end_month = timezone.now() - relativedelta(months=month - 1)
+
+            retailer_sales = (
+                self.request.user.retailer_user.retailer.retailer_sales.filter(
+                    created_at__gte=sales_start_month.replace(
+                        day=1, minute=0, second=0, hour=0),
+                    created_at__lt=sales_end_month.replace(
+                        day=1, minute=0, second=0, hour=0)
+                )
+            )
+
+            data = self.sales_data(
+                obj=retailer_sales, month_date=sales_end_month
+            )
+
+            sales.append(data)
+
+        return JsonResponse(
+            {'sales_data': sales}
+        )
+
