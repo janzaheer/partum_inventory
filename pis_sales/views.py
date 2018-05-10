@@ -107,6 +107,7 @@ class GenerateInvoiceAPIView(View):
                 form_kwargs = {
                     'product': product.id,
                     'quantity': item.get('qty'),
+                    'price': item.get('price'),
                     'discount_percentage': item.get('perdiscount'),
                     'purchase_amount': item.get('total'),
                 }

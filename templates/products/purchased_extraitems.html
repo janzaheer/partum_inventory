@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block menu_product %}active{% endblock %}
+{% block submenu_purchased_extraitems %}active{% endblock %}
+
+{% block content %}
+    <div class="col-md-12">
+        <br>
+        <div class="content-panel">
+            <table class="table table-striped table-advance table-hover purchased-table">
+                <h2 class="text-center">Extra Items</h2>
+                <div class="input-group custom-search-form col-md-4" style="left: 5px">
+                    <input type="text" class="form-control extra-items" placeholder="Search...">
+                    <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </span>
+                </div>
+                <hr>
+                <thead>
+                <thead>
+                    <tr>
+                        <th><i class="fa fa-bullhorn"></i> Item Name</th>
+                        <th><i class=" fa fa-bookmark"></i> Quantity</th>
+                        <th><i class=" fa fa-edit"></i> Price</th>
+                        <th><i class=" fa fa-edit"></i> Discount %</th>
+                        <th><i class=" fa fa-edit"></i> Purchased Amount</th>
+                        <th><i class=" fa fa-bookmark"></i> Date</th>
+                    </tr>
+                    </thead>
+                    <tbody class="purchsaed-table-body">
+                    {% for extra_items in purchased_extra_items %}
+                        <tr>
+                            <td><a href="#">{{ extra_items.item_name}}</a></td>
+                            <td>{{ extra_items.quantity }}</td>
+                            <td>{{ extra_items.price }}</td>
+                            <td>{{ extra_items.discount_percentage }}</td>
+                            <td>{{ extra_items.total }}</td>
+                            <td>{{ extra_items.created_at|date }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+
+       $(document).ready(function(){
+
+          $('.extra-items').on("keyup", function() {
+              console.log('here');
+              var value = $(this).val().toLowerCase();
+              $(".purchsaed-table-body tr").filter(function() {
+                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+              });
+          });
+       });
+
+    </script>
+{% endblock %}

@@ -49,6 +49,9 @@ class PurchasedProduct(DatedModel):
     quantity = models.DecimalField(
         max_digits=8, decimal_places=2, default=1, blank=True, null=True
     )
+    price = models.DecimalField(
+        max_digits=8, decimal_places=2, default=0, blank=True, null=True
+    )
     discount_percentage = models.DecimalField(
         max_digits=8, decimal_places=2, default=0, blank=True, null=True
     )
