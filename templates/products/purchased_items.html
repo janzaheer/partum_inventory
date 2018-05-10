@@ -19,25 +19,21 @@
                 <hr>
                 <thead>
                 <tr>
-                    <th><i class="fa fa-bullhorn"></i> Item Name</th>
-                    <th class="hidden-phone"><i class="fa fa-question-circle"></i> Brand Name</th>
-                    <th><i class="fa fa-bookmark"></i> Purchased Amount</th>
-                    <th><i class=" fa fa-edit"></i> Discount</th>
-                    <th>Actions</th>
+                    <th><i class=""></i> Item Name</th>
+                    <th><i class="fa fa-bookmark"></i> Quantity</th>
+                    <th><i class="fa fa-bookmark"></i> Price</th>
+                    <th><i class=" fa fa-edit"></i> Discount %</th>
+                    <th><i class=" fa fa-bookmark"></i> Date</th>
                 </tr>
                 </thead>
                 <tbody class="purchased-table-body">
                 {% for purchased_product in purchased_products %}
                     <tr>
                         <td><a href="#">{{ purchased_product.product.name}}</a></td>
-                        <td class="#">{{ purchased_product.product.brand_name }}</td>
-                        <td>5003</td>
-                        <td>89245</td>
-                        <td>
-                            <a href="#"><button class="btn btn-primary btn-xs"><i class="fa fa-plus"></i></button></a>
-                            <a href="#"><button class="btn btn-success btn-xs"><i class="fa fa-eye"></i></button></a>
-                            <a href="#"><button class="btn btn-danger btn-xs"><i class="fa fa-trash-o "></i></button></a>
-                        </td>
+                        <td>{{ purchased_product.quantity }}</td>
+                        <td>{{ purchased_product.price }}</td>
+                        <td>{{ purchased_product.discount_percentage }}</td>
+                        <td>{{ purchased_product.created_at|date }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>

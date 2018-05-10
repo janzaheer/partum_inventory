@@ -21,6 +21,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^', include('pis_com.urls')),
     url(r'^product/', include('pis_product.urls', namespace='product')),
+    url(r'^retailer/', include('pis_retailer.urls', namespace='retailer')),
     url(r'^sales/', include('pis_sales.urls', namespace='sales')),
 ]
 

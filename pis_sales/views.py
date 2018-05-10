@@ -5,7 +5,8 @@ import json
 
 from django.db.models import Sum
 from django.http import JsonResponse, HttpResponse, Http404
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
+from django.utils.decorators import method_decorator
 from django.views.generic import FormView, View, TemplateView
 from django.utils import timezone
 
@@ -13,15 +14,16 @@ from pis_product.models import Product
 from pis_sales.models import SalesHistory
 from pis_product.forms import PurchasedProductForm
 from pis_sales.forms import BillingForm
-from pis_sales.forms import CustomerForm
+from pis_product.forms import ExtraItemForm
+from pis_com.forms import CustomerForm
 
 
-class CreateBillingView(FormView):
-    template_name = 'sales/create_billing.html'
+class CreateInvoiceView(FormView):
+    template_name = 'sales/create_invoice.html'
     form_class = BillingForm
 
     def get_context_data(self, **kwargs):
-        context = super(CreateBillingView, self).get_context_data(**kwargs)
+        context = super(CreateInvoiceView, self).get_context_data(**kwargs)
         products = (
             self.request.user.retailer_user.retailer.
                 retailer_product.all()
@@ -40,6 +42,7 @@ class CreateBillingView(FormView):
 
 class ProductItemAPIView(View):
     def get(self, request, *args, **kwargs):
+
         products = (
             self.request.user.retailer_user.retailer.
             retailer_product.all()
@@ -75,12 +78,12 @@ class ProductItemAPIView(View):
         return JsonResponse({'products': items})
 
 
-class CreateInvoiceView(View):
+class GenerateInvoiceAPIView(View):
 
     @csrf_exempt
     def dispatch(self, request, *args, **kwargs):
         return super(
-            CreateInvoiceView, self).dispatch(request, *args, **kwargs)
+            GenerateInvoiceAPIView, self).dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         customer_name = self.request.POST.get('customer_name')
@@ -92,33 +95,53 @@ class CreateInvoiceView(View):
         totalQty = self.request.POST.get('totalQty')
         items = json.loads(self.request.POST.get('items'))
         purchased_items_id = []
+        extra_items_id = []
 
         for item in items:
             item_name = item.get('item_name')
-            product = Product.objects.get(
-                name=item_name,
-                retailer=self.request.user.retailer_user.retailer
-            )
-            form_kwargs = {
-                'product': product.id,
-                'quantity': item.get('qty'),
-                'discount_percentage': item.get('perdiscount'),
-                'purchase_amount': item.get('total'),
-            }
-            form = PurchasedProductForm(form_kwargs)
-            if form.is_valid():
-                purchased_item = form.save()
-                purchased_items_id.append(purchased_item.id)
-                product_details = (
-                    purchased_item.product.product_detail.
-                    filter(available_item__gte=int(item.get('qty'))).first()
+            try:
+                product = Product.objects.get(
+                    name=item_name,
+                    retailer=self.request.user.retailer_user.retailer
                 )
-                product_details.available_item = (
-                    product_details.available_item - int(item.get('qty'))
-                )
-                product_details.purchased_item = (
-                    product_details.purchased_item + int(item.get('qty')))
-                product_details.save()
+                form_kwargs = {
+                    'product': product.id,
+                    'quantity': item.get('qty'),
+                    'price': item.get('price'),
+                    'discount_percentage': item.get('perdiscount'),
+                    'purchase_amount': item.get('total'),
+                }
+                form = PurchasedProductForm(form_kwargs)
+                if form.is_valid():
+                    purchased_item = form.save()
+                    purchased_items_id.append(purchased_item.id)
+
+                    product_details = (
+                        purchased_item.product.product_detail.filter(
+                            available_item__gte=int(item.get('qty'))).first()
+                    )
+                    product_details.available_item = (
+                        product_details.available_item - int(
+                            item.get('qty'))
+                    )
+                    product_details.purchased_item = (
+                        product_details.purchased_item + int(
+                            item.get('qty')))
+                    product_details.save()
+
+            except Product.DoesNotExist:
+                extra_item_kwargs = {
+                    'retailer': self.request.user.retailer_user.retailer.id,
+                    'item_name': item.get('item_name'),
+                    'quantity': item.get('qty'),
+                    'price': item.get('price'),
+                    'discount_percentage': item.get('perdiscount'),
+                    'total': item.get('total'),
+                }
+                extra_item_form = ExtraItemForm(extra_item_kwargs)
+                if extra_item_form.is_valid():
+                    extra_item = extra_item_form.save()
+                    extra_items_id.append(extra_item.id)
 
         billing_form_kwargs = {
             'sub_total': sub_total,
@@ -127,6 +150,7 @@ class CreateInvoiceView(View):
             'total_quantity': totalQty,
             'shipping': shipping,
             'purchased_items': purchased_items_id,
+            'extra_items': extra_items_id,
             'retailer': self.request.user.retailer_user.retailer.id,
         }
 
@@ -162,7 +186,8 @@ class InvoiceDetailView(TemplateView):
         invoice = SalesHistory.objects.get(id=self.kwargs.get('invoice_id'))
         context.update({
             'invoice': invoice,
-            'product_details': invoice.product_details
+            'product_details': invoice.product_details,
+            'extra_items_details': invoice.extra_items
         })
         return context
 

@@ -17,7 +17,7 @@ class SalesHistory(DatedModel):
     )
 
     customer = models.ForeignKey(
-        'pis_sales.Customer',
+        'pis_com.Customer',
         related_name='customer_sales',
         blank=True, null=True
     )
@@ -29,6 +29,11 @@ class SalesHistory(DatedModel):
     purchased_items = models.ManyToManyField(
         'pis_product.PurchasedProduct',
         max_length=100, blank=True, null=True
+    )
+
+    extra_items = models.ManyToManyField(
+        'pis_product.ExtraItems',
+        max_length=200, blank=True, null=True
     )
 
     total_quantity = models.CharField(
@@ -56,18 +61,6 @@ class SalesHistory(DatedModel):
 
     def __unicode__(self):
         return self.retailer.name
-
-
-class Customer(models.Model):
-    retailer = models.ForeignKey(
-        'pis_retailer.Retailer',
-        related_name='retailer_customer'
-    )
-    customer_name = models.CharField(max_length=200)
-    customer_phone = models.CharField(max_length=20, blank=True, null=True)
-
-    def __unicode__(self):
-        return self.customer_name
 
 
 # Signals Function
