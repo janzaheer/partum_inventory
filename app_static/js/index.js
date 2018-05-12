@@ -212,7 +212,7 @@ $.get('/api/sales/monthly/', function (result, status) {
 
 // Dashboard daily profit chart code
 
-var doughnutData = [s
+var doughnutData = [
     {
         value: 70,
         color:"#68dff0"
