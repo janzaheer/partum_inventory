@@ -13,19 +13,19 @@ class DatedModel(models.Model):
 
 
 class UserProfile(models.Model):
-    USER_TYPE_OWNER = 'owner'
-    USER_TYPE_DATA_ENTRY = 'data_entry_clerk'
-    USER_TYPE_EDITOR = 'editor'
+    USER_TYPE_SHOP = 'shop'
+    USER_TYPE_COMPANY = 'company'
+    USER_TYPE_INDIVIDUAL = 'individual'
 
     USER_TYPES = (
-        (USER_TYPE_OWNER, 'Owner'),
-        (USER_TYPE_DATA_ENTRY, 'Data Entry Clerk'),
-        (USER_TYPE_EDITOR, 'Editor')
+        (USER_TYPE_SHOP, 'Shop'),
+        (USER_TYPE_COMPANY, 'Company'),
+        (USER_TYPE_INDIVIDUAL, 'Individual'),
     )
 
     user = models.OneToOneField(User, related_name='user_profile')
     user_type = models.CharField(
-        max_length=100, choices=USER_TYPES, default=USER_TYPE_OWNER
+        max_length=100, choices=USER_TYPES, default=USER_TYPE_SHOP
     )
     address = models.TextField(max_length=512, blank=True, null=True)
     phone_no = models.CharField(max_length=13, blank=True, null=True)
