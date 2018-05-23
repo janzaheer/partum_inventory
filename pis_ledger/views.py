@@ -42,7 +42,9 @@ class AddLedger(FormView):
     def form_valid(self, form):
         ledger = form.save()
         return HttpResponseRedirect(
-            reverse('ledger:customer_ledger_list')
+            reverse('ledger:customer_ledger_detail', kwargs={
+                'customer_id': self.kwargs.get('customer_id')
+            })
         )
 
     def form_invalid(self, form):
@@ -111,3 +113,50 @@ class CustomerLedgerView(TemplateView):
         })
 
         return context
+
+
+class CustomerLedgerDetailsView(TemplateView):
+    template_name = 'ledger/customer_ledger_details.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(
+            CustomerLedgerDetailsView, self).get_context_data(**kwargs)
+
+        try:
+            customer = Customer.objects.get(
+                id=self.kwargs.get('customer_id')
+            )
+        except Customer.DoesNotExist:
+            raise Http404
+
+        ledgers = customer.customer_ledger.all()
+        payments = customer.customer_ledger_payment.all()
+        if ledgers:
+            ledger_total = ledgers.aggregate(Sum('amount'))
+            ledger_total = float(ledger_total.get('amount__sum'))
+            context.update({
+
+            })
+        else:
+            ledger_total = 0
+
+        if payments:
+            payment_total = payments.aggregate(Sum('amount'))
+            payment_total = float(payment_total.get('amount__sum'))
+            context.update({
+
+            })
+        else:
+            payment_total = 0
+
+        context.update({
+            'customer': customer,
+            'ledgers': ledgers,
+            'payments': payments,
+            'ledger_total': '%g' % ledger_total,
+            'payment_total': '%g' % payment_total,
+            'remaining_amount': '%g' % (ledger_total - payment_total)
+        })
+
+        return context
+

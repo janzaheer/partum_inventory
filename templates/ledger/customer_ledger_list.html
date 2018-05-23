@@ -38,6 +38,8 @@
                             <td>{{ customer_ledger.remaining_ledger }}</td>
                             <td>
                                 <a href="{% url 'ledger:add_ledger' customer_id=customer_ledger.id %}"><button class="btn btn-primary btn-xs"><i class="fa fa-plus"></i></button></a>
+                                <a href="{% url 'ledger:customer_ledger_detail' customer_id=customer_ledger.id %}"><button class="btn btn-success btn-xs"><i class="fa fa-eye"></i></button></a>
+
                             </td>
                         </tr>
                     {% endfor %}

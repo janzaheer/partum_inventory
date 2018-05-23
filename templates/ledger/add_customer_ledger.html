@@ -7,7 +7,7 @@
         <a href="{% url 'ledger:customer_ledger_list'%}"><button type="button" class="btn btn-primary" style="float: left">Back to Ledger List</button></a>
         <br><br><br>
         <div class="content-panel">
-            <h3 class="text-center">{{ customer.customer_name }} </h3>
+            <h3 class="text-center">{{ customer.customer_name }} <small>New Ledger</small></h3>
             <div class="panel-body">
                 <form class="form-horizontal" action="{% url 'ledger:add_ledger' customer_id=customer.id %}" method="post" >
                     <div class="form-group">
