@@ -5,7 +5,7 @@
 {% block content %}
     <br>
     <a href="{% url 'ledger:add_ledger' customer_id=customer.id %}"><button type="button" class="btn btn-primary" style="float: left"> Ledger Add</button></a> &nbsp;
-    <a href="#"><button type="button" class="btn btn-primary">Do Payment</button></a>
+    <a href="{% url 'ledger:payment_ledger' customer_id=customer.id %}"><button type="button" class="btn btn-primary">Do Payment</button></a>
     <br><br><br>
     <div class="content-panel">
         <h2 class="text-center">{{ customer.customer_name }} <small>Ledger Detail</small></h2>

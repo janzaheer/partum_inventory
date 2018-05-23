@@ -10,6 +10,7 @@ from django.http import Http404
 from pis_com.models import Customer
 from pis_com.forms import CustomerForm
 from pis_ledger.forms import LedgerForm
+from pis_ledger.forms import PaymentForm
 
 
 class AddNewLedger(FormView):
@@ -160,3 +161,23 @@ class CustomerLedgerDetailsView(TemplateView):
 
         return context
 
+
+class PaymentLedgerView(FormView):
+    template_name = 'ledger/payment_ledger.html'
+    form_class = PaymentForm
+
+    def form_valid(self, form):
+        form.save()
+        return HttpResponseRedirect(
+            reverse('ledger:customer_ledger_detail', kwargs={
+                'customer_id': self.kwargs.get('customer_id')
+            })
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super(PaymentLedgerView, self).get_context_data(**kwargs)
+        context.update({
+            'customer': Customer.objects.get(
+                id=self.kwargs.get('customer_id'))
+        })
+        return context

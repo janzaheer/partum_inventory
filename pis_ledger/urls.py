@@ -2,7 +2,7 @@ from django.conf.urls import url
 
 from pis_ledger.views import (
     CustomerLedgerView, AddNewLedger, AddLedger,
-    CustomerLedgerDetailsView
+    CustomerLedgerDetailsView, PaymentLedgerView
 )
 
 
@@ -23,5 +23,10 @@ urlpatterns = [
         r'^customer/(?P<customer_id>\d+)/ledger/details/$',
         CustomerLedgerDetailsView.as_view(),
         name='customer_ledger_detail'
-    )
+    ),
+    url(
+        r'^customer/(?P<customer_id>\d+)/payment/$',
+        PaymentLedgerView.as_view(),
+        name='payment_ledger'
+    ),
 ]
