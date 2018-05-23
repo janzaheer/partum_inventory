@@ -61,6 +61,19 @@
                   {% endif %}
                   {% if request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_DATA_ENTRY_USER or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_OWNER or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_VIEW_ACCOUNT %}
                   <li class="sub-menu">
+                      <a class="{% block menu_ledger %}{% endblock %}" href="javascript:;" >
+                          <i class="fa fa-desktop"></i>
+                          <span>Ledgers</span>
+                      </a>
+                      <ul class="sub">
+                          <li class="{% block submenu_customer_ledger %}{% endblock %}"><a  href="{% url 'ledger:customer_ledger_list' %}">Customer Ledger List</a></li>
+                          <li class="{% block submenu_add_new_ledger %}{% endblock %}"><a  href="{% url 'ledger:add_new_ledger' %}">Add Ledger</a></li>
+
+                      </ul>
+                  </li>
+                  {% endif %}
+                  {% if request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_DATA_ENTRY_USER or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_OWNER or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_VIEW_ACCOUNT %}
+                  <li class="sub-menu">
                       <a class="{% block menu_product %}{% endblock %}" href="javascript:;" >
                           <i class="fa fa-desktop"></i>
                           <span>Products</span>
