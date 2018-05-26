@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block menu_ledger %}active{% endblock %}
+{% block submenu_customer_ledger %}active{% endblock %}
+
+{% block content %}
+    <div class="col-md-12">
+        <br>
+        <div class="content-panel">
+            <table class="table table-striped table-advance table-hover purchased-table">
+                <h2 class="text-center">Customer Ledger</h2>
+                <div class="input-group custom-search-form col-md-4" style="left: 5px">
+                    <input type="text" class="form-control extra-items" placeholder="Search...">
+                    <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </span>
+                </div>
+                <hr>
+                <thead>
+                <thead>
+                    <tr>
+                        <th><i class="fa fa-bullhorn"></i> Customer Name</th>
+                        <th><i class=" fa fa-bookmark"></i> Customer Phone</th>
+                        <th><i class=" fa fa-edit"></i> Total Ledger</th>
+                        <th><i class=" fa fa-edit"></i> Total Payment</th>
+                        <th><i class=" fa fa-bookmark"></i> Remaining Ledger</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody class="ledger-table-body">
+                    {% for customer_ledger in customer_ledgers %}
+                        <tr>
+                            <td><a href="#">{{ customer_ledger.customer_name}}</a></td>
+                            <td>{{ customer_ledger.customer_phone }}</td>
+                            <td>{{ customer_ledger.ledger_amount }}</td>
+                            <td>{{ customer_ledger.payment_amount }}</td>
+                            <td>{{ customer_ledger.remaining_ledger }}</td>
+                            <td>
+                                <a href="{% url 'ledger:add_ledger' customer_id=customer_ledger.id %}"><button class="btn btn-primary btn-xs" title="Add New Ledger"><i class="fa fa-plus"></i></button></a>
+                                <a href="{% url 'ledger:customer_ledger_detail' customer_id=customer_ledger.id %}"><button class="btn btn-success btn-xs" title="Customer Ledger Detail"><i class="fa fa-eye"></i></button></a>
+                                <a href="{% url 'ledger:payment_ledger' customer_id=customer_ledger.id %}"><button class="btn btn-danger btn-xs" title="Payment Payment"><i class="fa fa-credit-card"></i></button></a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+
+       $(document).ready(function(){
+          $('.extra-items').on("keyup", function() {
+              var value = $(this).val().toLowerCase();
+              $(".ledger-table-body tr").filter(function() {
+                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+              });
+          });
+       })
+
+
+    </script>
+{% endblock %}

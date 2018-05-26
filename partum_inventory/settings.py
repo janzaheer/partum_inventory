@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'pis_com',
+    'pis_ledger',
     'pis_retailer',
     'pis_product',
     'pis_sales',

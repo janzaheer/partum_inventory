@@ -48,7 +48,6 @@
        $(document).ready(function(){
 
           $('.extra-items').on("keyup", function() {
-              console.log('here');
               var value = $(this).val().toLowerCase();
               $(".purchsaed-table-body tr").filter(function() {
                  $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)

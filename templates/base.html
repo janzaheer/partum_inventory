@@ -38,7 +38,7 @@
         <div class="sidebar-toggle-box">
             <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
         </div>
-        <a href="{% url 'index' %}" class="logo"><b>Partum Inventory System</b></a>
+        <a href="{% url 'index' %}" class="logo"><b>Partum Inventory</b></a>
     </header>
 
     <aside>
@@ -57,6 +57,19 @@
                           <i class="fa fa-dashboard"></i>
                           <span>Dashboard</span>
                       </a>
+                  </li>
+                  {% endif %}
+                  {% if request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_DATA_ENTRY_USER or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_OWNER or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_VIEW_ACCOUNT %}
+                  <li class="sub-menu">
+                      <a class="{% block menu_ledger %}{% endblock %}" href="javascript:;" >
+                          <i class="fa fa-desktop"></i>
+                          <span>Ledgers</span>
+                      </a>
+                      <ul class="sub">
+                          <li class="{% block submenu_customer_ledger %}{% endblock %}"><a  href="{% url 'ledger:customer_ledger_list' %}">Customer Ledger List</a></li>
+                          <li class="{% block submenu_add_new_ledger %}{% endblock %}"><a  href="{% url 'ledger:add_new_ledger' %}">Add Ledger</a></li>
+
+                      </ul>
                   </li>
                   {% endif %}
                   {% if request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_DATA_ENTRY_USER or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_OWNER or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_VIEW_ACCOUNT %}
