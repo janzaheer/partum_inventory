@@ -35,6 +35,17 @@ class AddNewLedger(FormView):
     def form_invalid(self, form):
         return super(AddNewLedger, self).form_invalid(form)
 
+    def get_context_data(self, **kwargs):
+        context = super(AddNewLedger, self).get_context_data(**kwargs)
+        customers = Customer.objects.filter(
+            retailer=self.request.user.retailer_user.retailer)
+
+        context.update({
+            'customers': customers
+        })
+
+        return context
+
 
 class AddLedger(FormView):
     template_name = 'ledger/add_customer_ledger.html'

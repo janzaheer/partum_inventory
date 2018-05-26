@@ -49,14 +49,14 @@
     <script>
 
        $(document).ready(function(){
-
-          $('.customer_ledger').on("keyup", function() {
+          $('.extra-items').on("keyup", function() {
               var value = $(this).val().toLowerCase();
               $(".ledger-table-body tr").filter(function() {
                  $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
               });
           });
-       });
+       })
+
 
     </script>
 {% endblock %}
