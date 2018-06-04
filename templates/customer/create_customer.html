@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block menu_customer %}active{% endblock %}
+{% block submenu_create_customer %}active{% endblock %}
+
+{% block content %}
+     <div class="col-md-6">
+        <br>
+        <a href="{% url 'customers' %}"><button type="button" class="btn btn-primary" style="float: left">Back to Customers</button></a>
+        <br><br><br>
+        <div class="content-panel">
+            <h3 class="text-center">Create New Customer</h3>
+            <div class="panel-body">
+                <form class="form-horizontal" action="{% url 'create_customer' %}" method="post" >
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            {% csrf_token %}
+                            <span class="retail-error" style="color:red; display:none">This field is required..</span>
+                            <input type="text" class="form-control customer_name" name="customer_name" placeholder="Customer Name"><br>
+                            <span class="consumer-error" style="color:red; display:none">This field is required..</span>
+                            <input type="text" class="form-control customer_phone" name="customer_phone" onkeyup="checkDec(this);" placeholder="Customer Phone"><br>
+                            <input type="text" class=" form-control shop" name="shop" placeholder="Customer Shop Name (Optional)"><br>
+                            <textarea name="address" class="form-control address" placeholder="Customer Address (Optional)"></textarea><br>
+                            <input type="hidden" name="retailer" value="{{ request.user.retailer_user.retailer.id }}">
+                            <button type="submit" class="btn btn-primary product-sub-btn" style="float: right">Save Customer</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

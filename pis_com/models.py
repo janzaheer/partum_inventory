@@ -46,6 +46,8 @@ class Customer(models.Model):
     )
     customer_name = models.CharField(max_length=200)
     customer_phone = models.CharField(max_length=20, blank=True, null=True)
+    address = models.TextField(max_length=500, blank=True,null=True)
+    shop = models.CharField(max_length=200, blank=True, null=True)
 
     def __unicode__(self):
         return self.customer_name

@@ -8,6 +8,10 @@ from django.views.generic import FormView
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse, reverse_lazy
 
+from pis_com.models import Customer
+from pis_com.forms import CustomerForm
+
+
 
 class LoginView(FormView):
     template_name = 'login.html'
@@ -70,4 +74,40 @@ class HomePageView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(HomePageView, self).get_context_data(**kwargs)
+        return context
+
+
+class CreateCustomer(FormView):
+    form_class = CustomerForm
+    template_name = 'customer/create_customer.html'
+
+    def form_valid(self, form):
+        form.save()
+        return HttpResponseRedirect(reverse('customer'))
+    
+    def form_invalid(self, form):
+        return super(CreateCustomer, self).form_invalid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super(
+            CreateCustomer, self).get_context_data(**kwargs)
+
+        customers = Customer.objects.all()
+        context.update({
+            'customers': customers
+        })
+        return context
+
+
+class CustomerTemplateView(TemplateView):
+    template_name = 'customer/customer_list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(
+            CustomerTemplateView, self).get_context_data(**kwargs)
+
+        customers = Customer.objects.all().order_by('customer_name')
+        context.update({
+            'customers': customers
+        })
         return context
