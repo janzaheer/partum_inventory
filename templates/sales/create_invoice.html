@@ -75,7 +75,6 @@
 								<th>Item</th>
 								<th>Price</th>
 								<th>Quantity</th>
-								<th>Discount %</th>
 								<th>Total</th>
 							</tr>
 							</thead>
@@ -89,19 +88,16 @@
 							<tr>
 								<td></td>
 								<td></td>
-								<td></td>
 								<td class="text-right"><strong>Sub Total</strong></td>
 								<td><span id="subtotal">0.00</span></td>
 							</tr>
 							<tr>
 								<td><strong>Total Quantity: </strong><span id="totalQty" style="color: red; font-weight: bold">0</span> Units</td>
 								<td></td>
-								<td></td>
 								<td class="text-right"><strong>Discount</strong></td>
 								<td><input class="form-control" id="discount" value="0" type="text"></td>
 							</tr>
 							<tr>
-								<td></td>
 								<td></td>
 								<td></td>
 								<td class="text-right"><strong>Shipping</strong></td>
@@ -110,9 +106,20 @@
 							<tr>
 								<td></td>
 								<td></td>
-								<td></td>
 								<td class="text-right"><strong>Grand Total</strong></td>
-								<td><span id="grandTotal">0</span></td>
+								<td><span id="grandTotal" style="color:red">0</span></td>
+							</tr>
+                            <tr>
+								<td></td>
+								<td></td>
+								<td class="text-right"><strong>Paid Amount</strong></td>
+								<td><input class="form-control" id="paidAmount" value="0" type="text"></td>
+							</tr>
+                            <tr>
+								<td></td>
+								<td></td>
+								<td class="text-right"><strong>Remaining Amount</strong></td>
+								<td><span id="remainingAmount">0</span></td>
 							</tr>
 							</tbody>
 						</table>
@@ -142,7 +149,10 @@
 				subtotal : "#subtotal",
 				discount: "#discount",
 				shipping : "#shipping",
-				grandTotal : "#grandTotal"
+				grandTotal : "#grandTotal",
+
+                remainingAmount: '#remainingAmount',
+                paidAmount: '#paidAmount'
 			});
 
 		});
@@ -245,6 +255,8 @@
                 var discount = $('#discount').val();
                 var shipping = $('#shipping').val();
                 var grand_total = $('#grandTotal').text();
+                var remaining_amount = $('#remainingAmount').text();
+                var paid_amount = $('#paidAmount').val();
                 var totalQty = total_quantity;
 
                 var customer_value = $('.customer').val();
@@ -259,6 +271,8 @@
                         shipping: shipping,
                         grand_total: grand_total,
                         totalQty: totalQty,
+                        remaining_amount: remaining_amount,
+                        paid_amount: paid_amount,
                         items: JSON.stringify(items)
                     }, function (result, status) {
                         window.location.href = '/sales/invoice/'+ result.invoice_id +/detail/;
