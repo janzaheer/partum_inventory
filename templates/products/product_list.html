@@ -24,6 +24,7 @@
                         <th class="hidden-phone"><i class="fa fa-question-circle"></i> Brand Name</th>
                         <th><i class=" fa fa-bookmark"></i> Available Items</th>
                         <th><i class=" fa fa-edit"></i> Purchased Items</th>
+                        <th><i class=" fa fa-edit"></i> Claimed Items</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
@@ -34,6 +35,7 @@
                             <td class="#">{{ item.brand_name }}</td>
                             <td>{{ item.product_available_items }}</td>
                             <td>{{ item.product_purchased_items }}</td>
+                            <td>{{ item.total_num_of_claimed_items }}</td>
                             <td>
                                 <a href="{% url 'product:add_product_items' product_id=item.id %}"><button class="btn btn-primary btn-xs"><i class="fa fa-plus"></i></button></a>
                                 <a href="{% url 'product:item_details' pk=item.id %}"><button class="btn btn-success btn-xs"><i class="fa fa-eye"></i></button></a>

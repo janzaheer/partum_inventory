@@ -1,7 +1,7 @@
 from django import forms
 
 from pis_product.models import (
-    Product, ProductDetail, PurchasedProduct, ExtraItems)
+    Product, ProductDetail, PurchasedProduct, ExtraItems, ClaimedProduct)
 
 
 class ProductForm(forms.ModelForm):
@@ -27,3 +27,8 @@ class ExtraItemForm(forms.ModelForm):
         model = ExtraItems
         fields = "__all__"
 
+
+class ClaimedProductForm(forms.ModelForm):
+    class Meta:
+        model = ClaimedProduct
+        fields = "__all__"

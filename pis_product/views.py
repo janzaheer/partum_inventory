@@ -9,7 +9,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 
 from pis_product.models import PurchasedProduct, ExtraItems
-from pis_product.forms import ProductForm, ProductDetailsForm
+from pis_product.forms import (
+    ProductForm, ProductDetailsForm, ClaimedProductForm)
 
 
 class ProductItemList(TemplateView):
@@ -155,6 +156,32 @@ class ExtraItemsView(TemplateView):
 
         context.update({
             'purchased_extra_items': extra_products
+        })
+
+        return context
+
+
+class ClaimedProductFormView(FormView):
+    template_name = 'products/claimed_product.html'
+    form_class = ClaimedProductForm
+
+    def form_valid(self, form):
+        form.save()
+        return HttpResponseRedirect(reverse('product:items_list'))
+    
+    def form_invalid(self, form):
+        return super(ClaimedProductFormView, self).form_invalid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super(
+            ClaimedProductFormView, self).get_context_data(**kwargs)
+
+        products = (
+            self.request.user.retailer_user.retailer.
+            retailer_product.all())
+
+        context.update({
+            'products': products
         })
 
         return context

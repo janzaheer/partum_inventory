@@ -24,6 +24,10 @@ class Product(models.Model):
         obj = self.product_detail.aggregate(Sum('purchased_item'))
         return obj.get('purchased_item__sum')
 
+    def total_num_of_claimed_items(self):
+        obj = self.claimed_product.aggregate(Sum('claimed_items'))
+        return obj.get('claimed_items__sum')
+
 
 class ProductDetail(DatedModel):
     product = models.ForeignKey(
@@ -80,6 +84,15 @@ class ExtraItems(DatedModel):
 
     def __unicode__(self):
         return self.item_name or ''
+
+
+class ClaimedProduct(models.Model):
+    product = models.ForeignKey(Product, related_name='claimed_product')
+    claimed_items = models.IntegerField(
+        default=1, verbose_name='No. of Claimed Items')
+
+    def __unicode__(self):
+        return self.product.name
 
 
 # Signals

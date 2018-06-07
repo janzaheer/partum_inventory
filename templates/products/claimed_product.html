@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block menu_product %}active{% endblock %}
+{% block submenu_purchased_claimeditems %}active{% endblock %}
+
+{% block content %}
+    <div class="col-md-6">
+        <br>
+        <a href="{% url 'product:items_list' %}"><button type="button" class="btn btn-primary" style="float: left">Back to Product Item List</button></a>
+        <br><br><br>
+        <div class="content-panel">
+            <h3 class="text-center">Claimed items</h3>
+            <div class="panel-body">
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <input type="text" class="form-control product" name="product" placeholder="Product" list="product-list">
+                        <datalist id="product-list">
+                            {% for product in products %}
+                                <option data-id="{{ product.id }}" value="{{ product.name }}">{{ product.brand_name }}</option>
+                            {% endfor %}
+                        </datalist>
+                        <br>
+                        <input type="number" class="form-control claimed_items" name="claimed_items" placeholder="Claimed Items" value="1"><br>
+                        <button type="button" class="btn btn-primary claimed-btn" style="float: right">Claimed</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+    {{ block.super }}
+    <script>
+        $('.claimed-btn').on('click', function () {
+
+            var product_val = $('.product').val();
+            var product_id = $('#product-list [value="' + product_val + '"]').data('id');
+            $.post('{% url "product:claimed_items" %}', {
+                product: product_id,
+                claimed_items: $('.claimed_items').val(),
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            }, function (result, status) {
+                window.location.href = '{% url "product:items_list" %}';
+            }
+        );
+        });
+    </script>
+{% endblock %}
