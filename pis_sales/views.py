@@ -16,6 +16,8 @@ from pis_product.forms import PurchasedProductForm
 from pis_sales.forms import BillingForm
 from pis_product.forms import ExtraItemForm
 from pis_com.forms import CustomerForm
+from pis_ledger.models import Ledger
+from pis_ledger.forms import LedgerForm
 
 
 class CreateInvoiceView(FormView):
@@ -80,6 +82,11 @@ class ProductItemAPIView(View):
 
 class GenerateInvoiceAPIView(View):
 
+    def __init__(self, *args, **kwargs):
+        super(GenerateInvoiceAPIView, self).__init__(*args, **kwargs)
+        self.customer = None
+        self.invoice = None
+
     @csrf_exempt
     def dispatch(self, request, *args, **kwargs):
         return super(
@@ -93,6 +100,8 @@ class GenerateInvoiceAPIView(View):
         shipping = self.request.POST.get('shipping')
         grand_total = self.request.POST.get('grand_total')
         totalQty = self.request.POST.get('totalQty')
+        remaining_payment = self.request.POST.get('remaining_amount')
+        paid_amount = self.request.POST.get('paid_amount')
         items = json.loads(self.request.POST.get('items'))
         purchased_items_id = []
         extra_items_id = []
@@ -151,6 +160,8 @@ class GenerateInvoiceAPIView(View):
             'shipping': shipping,
             'purchased_items': purchased_items_id,
             'extra_items': extra_items_id,
+            'paid_amount': paid_amount,
+            'remaining_payment': remaining_payment,
             'retailer': self.request.user.retailer_user.retailer.id,
         }
 
@@ -166,16 +177,32 @@ class GenerateInvoiceAPIView(View):
             }
             customer_form = CustomerForm(customer_form_kwargs)
             if customer_form.is_valid():
-                customer = customer_form.save()
+                self.customer = customer_form.save()
                 billing_form_kwargs.update({
-                    'customer': customer.id
+                    'customer': self.customer.id
                 })
 
         billing_form = BillingForm(billing_form_kwargs)
         if billing_form.is_valid():
-            invoice = billing_form.save()
+            self.invoice = billing_form.save()
 
-        return JsonResponse({'invoice_id': invoice.id})
+        if float(remaining_payment):
+            ledger_form_kwargs = {
+                'retailer': self.request.user.retailer_user.retailer.id,
+                'customer': (
+                    self.request.POST.get('customer_id') or
+                    self.customer.id),
+                'amount': remaining_payment,
+                'description': (
+                    'Remaining Payment for Bill/Receipt No %s '
+                    % self.invoice.receipt_no)
+            }
+
+            ledger = LedgerForm(ledger_form_kwargs)
+            if ledger.is_valid():
+                ledger.save()
+
+        return JsonResponse({'invoice_id': self.invoice.id})
 
 
 class InvoiceDetailView(TemplateView):
