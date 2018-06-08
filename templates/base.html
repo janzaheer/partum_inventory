@@ -84,6 +84,7 @@
                             <li class="{% block submenu_purchased_items %}{% endblock %}"><a  href="{% url 'product:purchased_items' %}">Purchased Items</a></li>
                             <li class="{% block submenu_purchased_extraitems %}{% endblock %}"><a  href="{% url 'product:purchased_extra_items' %}">Purchased Extra Items</a></li>
                             <li class="{% block submenu_purchased_claimeditems %}{% endblock %}"><a  href="{% url 'product:claimed_items' %}">Claimed Items</a></li>
+                            <li class="{% block submenu_claimedlist %}{% endblock %}"><a  href="{% url 'product:claimed_items_list' %}">Claimed Items List</a></li>
                         </ul>
                     </li>
                 {% endif %}
