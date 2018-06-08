@@ -80,7 +80,7 @@ class CreateCustomer(FormView):
 
     def form_valid(self, form):
         form.save()
-        return HttpResponseRedirect(reverse('customer'))
+        return HttpResponseRedirect(reverse('customers'))
     
     def form_invalid(self, form):
         return super(CreateCustomer, self).form_invalid(form)
