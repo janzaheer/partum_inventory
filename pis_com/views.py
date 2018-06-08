@@ -3,14 +3,13 @@ from __future__ import unicode_literals
 from django.contrib.auth import forms as auth_forms
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
-from django.views.generic import TemplateView, RedirectView
+from django.views.generic import TemplateView, RedirectView, UpdateView
 from django.views.generic import FormView
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse, reverse_lazy
 
 from pis_com.models import Customer
 from pis_com.forms import CustomerForm
-
 
 
 class LoginView(FormView):
@@ -20,8 +19,6 @@ class LoginView(FormView):
     def dispatch(self, request, *args, **kwargs):
 
         if self.request.user.is_authenticated():
-
-
             return HttpResponseRedirect(reverse('index'))
 
         return super(LoginView, self).dispatch(request, *args, **kwargs)
@@ -111,3 +108,9 @@ class CustomerTemplateView(TemplateView):
             'customers': customers
         })
         return context
+
+
+class CustomerUpdateView(UpdateView):
+    form_class = CustomerForm
+    template_name = 'customer/update_customer.html'
+    model = Customer
