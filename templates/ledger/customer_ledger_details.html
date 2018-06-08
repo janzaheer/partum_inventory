@@ -15,7 +15,7 @@
                 <div class="panel-heading">
                    Ledger List
                 </div>
-                <div class="panel-body">
+                <div class="panel-body table-responsive">
                     <table class="table table-striped table-advance table-hover ledger-table">
                         <thead>
                             <tr>
@@ -46,11 +46,12 @@
                 <div class="panel-heading">
                    Payments Lists
                 </div>
-                <div class="panel-body">
+                <div class="panel-body table-responsive">
                     <table class="table table-striped table-advance table-hover payment-table">
                         <thead>
                             <tr>
                                 <th><i class="fa fa-bullhorn"></i> Amount (PKR)</th>
+                                <th><i class="fa fa-question-circle"></i> Description</th>
                                 <th><i class="fa fa-bookmark"></i> Paid Date</th>
                             </tr>
                         </thead>
@@ -58,6 +59,7 @@
                             {% for payment in payments %}
                                 <tr>
                                     <td>{{ payment.amount}}</td>
+                                    <td>{{ payment.description }}</td>
                                     <td>{{ payment.created_at|date }}</td>
                                 </tr>
                             {% endfor %}

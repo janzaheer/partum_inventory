@@ -86,10 +86,16 @@ class ExtraItems(DatedModel):
         return self.item_name or ''
 
 
-class ClaimedProduct(models.Model):
+class ClaimedProduct(DatedModel):
     product = models.ForeignKey(Product, related_name='claimed_product')
+    customer = models.ForeignKey(
+        'pis_com.Customer', related_name='customer_claimed_items',
+        null=True, blank=True,
+    )
     claimed_items = models.IntegerField(
         default=1, verbose_name='No. of Claimed Items')
+    claimed_amount = models.DecimalField(
+        max_digits=8, decimal_places=2, default=0, blank=True, null=True)
 
     def __unicode__(self):
         return self.product.name

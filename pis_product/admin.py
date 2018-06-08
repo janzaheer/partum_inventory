@@ -97,7 +97,8 @@ class ExtraItemsAdmin(admin.ModelAdmin):
 
 class ClaimedProductAdmin(admin.ModelAdmin):
     list_display = (
-        '__unicode__', 'brand_name', 'claimed_items'
+        '__unicode__', 'brand_name', 'customer', 'claimed_items',
+        'claimed_amount', 'created_at'
     )
     search_fields = ('product__name', 'product__brand_name')
     raw_id_fields = ('product',)
@@ -105,6 +106,10 @@ class ClaimedProductAdmin(admin.ModelAdmin):
     @staticmethod
     def brand_name(obj):
         return obj.product.brand_name or None
+
+    @staticmethod
+    def customer(obj):
+        return obj.customer.customer_name or None
 
 
 admin.site.register(Product, ProductAdmin)
