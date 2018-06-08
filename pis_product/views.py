@@ -8,7 +8,7 @@ from django.core.urlresolvers import reverse, reverse_lazy
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 
-from pis_product.models import PurchasedProduct, ExtraItems
+from pis_product.models import PurchasedProduct, ExtraItems, ClaimedProduct
 from pis_product.forms import (
     ProductForm, ProductDetailsForm, ClaimedProductForm)
 from pis_ledger.forms import PaymentForm
@@ -227,4 +227,17 @@ class ClaimedProductFormView(FormView):
             'customers': customers,
         })
 
+        return context
+
+
+class ClaimedItemsListView(TemplateView):
+    template_name = 'products/claimed_product_list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(
+            ClaimedItemsListView, self).get_context_data(**kwargs)
+        context.update({
+            'claimed_items': ClaimedProduct.objects.all().order_by(
+                '-created_at')
+        })
         return context
