@@ -4,7 +4,8 @@ from django.conf.urls import url, include
 from pis_com.views import HomePageView
 from pis_com.views import LoginView
 from pis_com.views import LogoutView
-from pis_com.views import CreateCustomer, CustomerTemplateView
+from pis_com.views import (
+    CreateCustomer, CustomerTemplateView, CustomerUpdateView)
 
 urlpatterns = [
     url(r'^$', HomePageView.as_view(), name='index'),
@@ -17,10 +18,16 @@ urlpatterns = [
         name='create_customer'
     ),
 
-url(
+    url(
         r'^customers/$',
         CustomerTemplateView.as_view(),
         name='customers'
+    ),
+
+    url(
+        r'^customer/(?P<pk>\d+)/update$',
+        CustomerUpdateView.as_view(),
+        name='update_customer'
     ),
 ]
 

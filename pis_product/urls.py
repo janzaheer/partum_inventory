@@ -6,6 +6,7 @@ from pis_product.views import AddNewProduct
 from pis_product.views import AddProductItems
 from pis_product.views import PurchasedItems
 from pis_product.views import ExtraItemsView
+from pis_product.views import ClaimedProductFormView
 
 
 urlpatterns = [
@@ -32,5 +33,9 @@ urlpatterns = [
     url(
         r'^items/extra/purchased/$', ExtraItemsView.as_view(),
         name='purchased_extra_items'
+    ),
+    url(
+        r'^items/claimed/$', ClaimedProductFormView.as_view(),
+        name='claimed_items'
     ),
 ]

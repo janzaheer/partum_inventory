@@ -5,6 +5,7 @@ from pis_product.models import Product
 from pis_product.models import ProductDetail
 from pis_product.models import PurchasedProduct
 from pis_product.models import ExtraItems
+from pis_product.models import ClaimedProduct
 
 
 class ProductAdmin(admin.ModelAdmin):
@@ -94,7 +95,20 @@ class ExtraItemsAdmin(admin.ModelAdmin):
         return obj.product.retailer.item_name
 
 
+class ClaimedProductAdmin(admin.ModelAdmin):
+    list_display = (
+        '__unicode__', 'brand_name', 'claimed_items'
+    )
+    search_fields = ('product__name', 'product__brand_name')
+    raw_id_fields = ('product',)
+
+    @staticmethod
+    def brand_name(obj):
+        return obj.product.brand_name or None
+
+
 admin.site.register(Product, ProductAdmin)
 admin.site.register(ProductDetail, ProductDetailAdmin)
 admin.site.register(PurchasedProduct, PurchasedProductAdmin)
 admin.site.register(ExtraItems, ExtraItemsAdmin)
+admin.site.register(ClaimedProduct, ClaimedProductAdmin)

@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+{% block menu_sales %}active{% endblock %}
+{% block submenu_list_invoice %}active{% endblock %}
 
 {% block content %}
     <style>
@@ -9,20 +11,31 @@
 
     <div class="col-lg-10 col-md-10 col-sm-10">
         <br>
-        <div class="content-panel" style="padding: 5px">
+        <button type="button" class="btn btn-primary print-invoice-btn" onclick="PrintInvoice('print-invoice')" style="float: left">Print Invoice</button>
+        <br><br><br>
+        <div class="content-panel print-invoice" id="print-invoice" style="padding: 5px">
             <div class="row">
                 <div class="col-xs-12 col-md-12">
-                    <div>
-                        <h2 class="text-center"><strong>Invoice</strong> <small style="float: right">Receipt No. <span style="color:red">{{ invoice.receipt_no }}</span></small></h2>
+                    <div class="text-center">
+                        <h1><strong>{{ request.user.retailer_user.retailer.name }}</strong></h1>
+                        <span><strong>{{ request.user.user_profile.address }}</strong></span><br>
+                        <small><strong>Phone No:</strong> {{ request.user.user_profile.phone_no }} </small> <small><strong>Mobile No: </strong>{{ request.user.user_profile.mobile_no }} </small>
+                        <h3>Invoice</h3>
                     </div>
-                </div>
-                <div class="col-xs-12 col-md-12">
                     <hr>
+                </div>
+                <div class="col-xs-12 col-md-12" style="margin-top: 15px">
                     <div class="row">
                         <div class="col-xs-6 col-md-6">
-                            <label><strong>Billed To:</strong></label><span style="float: right">{{ invoice.created_at.date }}</span><br>
-                            <label><strong>Customer Name:</strong></label> <span style="float: right">{{ invoice.customer.customer_name }}</span><br>
-                            <label><strong>Customer Phone:</strong></label> <span style="float: right">{{ invoice.customer.customer_phone }}</span><br>
+                            <label><strong>Customer Name:</strong></label> <span style="margin: 15px;">{{ invoice.customer.customer_name }}</span><br>
+                            <label><strong>Customer Phone:</strong></label> <span style="margin: 15px;">{{ invoice.customer.customer_phone }}</span><br>
+                            {% if invoice.customer.shop %}
+                                <label><strong>Shop Name:</strong></label> <span style="margin: 15px;">{{ invoice.customer.shop }}</span><br>
+                            {% endif %}
+                            {% if invoice.customer.address %}
+                                <label><strong>Address:</strong></label> <span style="margin: 15px;">{{ invoice.customer.address }}</span><br>
+                            {% endif %}
+                            <label><strong>Billed To:</strong></label><span style="margin: 15px;">{{ invoice.created_at.date }}</span><br>
                             <br>
                         </div>
                     </div>
@@ -31,14 +44,13 @@
 
             <div class="row">
                 <div class="col-md-12">
+                    <span style="float: right; font-size: large">Receipt No. <span style="color:red">{{ invoice.receipt_no }}</span></span>
                     <div class="table-responsive">
                         <table class="table table-bordered">
                             <thead>
                             <tr class="item-row">
                                 <th>Item</th>
-{#                                <th>Price</th>#}
                                 <th>Quantity</th>
-                                <th>Discount %</th>
                                 <th>Total</th>
                             </tr>
                             </thead>
@@ -48,19 +60,11 @@
                                     <td>
                                         {{ item.product.name}}
                                     </td>
-
-{#                                    <td>#}
-{#                                        40000#}
-{#                                    </td>#}
-
                                     <td>
-                                        {{ item.quantity}}
+                                        {{ item.quantity|floatformat:-2}}
                                     </td>
                                     <td>
-                                        {{ item.discount_percentage }} %
-                                    </td>
-                                    <td>
-                                        {{ item.purchase_amount }}
+                                        {{ item.purchase_amount|floatformat:-2 }}
                                     </td>
                                 </tr>
                             {% endfor %}
@@ -71,40 +75,43 @@
                                     </td>
 
                                     <td>
-                                        {{ extra_item.quantity}}
+                                        {{ extra_item.quantity|floatformat:-2}}
                                     </td>
                                     <td>
-                                        {{ extra_item.discount_percentage }} %
-                                    </td>
-                                    <td>
-                                        {{ extra_item.total }}
+                                        {{ extra_item.total|floatformat:-2 }}
                                     </td>
                                 </tr>
                             {% endfor %}
                             <tr><td colspan="4" style="color:white">Need to change this properly</td></tr>
                             <tr style="border-top: 3px solid">
                                 <td></td>
-                                <td></td>
                                 <td class="text-right"><strong>Sub Total</strong></td>
-                                <td><span id="subtotal">{{ invoice.sub_total }}</span></td>
+                                <td><span id="subtotal">{{ invoice.sub_total|floatformat:-2 }}</span></td>
                             </tr>
                             <tr>
                                 <td><strong>Total Quantity: </strong><span id="totalQty" style="color: red; font-weight: bold">{{ invoice.total_quantity }}</span> Units</td>
-                                <td></td>
                                 <td class="text-right"><strong>Discount</strong></td>
-                                <td>{{ invoice.discount }}</td>
+                                <td>{{ invoice.discount|floatformat:-2 }}</td>
                             </tr>
                             <tr>
-                                <td></td>
                                 <td></td>
                                 <td class="text-right"><strong>Shipping</strong></td>
-                                <td>{{ invoice.shipping }}</td>
+                                <td>{{ invoice.shipping|floatformat:-2 }}</td>
                             </tr>
                             <tr>
                                 <td></td>
-                                <td></td>
                                 <td class="text-right"><strong>Grand Total</strong></td>
-                                <td><span id="grandTotal">{{ invoice.grand_total }}</span></td>
+                                <td><span id="grandTotal" style="color: red;">{{ invoice.grand_total|floatformat:-2 }}</span></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td class="text-right"><strong>Paid Amount</strong></td>
+                                <td><span id="grandTotal">{{ invoice.paid_amount|floatformat:-2 }}</span></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td class="text-right"><strong>Remaining Payment</strong></td>
+                                <td><span id="grandTotal">{{ invoice.remaining_payment|floatformat:-2 }}</span></td>
                             </tr>
                             </tbody>
                         </table>
@@ -113,4 +120,14 @@
             </div>
         </div>
     </div>
+    <script>
+        function PrintInvoice(divName){
+             var printContents = document.getElementById(divName).innerHTML;
+             var originalContents = document.body.innerHTML;
+             document.body.innerHTML = printContents;
+             window.print();
+             document.body.innerHTML = originalContents;
+        }
+    </script>
+
 {% endblock %}
