@@ -13,14 +13,13 @@
                     <div class="form-group">
                         <div class="col-sm-12">
                             {% csrf_token %}
-                            <span class="retail-error" style="color:red; display:none">This field is required..</span>
-                            <input type="text" class="form-control retail_price" name="retail_price" onkeyup="checkDec(this);" placeholder="Retail Price"><br>
                             <span class="consumer-error" style="color:red; display:none">This field is required..</span>
                             <input type="text" class="form-control consumer_price" name="consumer_price" onkeyup="checkDec(this);" placeholder="Consumer Price"><br>
                             <span class="item-error" style="color:red; display:none">This field is required..</span>
                             <input type="text"  class="form-control Quantity_item"  name="available_item"  onkeyup="checkDec(this);" placeholder="Item Quantity"><br>
                             <input type="hidden" name="purchased_item" value="0">
                             <input type="hidden" name="product" value="{{ product.id }}">
+                            <input type="hidden" name="retail_price" value="0">
                             <button type="button" class="btn btn-primary product-sub-btn" style="float: right">Save Product</button>
                         </div>
                     </div>
@@ -33,14 +32,6 @@
     $(document).ready(function(){
         $(".product-sub-btn").on ('click', function(){
             var error= false;
-
-            if($('.retail_price').val () == ""){
-                $('.retail-error').show();
-                error= true;
-            }
-            else {
-                $('.retail-error').hide();
-            }
             if ($('.consumer_price').val() == ""){
                 $('.consumer-error').show();
                 error = true;
@@ -66,17 +57,6 @@
             }
         });
     });
-
-    $('.retail_price').keyup (function(){
-        $('.retail-error').hide();
-    });
-
-    function checkDec(el){
-        var ex = /^[0-9]+\.?[0-9]*$/;
-        if(ex.test(el.value)==false){
-            el.value = el.value.substring(0,el.value.length - 1);
-        }
-    }
 
     $('.consumer_price').keyup (function(){
         $('.consumer-error').hide();

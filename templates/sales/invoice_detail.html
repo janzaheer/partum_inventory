@@ -105,17 +105,30 @@
                             </tr>
                             <tr>
                                 <td></td>
-                                <td class="text-right"><strong>Paid Amount</strong></td>
-                                <td><span id="grandTotal">{{ invoice.paid_amount|floatformat:-2 }}</span></td>
+                                <td class="text-right"><strong>Received Amount</strong></td>
+                                <td><span id="receivedAmount">{{ invoice.paid_amount|floatformat:-2 }}</span></td>
                             </tr>
                             <tr>
                                 <td></td>
                                 <td class="text-right"><strong>Remaining Payment</strong></td>
-                                <td><span id="grandTotal">{{ invoice.remaining_payment|floatformat:-2 }}</span></td>
+                                <td><span id="remainingAmount">{{ invoice.remaining_payment|floatformat:-2 }}</span></td>
                             </tr>
                             </tbody>
                         </table>
                     </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-3 col-md-3">
+                </div>
+                <div class="col-xs-3 col-md-3">
+                </div>
+                <div class="col-xs-3 col-md-3">
+                </div>
+                <div class="col-xs-3 col-md-3" style="text-align: center;">
+                    <br><br><br>
+                    <hr>
+                    <span>Signature</span>
                 </div>
             </div>
         </div>

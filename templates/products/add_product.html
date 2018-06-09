@@ -18,15 +18,12 @@
                             <input type="text" class="form-control product_name" name="name"   placeholder="Product Name"><br>
                             <span class="brand-name-error" style="color:red; display:none">The field is required</span>
                             <input type="text" class="form-control brand_name" name="brand_name" placeholder="Brand Name"><br>
-                            <span class="retail-name-error" style="color:red; display:none">The field is required</span>
-                            <input type="text" class="form-control retail_price" name="retail_price" placeholder="Retail Price"><br>
                             <span class="consumer-name-error" style="color:red; display:none">The field is required</span>
                             <input type="text" class="form-control consumer_price" name="consumer_price"  placeholder="Consumer Price"><br>
                             <span class="available-name-error" style="color:red; display:none">The field is required</span>
                             <input type="text"  class="form-control available_item" name="available_item"   placeholder="Item Quantity"><br>
                             <input type="hidden" name="retailer" value="{{ request.user.retailer_user.retailer.id }}">
                             <button type="button" class="btn btn-primary product-submit-btn" style="float: right">Save Product</button>
-
                         </div>
                     </div>
                 </form>
@@ -57,14 +54,6 @@
             else {
                 $(".brand-name-error").hide();
 
-            }
-
-            if ($('.retail_price').val() == ""){
-                $(".retail-name-error").show();
-                error = true;
-            }
-            else {
-                $(".retail-name-error").hide();
             }
 
             if ($('.consumer_price').val() == ""){
@@ -110,10 +99,6 @@
             $('.brand-name-error').hide();
         });
 
-        $('.retail_price').keyup(function(){
-            $('.retail-name-error').hide();
-            checkDec(this);
-        });
         function checkDec(el){
             var ex = /^[0-9]+\.?[0-9]*$/;
             if(ex.test(el.value)==false){

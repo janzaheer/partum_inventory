@@ -22,7 +22,6 @@
                     <tr>
                         <th><i class="fa fa-bullhorn"></i> Item</th>
                         <th class="hidden-phone"><i class="fa fa-question-circle"></i> Brand Name</th>
-                        <th><i class="fa fa-bookmark"></i> Retail Price (pkr)</th>
                         <th><i class=" fa fa-try"></i> Consumer Price (pkr)</th>
                         <th><i class=" fa fa-rebel"></i> Remaining Items</th>
                         <th><i class=" fa fa-shield"></i> Purchased Items</th>
@@ -34,7 +33,6 @@
                         <tr>
                             <td><a href="#">{{ detail.product.name}}</a></td>
                             <td class="#">{{ detail.product.brand_name }}</td>
-                            <td>{{ detail.retail_price|floatformat:-2 }}</td>
                             <td>{{ detail.consumer_price|floatformat:-2 }}</td>
                             <td>{{ detail.available_item }}</td>
                             <td>{{ detail.purchased_item }}</td>

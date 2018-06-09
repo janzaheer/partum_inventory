@@ -12,6 +12,7 @@
             <div class="panel-body">
                 <div class="form-group">
                     <div class="col-sm-12">
+                        <span class="customer_error" style="color: red; display: none" > This Field is requreid</span>
                         <input type="text" class="form-control customer" name="customer" placeholder="Customer" list="customer-list">
                         <datalist id="customer-list">
                             {% for customer in customers %}
@@ -19,6 +20,7 @@
                             {% endfor %}
                         </datalist>
                         <br>
+                        <span class="product_error"style="color: red; display: none" >This field is Required</span>
                         <input type="text" class="form-control product" name="product" placeholder="Product" list="product-list">
                         <datalist id="product-list">
                             {% for product in products %}
@@ -26,8 +28,10 @@
                             {% endfor %}
                         </datalist>
                         <br>
+                        <span class="claimed_item_error" style="color: red; display: none" >This field is Required</span>
                         <input type="number" class="form-control claimed_items" name="claimed_items" placeholder="Claimed Items"><br>
-                        <input type="number" class="form-control claimed_amount" name="claimed_amount" placeholder="Claimed Amount"><br>
+                        <span class="claimed_amount_error" style="color: red; display: none" >This field is Required</span>
+                        <input type="text" class="form-control claimed_amount"  name="claimed_amount"  placeholder="Claimed Amount"><br>
                         <button type="button" class="btn btn-primary claimed-btn" style="float: right">Claimed</button>
                     </div>
                 </div>
@@ -39,6 +43,40 @@
     {{ block.super }}
     <script>
         $('.claimed-btn').on('click', function () {
+            var error = false;
+            if ($('.customer').val ()== ""){
+                $('.customer_error').show();
+                error = true;
+            }
+            else
+            {
+                $('.customer_error').hide();
+            }
+            if ($('.product').val() =="") {
+                $('.product_error').show();
+                error = true;
+            }
+            else {
+                $('.product_error').hide();
+            }
+            if ($('.claimed_items').val()== ""){
+                $('.claimed_item_error').show();
+                error = true;
+            }
+            else{
+                $('.claimed_item_error').hide();
+            }
+            if ($('.claimed_amount').val()== "" ) {
+                $('.claimed_amount_error').show();
+                error = true;
+            }
+            else {
+                $('.claimed_amount_error').hide()
+            }
+
+            if (error == true) {
+                return;
+            }
 
             var product_val = $('.product').val();
             var product_id = $('#product-list [value="' + product_val + '"]').data('id');
@@ -54,8 +92,30 @@
                 csrfmiddlewaretoken: '{{ csrf_token }}'
             }, function (result, status) {
                 window.location.href = '{% url "product:items_list" %}';
-            }
-        );
+            });
         });
+
+        $('.customer').keyup(function () {
+            $('.customer_error').hide();
+        });
+
+        $('.product').keyup(function () {
+            $('.product_error').hide();
+        });
+
+        $('.claimed_items').keyup(function () {
+            $('.claimed_item_error').hide();
+        });
+
+        $('.claimed_amount').keyup(function () {
+            $('.claimed_amount_error').hide();
+            checkDec(this);
+        });
+        function checkDec(el){
+            var ex = /^[0-9]+\.?[0-9]*$/;
+            if(ex.test(el.value)==false){
+                el.value = el.value.substring(0,el.value.length - 1);
+            }
+        }
     </script>
 {% endblock %}
