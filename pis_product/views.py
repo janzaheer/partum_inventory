@@ -83,10 +83,10 @@ class AddNewProduct(FormView):
     def form_valid(self, form):
         product = form.save()
         details_form_kwargs = {
-            'retail_price': self.request.POST.get('retail_price'),
-            'consumer_price': self.request.POST.get('consumer_price'),
-            'available_item': self.request.POST.get('available_item'),
-            'purchased_item': self.request.POST.get('purchased_item'),
+            'retail_price': self.request.POST.get('retail_price') or 0,
+            'consumer_price': self.request.POST.get('consumer_price') or 0,
+            'available_item': self.request.POST.get('available_item') or 0,
+            'purchased_item': self.request.POST.get('purchased_item') or 0,
         }
         self.add_product_details(
             product_id=product.id,
