@@ -56,7 +56,8 @@ class ProductDetailList(TemplateView):
             raise Http404('Product not found with concerned User')
 
         context.update({
-            'items_details': product.product_detail.all(),
+            'items_details': product.product_detail.all().order_by(
+                '-created_at'),
             'product': product,
         })
 
