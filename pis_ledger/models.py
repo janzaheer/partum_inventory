@@ -28,6 +28,7 @@ class PaymentLedger(DatedModel):
     amount = models.DecimalField(
         max_digits=8, decimal_places=2, default=0, blank=True, null=True
     )
+    payment_type = models.CharField(max_length=200, blank=True, null=True)
     description = models.TextField(max_length=200, blank=True, null=True)
 
     def __unicode__(self):
