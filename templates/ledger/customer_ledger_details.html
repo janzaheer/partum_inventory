@@ -51,6 +51,7 @@
                         <thead>
                             <tr>
                                 <th><i class="fa fa-bullhorn"></i> Amount (PKR)</th>
+                                <th><i class="fa fa-bitbucket"></i> Payment Type</th>
                                 <th><i class="fa fa-question-circle"></i> Description</th>
                                 <th><i class="fa fa-bookmark"></i> Paid Date</th>
                             </tr>
@@ -59,6 +60,7 @@
                             {% for payment in payments %}
                                 <tr>
                                     <td>{{ payment.amount}}</td>
+                                    <td>{{ payment.payment_type}}</td>
                                     <td>{{ payment.description }}</td>
                                     <td>{{ payment.created_at|date }}</td>
                                 </tr>
