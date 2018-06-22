@@ -31,20 +31,29 @@
     <script>
         $('.document').ready(function () {
             $('.ledger-submit-btn').on('click', function () {
+                    var error = true;
 
                 if ($('.amount').val() ==""){
                     $('.amount-error').show();
+                    error = true;
                 }
                 else {
                     $('.amount-error').hide();
                 }
                 if ($('.description').val() == ""){
                     $('.description-error').show();
+                    error = true;
                 }
                 else {
                     $('.description-error').hide();
-                }
 
+                }
+                if (error == false)
+                {
+
+                    $('.new_ledger').submit();
+
+                }
                 $('.amount').keyup(function () {
                     $('.amount-error').hide();
                     checkDec(this);
@@ -59,13 +68,8 @@
                     $('.description-error').hide();
                 })
 
-                $('.new_ledger').submit();
-
-
-
             });
         });
-
 
     </script>
 {% endblock %}
