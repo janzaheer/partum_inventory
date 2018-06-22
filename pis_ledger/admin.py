@@ -21,11 +21,11 @@ class LedgerAdmin(admin.ModelAdmin):
 
 class PaymentLedgerAdmin(admin.ModelAdmin):
     list_display = (
-        '__unicode__', 'retailer', 'amount', 'created_at'
+        '__unicode__', 'retailer', 'amount', 'payment_type', 'created_at'
     )
     search_fields = (
         'customer__customer_name', 'customer__customer_phone',
-        'customer__retailer__name'
+        'customer__retailer__name', 'payment_type'
     )
     raw_id_fields = ('customer',)
 

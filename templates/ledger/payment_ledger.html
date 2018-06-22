@@ -15,6 +15,9 @@
                             {% csrf_token %}
                             <span class="amount-error" style="color: red; display: none"> This Feild is Requried</span>
                             <input type="text" class="form-control amount" name="amount" placeholder="Amount"><br>
+                            <input type="text" class="form-control payment_type" name="payment_type" placeholder="Payment Type">
+                            <span style="color: #68dff0">For example: UBL Online, HBL Check or Cash etc</span><br><br>
+                            <textarea placeholder="Description" name="description" class="form-control description"></textarea><br>
                             <input type="hidden" name="customer" value="{{ customer.id }}">
                             <input type="hidden" name="retailer" value="{{ request.user.retailer_user.retailer.id }}">
                             <button type="button" class="btn btn-primary ledger-submit-btn" style="float: right">Save Ledger</button>
