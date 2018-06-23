@@ -9,7 +9,7 @@
         <div class="content-panel">
             <h3 class="text-center">{{ customer.customer_name }} <small>New Ledger</small></h3>
             <div class="panel-body">
-                <form class="form-horizontal new_ledger " action="{% url 'ledger:add_ledger' customer_id=customer.id %}" method="post" >
+                <form class="form-horizontal new_ledger" action="{% url 'ledger:add_ledger' customer_id=customer.id %}" method="post" >
                     <div class="form-group">
                         <div class="col-sm-12">
                             {% csrf_token %}
@@ -31,7 +31,7 @@
     <script>
         $('.document').ready(function () {
             $('.ledger-submit-btn').on('click', function () {
-                    var error = true;
+                var error = false;
 
                 if ($('.amount').val() ==""){
                     $('.amount-error').show();
@@ -50,25 +50,24 @@
                 }
                 if (error == false)
                 {
-
                     $('.new_ledger').submit();
-
                 }
-                $('.amount').keyup(function () {
-                    $('.amount-error').hide();
-                    checkDec(this);
-                });
-                function checkDec(el){
-                    var ex = /^[0-9]+\.?[0-9]*$/;
-                    if(ex.test(el.value)==false){
-                        el.value = el.value.substring(0,el.value.length - 1);
-                    }
-                }
-                $('.description').keyup(function () {
-                    $('.description-error').hide();
-                })
 
             });
+
+            $('.amount').keyup(function () {
+                $('.amount-error').hide();
+                checkDec(this);
+            });
+            function checkDec(el){
+                var ex = /^[0-9]+\.?[0-9]*$/;
+                if(ex.test(el.value)==false){
+                    el.value = el.value.substring(0,el.value.length - 1);
+                }
+            }
+            $('.description').keyup(function () {
+                $('.description-error').hide();
+            })
         });
 
     </script>
