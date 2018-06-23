@@ -83,8 +83,9 @@ class CustomerLedgerView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(CustomerLedgerView, self).get_context_data(**kwargs)
-        customers = Customer.objects.filter(
-            retailer=self.request.user.retailer_user.retailer
+        customers = (
+            self.request.user.retailer_user.retailer.
+            retailer_customer.all().order_by('customer_name')
         )
         customer_ledger = []
 
@@ -96,17 +97,18 @@ class CustomerLedgerView(TemplateView):
                 .aggregate(Sum('amount'))
             )
 
-            if not ledger.get('amount__sum'):
-                continue
-
             if payment_ledger.get('amount__sum'):
                 payment_amount = float(payment_ledger.get('amount__sum'))
             else:
                 payment_amount = 0
 
+            if ledger.get('amount__sum'):
+                ledger_amount = float(ledger.get('amount__sum'))
+            else:
+                ledger_amount = 0
+
             remaining_ledger = '%g' % (
-                    float(ledger.get('amount__sum')) -
-                    payment_amount
+                    ledger_amount - payment_amount
             )
 
             customer_data.update({

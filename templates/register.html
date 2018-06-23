@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Registration Form, Partum Solutions, Partum, Software house, Software Company, Websites, Web Applications, Management System, Databases and etc">
+    <meta name="author" content="Zaheer Jan">
+    <meta name="keyword" content="Register Form, Partum Solutions, Partum, Software Solutions, Software House, Databases, Web Applications, Websites">
+
+    <title>Register | Partum Solutions | Business Software Solution Providers</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
+    <!--external css-->
+    <link href="{% static 'font-awesome/css/font-awesome.css' %}" rel="stylesheet" />
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style-responsive.css' %}" rel="stylesheet">
+    <style>
+        .errorlist{
+            display: inline-block;
+            color: red;
+            font-size: smaller;
+            float: right;
+        }
+        .error-alert{
+            text-align: center;
+            padding-bottom: 10px;
+            font-size: xx-large;
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+<div id="login-page">
+    <div class="container">
+
+        <form class="form-login" method="post" action="{% url 'register' %}">
+            <h2 class="form-login-heading">Registration Form</h2>
+            <div class="login-wrap">
+                {% if form.errors or form.non_field_errors %}
+                    <div class="error-alert">
+                        <i class="fa fa-warning pull-center"></i>
+                    </div>
+                {% endif %}
+                {% csrf_token %}
+                {% if form.non_field_errors %}
+                    <div>
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+                <h5>Register yourself to use Ledger Free!</h5>
+                <input type="text" class="form-control" placeholder="Username" name="username" value="{{ username }}" autofocus>
+                {% if form.errors %}
+                    {{ form.errors.username }}
+                {% endif %}
+                <br>
+                <input type="password" class="form-control" name="password1" placeholder="Password" value="{{ password1 }}">
+                {% if form.errors %}
+                    {{ form.errors.password1  }}
+                {% endif %}
+                <br>
+                <input type="password" class="form-control" name="password2" placeholder="Confirm Password" value="{{ password2 }}">
+                {% if form.errors %}
+                    {{ form.errors.password2  }}
+                {% endif %}
+                <br>
+                <button class="btn btn-primary btn-block" type="submit"><i class="fa fa-lock"></i> Register</button>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<script src="{% static 'js/jquery.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+</body>
+</html>
