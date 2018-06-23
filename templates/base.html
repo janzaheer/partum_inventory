@@ -43,7 +43,7 @@
             <ul class="nav pull-right top-menu">
                 <li>
                     <div class="dropdown" style="margin: 15px;">
-                        <button style="background: #68dff0; color: white; border-color: #68dff0" class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">{{ request.user.first_name }} {{ request.user.last_name }}
+                        <button style="background: #68dff0; color: white; border-color: #68dff0" class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">{% if request.user.first_name %}{{ request.user.first_name }} {{ request.user.last_name }}{% else %}{{ request.user.username }}{% endif %}
                             <span class="caret"></span></button>
                         <ul class="dropdown-menu">
                             <li><a tabindex="logout" href="{% url 'logout' %}">Logout</a></li>

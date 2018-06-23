@@ -29,19 +29,23 @@
                     </tr>
                     </thead>
                     <tbody class="ledger-table-body">
-                    {% for customer_ledger in customer_ledgers %}
-                        <tr>
-                            <td><a href="#">{{ customer_ledger.customer_name}}</a></td>
-                            <td>{{ customer_ledger.customer_phone }}</td>
-                            <td>{{ customer_ledger.ledger_amount }}</td>
-                            <td>{{ customer_ledger.payment_amount }}</td>
-                            <td>{{ customer_ledger.remaining_ledger }}</td>
-                            <td>
-                                <a href="{% url 'ledger:add_ledger' customer_id=customer_ledger.id %}"><button class="btn btn-primary btn-xs" title="Add New Ledger"><i class="fa fa-plus"></i></button></a>
-                                <a href="{% url 'ledger:customer_ledger_detail' customer_id=customer_ledger.id %}"><button class="btn btn-success btn-xs" title="Customer Ledger Detail"><i class="fa fa-eye"></i></button></a>
-                                <a href="{% url 'ledger:payment_ledger' customer_id=customer_ledger.id %}"><button class="btn btn-danger btn-xs" title="Payment Payment"><i class="fa fa-credit-card"></i></button></a></td>
-                        </tr>
-                    {% endfor %}
+                    {% if customer_ledgers %}
+                        {% for customer_ledger in customer_ledgers %}
+                            <tr>
+                                <td><a href="#">{{ customer_ledger.customer_name}}</a></td>
+                                <td>{{ customer_ledger.customer_phone }}</td>
+                                <td>{{ customer_ledger.ledger_amount }}</td>
+                                <td>{{ customer_ledger.payment_amount }}</td>
+                                <td>{{ customer_ledger.remaining_ledger }}</td>
+                                <td>
+                                    <a href="{% url 'ledger:add_ledger' customer_id=customer_ledger.id %}"><button class="btn btn-primary btn-xs" title="Add New Ledger"><i class="fa fa-plus"></i></button></a>
+                                    <a href="{% url 'ledger:customer_ledger_detail' customer_id=customer_ledger.id %}"><button class="btn btn-success btn-xs" title="Customer Ledger Detail"><i class="fa fa-eye"></i></button></a>
+                                    <a href="{% url 'ledger:payment_ledger' customer_id=customer_ledger.id %}"><button class="btn btn-danger btn-xs" title="Payment Payment"><i class="fa fa-credit-card"></i></button></a></td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr><td colspan="6" class="text-center">No Record Found</td></tr>
+                    {% endif %}
                 </tbody>
             </table>
         </div>

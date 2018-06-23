@@ -23,12 +23,27 @@ class LoginView(FormView):
     def dispatch(self, request, *args, **kwargs):
 
         if self.request.user.is_authenticated():
+            if (
+                self.request.user.retailer_user.role_type ==
+                self.request.user.retailer_user.ROLE_TYPE_LEDGER_VIEW
+            ):
+                return HttpResponseRedirect(
+                    reverse('ledger:customer_ledger_list'))
+
             return HttpResponseRedirect(reverse('index'))
 
         return super(LoginView, self).dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
-        auth_login(self.request, form.get_user())
+        user = form.get_user()
+        auth_login(self.request, user)
+        if (
+            user.retailer_user.role_type ==
+            user.retailer_user.ROLE_TYPE_LEDGER_VIEW
+        ):
+            return HttpResponseRedirect(
+                reverse('ledger:customer_ledger_list'))
+
         return HttpResponseRedirect(reverse('index'))
     
     def form_invalid(self, form):
