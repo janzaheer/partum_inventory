@@ -38,12 +38,12 @@
         <div class="sidebar-toggle-box">
             <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
         </div>
-        <a href="{% url 'index' %}" class="logo"><b>Partum Inventory</b></a>
+        <a href="{% url 'index' %}" class="logo"><b>{{ request.user.retailer_user.retailer.name }} Dairy</b></a>
         <div class="top-menu">
             <ul class="nav pull-right top-menu">
                 <li>
                     <div class="dropdown" style="margin: 15px;">
-                        <button style="background: #68dff0; color: white; border-color: #68dff0" class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">{% if request.user.first_name %}{{ request.user.first_name }} {{ request.user.last_name }}{% else %}{{ request.user.username }}{% endif %}
+                        <button style="background: #68dff0; color: white; border-color: #68dff0" class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"><span class="hidden-phone">{% if request.user.first_name %}{{ request.user.first_name }} {{ request.user.last_name }}{% else %}{{ request.user.username }}{% endif %}</span>
                             <span class="caret"></span></button>
                         <ul class="dropdown-menu">
                             <li><a tabindex="logout" href="{% url 'logout' %}">Logout</a></li>
@@ -59,12 +59,14 @@
         <div id="sidebar"  class="nav-collapse ">
             <!-- sidebar menu start-->
             <ul class="sidebar-menu" id="nav-accordion">
-                {% if request.user.retailer_user.retailer.logo %}
-                    <p class="centered"><a href="{% url 'index' %}"><img src="{{ request.user.retailer_user.retailer.logo.url }}" class="img-circle" width="60"></a></p>
-                {% else %}
-                    <div id="profileImage"></div>
-                {% endif %}
-                <h5 class="centered profile_name">{{ request.user.retailer_user.retailer.name|title }}</h5>
+                <div class="hidden-phone">
+                    {% if request.user.retailer_user.retailer.logo %}
+                        <p class="centered"><a href="{% url 'index' %}"><img src="{{ request.user.retailer_user.retailer.logo.url }}" class="img-circle" width="60"></a></p>
+                    {% else %}
+                        <div id="profileImage"></div>
+                    {% endif %}
+                    <h5 class="centered profile_name">{{ request.user.retailer_user.retailer.name|title }}</h5>
+                </div>
                 {% if request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_OWNER or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_VIEW_ACCOUNT %}
                     <li class="mt">
                         <a class="{% block menu_dashboard %}{% endblock %}" href="{% url 'index' %}">
