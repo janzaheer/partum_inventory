@@ -73,7 +73,17 @@
                         </a>
                     </li>
                 {% endif %}
-                {% if request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_DATA_ENTRY_USER or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_OWNER or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_VIEW_ACCOUNT %}
+                <li class="sub-menu">
+                    <a class="{% block menu_customer %}{% endblock %}" href="javascript:;" >
+                        <i class="fa fa-clipboard"></i>
+                        <span>Customers</span>
+                    </a>
+                    <ul class="sub">
+                        <li class="{% block submenu_create_customer %}{% endblock %}"><a  href="{% url 'create_customer' %}">Create Customer</a></li>
+                        <li class="{% block submenu_list_customer %}{% endblock %}"><a  href="{% url 'customers' %}">Customers</a></li>
+                    </ul>
+                </li>
+                {% if request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_LEDGER_VIEW or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_OWNER or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_VIEW_ACCOUNT %}
                     <li class="sub-menu">
                         <a class="{% block menu_ledger %}{% endblock %}" href="javascript:;" >
                             <i class="fa fa-life-ring"></i>
@@ -114,16 +124,6 @@
                         </ul>
                     </li>
                 {% endif %}
-                <li class="sub-menu">
-                    <a class="{% block menu_customer %}{% endblock %}" href="javascript:;" >
-                        <i class="fa fa-clipboard"></i>
-                        <span>Customers</span>
-                    </a>
-                    <ul class="sub">
-                        <li class="{% block submenu_create_customer %}{% endblock %}"><a  href="{% url 'create_customer' %}">Create Customer</a></li>
-                        <li class="{% block submenu_list_customer %}{% endblock %}"><a  href="{% url 'customers' %}">Customers</a></li>
-                    </ul>
-                </li>
             </ul>
               <!-- sidebar menu end-->
           </div>
