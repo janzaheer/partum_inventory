@@ -34,9 +34,9 @@
                             <tr>
                                 <td><a href="#">{{ customer_ledger.customer_name}}</a></td>
                                 <td>{{ customer_ledger.customer_phone }}</td>
-                                <td>{{ customer_ledger.ledger_amount }}</td>
-                                <td>{{ customer_ledger.payment_amount }}</td>
-                                <td>{{ customer_ledger.remaining_ledger }}</td>
+                                <td>{{ customer_ledger.ledger_amount|floatformat:-2 }}</td>
+                                <td>{{ customer_ledger.payment_amount|floatformat:-2 }}</td>
+                                <td>{{ customer_ledger.remaining_ledger|floatformat:-2 }}</td>
                                 <td>
                                     <a href="{% url 'ledger:add_ledger' customer_id=customer_ledger.id %}"><button class="btn btn-primary btn-xs" title="Add New Ledger"><i class="fa fa-plus"></i></button></a>
                                     <a href="{% url 'ledger:customer_ledger_detail' customer_id=customer_ledger.id %}"><button class="btn btn-success btn-xs" title="Customer Ledger Detail"><i class="fa fa-eye"></i></button></a>
