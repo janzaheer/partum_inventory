@@ -46,9 +46,9 @@
                         <button style="background: #68dff0; color: white; border-color: #68dff0" class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"><span class="hidden-phone">{% if request.user.first_name %}{{ request.user.first_name }} {{ request.user.last_name }}{% else %}{{ request.user.username }}{% endif %}</span>
                             <span class="caret"></span></button>
                         <ul class="dropdown-menu">
-                            <li><a tabindex="logout" href="{% url 'logout' %}">Logout</a></li>
                             <li><a tabindex="Setting" href="">Setting</a></li>
                             <li><a tabindex="feed_back" href="">FeedBack</a></li>
+                             <li><a tabindex="logout" href="{% url 'logout' %}">Logout</a></li>
 
                         </ul>
                     </div>
