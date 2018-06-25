@@ -19,7 +19,7 @@
                             <input type="text" class=" form-control shop" name="shop" placeholder="Customer Shop Name (Optional)" value="{% if object.shop %}{{ object.shop }}{% endif %}"><br>
                             <textarea name="address" class="form-control address" placeholder="Customer Address (Optional)">{% if object.address %}{{ object.address }}{% endif %}</textarea><br>
                             <input type="hidden" name="retailer" value="{{ request.user.retailer_user.retailer.id }}">
-                            <button type="submit" class="btn btn-primary product-sub-btn" style="float: right">Save Customer</button>
+                            <button type="submit" class="btn btn-primary product-sub-btn" style="float: right">Update Customer</button>
                         </div>
                     </div>
                 </form>

@@ -22,17 +22,15 @@
                     <th><i class=""></i> Item Name</th>
                     <th><i class="fa fa-bookmark"></i> Quantity</th>
                     <th><i class="fa fa-bookmark"></i> Price</th>
-                    <th><i class=" fa fa-edit"></i> Discount %</th>
                     <th><i class=" fa fa-bookmark"></i> Date</th>
                 </tr>
                 </thead>
                 <tbody class="purchased-table-body">
                 {% for purchased_product in purchased_products %}
                     <tr>
-                        <td><a href="#">{{ purchased_product.product.name}}</a></td>
+                        <td>{{ purchased_product.product.name}}</td>
                         <td>{{ purchased_product.quantity }}</td>
                         <td>{{ purchased_product.price }}</td>
-                        <td>{{ purchased_product.discount_percentage }}</td>
                         <td>{{ purchased_product.created_at|date }}</td>
                     </tr>
                 {% endfor %}

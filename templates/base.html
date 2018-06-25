@@ -47,8 +47,12 @@
                             <span class="caret"></span></button>
                         <ul class="dropdown-menu">
                             <li><a tabindex="logout" href="{% url 'logout' %}">Logout</a></li>
+                            <li><a tabindex="Setting" href="">Setting</a></li>
+                            <li><a tabindex="feed_back" href="">FeedBack</a></li>
+
                         </ul>
                     </div>
+
 
                 </li>
             </ul>
@@ -92,7 +96,7 @@
                             <span>Ledgers</span>
                         </a>
                         <ul class="sub">
-                            <li class="{% block submenu_customer_ledger %}{% endblock %}"><a  href="{% url 'ledger:customer_ledger_list' %}">Customer Ledger List</a></li>
+                            <li class="{% block submenu_customer_ledger %}{% endblock %}"><a  href="{% url 'ledger:customer_ledger_list' %}">Ledger List</a></li>
                             <li class="{% block submenu_add_new_ledger %}{% endblock %}"><a  href="{% url 'ledger:add_new_ledger' %}">Add Ledger</a></li>
 
                         </ul>
