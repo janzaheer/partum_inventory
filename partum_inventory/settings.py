@@ -87,27 +87,10 @@ WSGI_APPLICATION = 'partum_inventory.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'partum_inventory',
-        'USER': 'root',
-        'PASSWORD': 'partum_inventory'
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'inventory_db',
-        'USER': 'root',
-        'OPTIONS': {
-            'client_encoding': 'UTF8',
-        }
-    }
-}
-
-import dj_database_url
-db_from_env = dj_database_url.config()
-DATABASES['default'].update(db_from_env)
 
 
 # Password validation
@@ -148,16 +131,6 @@ USE_TZ = True
 
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-
-env = environ.Env()
-env.read_env(str(ROOT_DIR.path('.env')))
-
-DATABASES = {
-    'default': env.db('DATABASE_URL'),
-}
-DATABASES['default']['ATOMIC_REQUESTS'] = True
-
 
 STATIC_ROOT = os.path.join(ROOT_DIR, 'static')
 
