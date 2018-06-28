@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+import environ
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -25,7 +26,7 @@ SECRET_KEY = 'a64=!httk^j=qb$of02n07%+^y*wos2152aj5f49s_&^q-hd04'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['demo-inventory.herokuapp.com', '*']
 
 
 # Application definition
@@ -86,10 +87,8 @@ WSGI_APPLICATION = 'partum_inventory.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'partum_inventory',
-        'USER': 'root',
-        'PASSWORD': 'partum_inventory'
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
@@ -133,7 +132,6 @@ USE_TZ = True
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 STATIC_ROOT = os.path.join(ROOT_DIR, 'static')
 
 STATIC_URL = '/static/'  # also misconfigured; should be absolute URI
@@ -146,5 +144,7 @@ STATICFILES_DIRS = (
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(ROOT_DIR, 'media')
 
+# STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
-from partum_inventory.settings_local import *
+
+# from partum_inventory.settings_local import *
