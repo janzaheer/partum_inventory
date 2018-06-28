@@ -14,6 +14,9 @@ urlpatterns = [
     url(r'^logout/$', LogoutView.as_view(), name='logout'),
 
     url(
+        r'^api/', include('pis_com.api_urls', namespace='com_api')
+    ),
+    url(
         r'^customer/create/$',
         CreateCustomer.as_view(),
         name='create_customer'

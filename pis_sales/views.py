@@ -222,9 +222,11 @@ class InvoiceDetailView(TemplateView):
 class InvoicesList(TemplateView):
     template_name = 'sales/invoice_list.html'
 
-    @staticmethod
-    def get_sales_history():
-        return SalesHistory.objects.all().order_by('-created_at')
+    def get_sales_history(self):
+        return (
+            self.request.user.retailer_user.retailer.
+            retailer_sales.all().order_by('-created_at')
+        )
 
     def get_context_data(self, **kwargs):
         context = super(InvoicesList, self).get_context_data(**kwargs)
