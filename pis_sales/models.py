@@ -31,10 +31,19 @@ class SalesHistory(DatedModel):
         max_length=100, blank=True, null=True
     )
 
+    extra_items = models.ManyToManyField(
+        'pis_product.ExtraItems',
+        max_length=200, blank=True, null=True
+    )
+
     total_quantity = models.CharField(
         max_length=10, blank=True, null=True, default=1)
 
     sub_total = models.DecimalField(
+        max_digits=8, decimal_places=2, default=0, blank=True, null=True
+    )
+
+    paid_amount = models.DecimalField(
         max_digits=8, decimal_places=2, default=0, blank=True, null=True
     )
 

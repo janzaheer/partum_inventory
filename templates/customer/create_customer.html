@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% block menu_customer %}active{% endblock %}
+{% block submenu_create_customer %}active{% endblock %}
+
+{% block content %}
+     <div class="col-md-6">
+        <br>
+        <a href="{% url 'customers' %}"><button type="button" class="btn btn-primary" style="float: left">Back to Customers</button></a>
+        <br><br><br>
+        <div class="content-panel">
+            <h3 class="text-center">Create New Customer</h3>
+            <div class="panel-body">
+                <form class="form-horizontal add-customer-form" action="{% url 'create_customer' %}" method="post" >
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            {% csrf_token %}
+                            <span class="customer_name_error" style="color:red; display:none">This field is required..</span>
+                            <span class="customer_exisit" style="color: red; display: none">Customer With this Phone Number Already exists.</span>
+                            <input type="text" class="form-control customer_name" name="customer_name" placeholder="Customer Name"><br>
+                            <span class="customer_phone_error" style="color: red;display: none" >This Field is Required</span>
+                            <input type="text" class="form-control customer_phone" name="customer_phone" onkeyup="checkDec(this);" placeholder="Customer Phone"><br>
+                            <input type="text" class=" form-control shop" name="shop" placeholder="Customer Shop Name (Optional)"><br>
+                            <textarea name="address" class="form-control address" placeholder="Customer Address (Optional)"></textarea><br>
+                            <input type="hidden" name="retailer" value="{{ request.user.retailer_user.retailer.id }}">
+                            <button type="button" class="btn btn-primary product-sub-btn" style="float: right">Save Customer</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+     <script>
+         $(document).ready (function () {
+             $('.product-sub-btn').on ('click', function () {
+                 var error= false;
+
+                 if ($('.customer_name').val()== "") {
+                     $('.customer_name_error').show();
+                     error = true;
+                 }
+                 else
+                 {
+                     $('.customer_name_error').hide();
+                 }
+
+                 if ($('.customer_phone').val()== "") {
+                     $('.customer_phone_error').show();
+                     error = true;
+                 }
+                 else {
+                     $('.customer-phone-error').hide();
+                 }
+
+                 if (error == false) {
+                     {% for customer  in customers%}
+                         if ($('.customer_phone').val() == '{{ customer.customer_phone }}') {
+                             $('.customer_exisit').show();
+                             return;
+                         }
+                     {% endfor %}
+                 }
+                 if (error == false) {
+                     $('.add-customer-form').submit();
+                 }
+                 else
+                 {
+                     return;
+                 }
+             });
+         });
+
+         $(".customer_name").keyup (function () {
+             $('.customer_name_error').hide();
+
+         });
+         $(".customer_phone").keyup(function () {
+             $('.customer_phone_error').hide();
+             checkDec(this);
+         });
+         function checkDec(el){
+             var ex = /^[0-9]+\.?[0-9]*$/;
+             if(ex.test(el.value)==false){
+                 el.value = el.value.substring(0,el.value.length - 1);
+             }
+         }
+    </script>
+
+{% endblock %}

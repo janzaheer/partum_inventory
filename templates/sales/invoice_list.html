@@ -5,7 +5,7 @@
 {% block content %}
     <div class="col-md-12">
             <br>
-            <div class="content-panel">
+            <div class="content-panel table-responsive">
                 <table class="table table-striped table-advance table-hover invoice-table">
                     <h2 class="text-center">Sales List</h2>
                     <div class="input-group custom-search-form col-md-4" style="left: 5px">
@@ -20,27 +20,26 @@
                     <thead>
                     <tr>
                         <th><i class="fa fa-bullhorn"></i> Customer Name</th>
-                        <th class="hidden-phone"><i class="fa fa-question-circle"></i> Customer Phone</th>
+                        <th><i class="fa fa-question-circle"></i> Customer Phone</th>
                         <th><i class=" fa fa-bookmark"></i> Receipt No.</th>
                         <th><i class=" fa fa-edit"></i> Quantity</th>
-                        <th><i class=" fa fa-edit"></i> Grand Total</th>
-                        <th><i class=" fa fa-edit"></i> Status</th>
+                        <th><i class=" fa fa-try"></i> Grand Total</th>
+                        <th><i class=" fa fa-calendar"></i> Date</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
                     <tbody class="invoice-table-body">
                     {% for invoice in invoices %}
                         <tr>
-                            <td><a href="#">{{ invoice.customer.customer_name}}</a></td>
+                            <td><a href="{% url 'sales:invoice_detail' invoice_id=invoice.id %}">{{ invoice.customer.customer_name}}</a></td>
                             <td>{{ invoice.customer.customer_phone }}</td>
                             <td>{{ invoice.receipt_no }}</td>
                             <td>{{ invoice.total_quantity }}</td>
                             <td>{{ invoice.grand_total }}</td>
-                            <td>Paid</td>
+                            <td>{{ invoice.created_at|date }}</td>
                             <td>
-                                <a href="#"><button class="btn btn-primary btn-xs"><i class="fa fa-plus"></i></button></a>
-                                <a href="{% url 'sales:invoice_detail' invoice_id=invoice.id %}"><button class="btn btn-success btn-xs"><i class="fa fa-eye"></i></button></a>
-                                <a href="#"><button class="btn btn-danger btn-xs"><i class="fa fa-trash-o "></i></button></a>
+                                <a href="{% url 'sales:invoice_detail' invoice_id=invoice.id %}"><button class="btn btn-success btn-xs"><i class="fa fa-eye" title="Invoice list"></i></button></a>
+
                             </td>
                         </tr>
                     {% endfor %}

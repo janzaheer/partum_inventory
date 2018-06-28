@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block menu_ledger %}active{% endblock %}
+{% block submenu_customer_ledger %}active{% endblock %}
+{% block content %}
+    <div class="col-md-6">
+        <br>
+        <a href="{% url 'ledger:customer_ledger_detail' customer_id=customer.id%}"><button type="button" class="btn btn-primary" style="float: left">Customer Ledger Details</button></a>
+        <br><br><br>
+        <div class="content-panel">
+            <h3 class="text-center">{{ customer.customer_name }} <small>Payment</small></h3>
+            <div class="panel-body">
+                <form class="form-horizontal add-payment" action="{% url 'ledger:payment_ledger' customer_id=customer.id %}" method="post" >
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            {% csrf_token %}
+                            <span class="amount-error" style="color: red; display: none"> This Feild is Requried</span>
+                            <input type="text" class="form-control amount" name="amount" placeholder="Amount"><br>
+                            <input type="text" class="form-control payment_type" name="payment_type" placeholder="Payment Type">
+                            <span style="color: #68dff0">For example: UBL Online, HBL Check or Cash etc</span><br><br>
+                            <textarea placeholder="Description" name="description" class="form-control description"></textarea><br>
+                            <input type="hidden" name="customer" value="{{ customer.id }}">
+                            <input type="hidden" name="retailer" value="{{ request.user.retailer_user.retailer.id }}">
+                            <button type="button" class="btn btn-primary ledger-submit-btn" style="float: right">Save Ledger</button>
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        $('.document').ready ( function() {
+            $('.ledger-submit-btn').on('click', function(){
+                var error = false;
+                if ($('.amount').val ()== ""){
+                    $('.amount-error').show();
+                    error = true;
+                }
+                else {
+                    $('.amount-error').hide();
+                }
+                if (error == false){
+                    $('.add-payment').submit();
+                }
+
+                $('.amount').keyup(function () {
+                    $('.amount-error').hide();
+                    checkDec(this);
+                });
+                function checkDec(el){
+                    var ex = /^[0-9]+\.?[0-9]*$/;
+                    if(ex.test(el.value)==false){
+                        el.value = el.value.substring(0,el.value.length - 1);
+                    }
+                }
+
+            });
+        });
+
+    </script>
+{% endblock %}
+

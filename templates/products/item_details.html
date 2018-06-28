@@ -6,7 +6,7 @@
             <br>
             <a href="{% url 'product:add_product_items' product_id=product.id %}"><button type="button" class="btn btn-primary" style="float: left">Add New Items</button></a>
             <br><br><br>
-            <div class="content-panel">
+            <div class="content-panel table-responsive">
                 <table class="table table-striped table-advance table-hover item-table">
                     <h2 class="text-center">Product Item List</h2>
                     <div class="input-group custom-search-form col-md-4" style="left: 5px">
@@ -21,12 +21,11 @@
                     <thead>
                     <tr>
                         <th><i class="fa fa-bullhorn"></i> Item</th>
-                        <th class="hidden-phone"><i class="fa fa-question-circle"></i> Brand Name</th>
-                        <th><i class="fa fa-bookmark"></i> Retail Price</th>
-                        <th><i class=" fa fa-edit"></i> Consumer Price</th>
-                        <th><i class=" fa fa-edit"></i> Remaining Items</th>
-                        <th><i class=" fa fa-edit"></i> Purchased Items</th>
-                        <th>Actions</th>
+                        <th><i class="fa fa-question-circle"></i> Brand Name</th>
+                        <th><i class=" fa fa-try"></i> Consumer Price (pkr)</th>
+                        <th><i class=" fa fa-rebel"></i> Remaining Items</th>
+                        <th><i class=" fa fa-shield"></i> Purchased Items</th>
+                        <th><i class=" fa fa-calendar"></i> Date</th>
                     </tr>
                     </thead>
                     <tbody class="item-table-body">
@@ -34,15 +33,10 @@
                         <tr>
                             <td><a href="#">{{ detail.product.name}}</a></td>
                             <td class="#">{{ detail.product.brand_name }}</td>
-                            <td>{{ detail.retail_price }}</td>
-                            <td>{{ detail.consumer_price }}</td>
+                            <td>{{ detail.consumer_price|floatformat:-2 }}</td>
                             <td>{{ detail.available_item }}</td>
                             <td>{{ detail.purchased_item }}</td>
-                            <td>
-                                <a href="#"><button class="btn btn-primary btn-xs"><i class="fa fa-plus"></i></button></a>
-                                <a href="#"><button class="btn btn-success btn-xs"><i class="fa fa-eye"></i></button></a>
-                                <a href="#"><button class="btn btn-danger btn-xs"><i class="fa fa-trash-o "></i></button></a>
-                            </td>
+                            <td>{{ detail.created_at|date }}</td>
                         </tr>
                     {% endfor %}
                     </tbody>

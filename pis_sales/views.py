@@ -14,7 +14,10 @@ from pis_product.models import Product
 from pis_sales.models import SalesHistory
 from pis_product.forms import PurchasedProductForm
 from pis_sales.forms import BillingForm
-# from pis_com.forms import CustomerForm
+from pis_product.forms import ExtraItemForm
+from pis_com.forms import CustomerForm
+from pis_ledger.models import Ledger
+from pis_ledger.forms import LedgerForm
 
 
 class CreateInvoiceView(FormView):
@@ -79,6 +82,11 @@ class ProductItemAPIView(View):
 
 class GenerateInvoiceAPIView(View):
 
+    def __init__(self, *args, **kwargs):
+        super(GenerateInvoiceAPIView, self).__init__(*args, **kwargs)
+        self.customer = None
+        self.invoice = None
+
     @csrf_exempt
     def dispatch(self, request, *args, **kwargs):
         return super(
@@ -92,35 +100,57 @@ class GenerateInvoiceAPIView(View):
         shipping = self.request.POST.get('shipping')
         grand_total = self.request.POST.get('grand_total')
         totalQty = self.request.POST.get('totalQty')
+        remaining_payment = self.request.POST.get('remaining_amount')
+        paid_amount = self.request.POST.get('paid_amount')
         items = json.loads(self.request.POST.get('items'))
         purchased_items_id = []
+        extra_items_id = []
 
         for item in items:
             item_name = item.get('item_name')
-            product = Product.objects.get(
-                name=item_name,
-                retailer=self.request.user.retailer_user.retailer
-            )
-            form_kwargs = {
-                'product': product.id,
-                'quantity': item.get('qty'),
-                'discount_percentage': item.get('perdiscount'),
-                'purchase_amount': item.get('total'),
-            }
-            form = PurchasedProductForm(form_kwargs)
-            if form.is_valid():
-                purchased_item = form.save()
-                purchased_items_id.append(purchased_item.id)
-                product_details = (
-                    purchased_item.product.product_detail.
-                    filter(available_item__gte=int(item.get('qty'))).first()
+            try:
+                product = Product.objects.get(
+                    name=item_name,
+                    retailer=self.request.user.retailer_user.retailer
                 )
-                product_details.available_item = (
-                    product_details.available_item - int(item.get('qty'))
-                )
-                product_details.purchased_item = (
-                    product_details.purchased_item + int(item.get('qty')))
-                product_details.save()
+                form_kwargs = {
+                    'product': product.id,
+                    'quantity': item.get('qty'),
+                    'price': item.get('price'),
+                    'discount_percentage': item.get('perdiscount'),
+                    'purchase_amount': item.get('total'),
+                }
+                form = PurchasedProductForm(form_kwargs)
+                if form.is_valid():
+                    purchased_item = form.save()
+                    purchased_items_id.append(purchased_item.id)
+
+                    product_details = (
+                        purchased_item.product.product_detail.filter(
+                            available_item__gte=int(item.get('qty'))).first()
+                    )
+                    product_details.available_item = (
+                        product_details.available_item - int(
+                            item.get('qty'))
+                    )
+                    product_details.purchased_item = (
+                        product_details.purchased_item + int(
+                            item.get('qty')))
+                    product_details.save()
+
+            except Product.DoesNotExist:
+                extra_item_kwargs = {
+                    'retailer': self.request.user.retailer_user.retailer.id,
+                    'item_name': item.get('item_name'),
+                    'quantity': item.get('qty'),
+                    'price': item.get('price'),
+                    'discount_percentage': item.get('perdiscount'),
+                    'total': item.get('total'),
+                }
+                extra_item_form = ExtraItemForm(extra_item_kwargs)
+                if extra_item_form.is_valid():
+                    extra_item = extra_item_form.save()
+                    extra_items_id.append(extra_item.id)
 
         billing_form_kwargs = {
             'sub_total': sub_total,
@@ -129,6 +159,9 @@ class GenerateInvoiceAPIView(View):
             'total_quantity': totalQty,
             'shipping': shipping,
             'purchased_items': purchased_items_id,
+            'extra_items': extra_items_id,
+            'paid_amount': paid_amount,
+            'remaining_payment': remaining_payment,
             'retailer': self.request.user.retailer_user.retailer.id,
         }
 
@@ -142,18 +175,34 @@ class GenerateInvoiceAPIView(View):
                 'customer_phone': customer_phone,
                 'retailer': self.request.user.retailer_user.retailer.id
             }
-            # customer_form = CustomerForm(customer_form_kwargs)
-            # if customer_form.is_valid():
-            #     customer = customer_form.save()
-            #     billing_form_kwargs.update({
-            #         'customer': customer.id
-            #     })
+            customer_form = CustomerForm(customer_form_kwargs)
+            if customer_form.is_valid():
+                self.customer = customer_form.save()
+                billing_form_kwargs.update({
+                    'customer': self.customer.id
+                })
 
         billing_form = BillingForm(billing_form_kwargs)
         if billing_form.is_valid():
-            invoice = billing_form.save()
+            self.invoice = billing_form.save()
 
-        return JsonResponse({'invoice_id': invoice.id})
+        if float(remaining_payment):
+            ledger_form_kwargs = {
+                'retailer': self.request.user.retailer_user.retailer.id,
+                'customer': (
+                    self.request.POST.get('customer_id') or
+                    self.customer.id),
+                'amount': remaining_payment,
+                'description': (
+                    'Remaining Payment for Bill/Receipt No %s '
+                    % self.invoice.receipt_no)
+            }
+
+            ledger = LedgerForm(ledger_form_kwargs)
+            if ledger.is_valid():
+                ledger.save()
+
+        return JsonResponse({'invoice_id': self.invoice.id})
 
 
 class InvoiceDetailView(TemplateView):
@@ -164,7 +213,8 @@ class InvoiceDetailView(TemplateView):
         invoice = SalesHistory.objects.get(id=self.kwargs.get('invoice_id'))
         context.update({
             'invoice': invoice,
-            'product_details': invoice.product_details
+            'product_details': invoice.product_details,
+            'extra_items_details': invoice.extra_items
         })
         return context
 

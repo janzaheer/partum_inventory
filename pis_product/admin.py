@@ -4,6 +4,8 @@ from django.contrib import admin
 from pis_product.models import Product
 from pis_product.models import ProductDetail
 from pis_product.models import PurchasedProduct
+from pis_product.models import ExtraItems
+from pis_product.models import ClaimedProduct
 
 
 class ProductAdmin(admin.ModelAdmin):
@@ -80,6 +82,38 @@ class PurchasedProductAdmin(admin.ModelAdmin):
         return obj.product.retailer.name
 
 
+class ExtraItemsAdmin(admin.ModelAdmin):
+    list_display = (
+        '__unicode__', 'retailer', 'quantity', 'price', 'discount_percentage',
+        'total')
+
+    search_fields = ('item_name', 'retailer__name')
+    raw_id_fields = ('retailer', )
+
+    @staticmethod
+    def retailer(obj):
+        return obj.product.retailer.item_name
+
+
+class ClaimedProductAdmin(admin.ModelAdmin):
+    list_display = (
+        '__unicode__', 'brand_name', 'customer', 'claimed_items',
+        'claimed_amount', 'created_at'
+    )
+    search_fields = ('product__name', 'product__brand_name')
+    raw_id_fields = ('product',)
+
+    @staticmethod
+    def brand_name(obj):
+        return obj.product.brand_name or None
+
+    @staticmethod
+    def customer(obj):
+        return obj.customer.customer_name or None
+
+
 admin.site.register(Product, ProductAdmin)
 admin.site.register(ProductDetail, ProductDetailAdmin)
 admin.site.register(PurchasedProduct, PurchasedProductAdmin)
+admin.site.register(ExtraItems, ExtraItemsAdmin)
+admin.site.register(ClaimedProduct, ClaimedProductAdmin)

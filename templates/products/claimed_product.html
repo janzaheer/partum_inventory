@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% block menu_product %}active{% endblock %}
+{% block submenu_purchased_claimeditems %}active{% endblock %}
+
+{% block content %}
+    <div class="col-md-6">
+        <br>
+        <a href="{% url 'product:items_list' %}"><button type="button" class="btn btn-primary" style="float: left">Back to Product Item List</button></a>
+        <br><br><br>
+        <div class="content-panel">
+            <h3 class="text-center">Claimed items</h3>
+            <div class="panel-body">
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <span class="customer_error" style="color: red; display: none" > This Field is requreid</span>
+                        <input type="text" class="form-control customer" name="customer" placeholder="Customer" list="customer-list">
+                        <datalist id="customer-list">
+                            {% for customer in customers %}
+                                <option data-id="{{ customer.id }}" value="{{ customer.customer_name }}">{{ customer.customer_phone }}</option>
+                            {% endfor %}
+                        </datalist>
+                        <br>
+                        <span class="product_error"style="color: red; display: none" >This field is Required</span>
+                        <input type="text" class="form-control product" name="product" placeholder="Product" list="product-list">
+                        <datalist id="product-list">
+                            {% for product in products %}
+                                <option data-id="{{ product.id }}" value="{{ product.name }}">{{ product.brand_name }}</option>
+                            {% endfor %}
+                        </datalist>
+                        <br>
+                        <span class="claimed_item_error" style="color: red; display: none" >This field is Required</span>
+                        <input type="number" class="form-control claimed_items" name="claimed_items" placeholder="Claimed Items"><br>
+                        <span class="claimed_amount_error" style="color: red; display: none" >This field is Required</span>
+                        <input type="text" class="form-control claimed_amount"  name="claimed_amount"  placeholder="Claimed Amount"><br>
+                        <button type="button" class="btn btn-primary claimed-btn" style="float: right">Claimed</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+    {{ block.super }}
+    <script>
+        $('.claimed-btn').on('click', function () {
+            var error = false;
+            if ($('.customer').val ()== ""){
+                $('.customer_error').show();
+                error = true;
+            }
+            else
+            {
+                $('.customer_error').hide();
+            }
+            if ($('.product').val() =="") {
+                $('.product_error').show();
+                error = true;
+            }
+            else {
+                $('.product_error').hide();
+            }
+            if ($('.claimed_items').val()== ""){
+                $('.claimed_item_error').show();
+                error = true;
+            }
+            else{
+                $('.claimed_item_error').hide();
+            }
+            if ($('.claimed_amount').val()== "" ) {
+                $('.claimed_amount_error').show();
+                error = true;
+            }
+            else {
+                $('.claimed_amount_error').hide()
+            }
+
+            if (error == true) {
+                return;
+            }
+
+            var product_val = $('.product').val();
+            var product_id = $('#product-list [value="' + product_val + '"]').data('id');
+
+            var customer_val = $('.customer').val();
+            var customer_id = $('#customer-list [value="' + customer_val + '"]').data('id');
+
+            $.post('{% url "product:claimed_items" %}', {
+                product: product_id,
+                claimed_items: $('.claimed_items').val(),
+                customer: customer_id,
+                claimed_amount: $('.claimed_amount').val(),
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            }, function (result, status) {
+                window.location.href = '{% url "product:items_list" %}';
+            });
+        });
+
+        $('.customer').keyup(function () {
+            $('.customer_error').hide();
+        });
+
+        $('.product').keyup(function () {
+            $('.product_error').hide();
+        });
+
+        $('.claimed_items').keyup(function () {
+            $('.claimed_item_error').hide();
+        });
+
+        $('.claimed_amount').keyup(function () {
+            $('.claimed_amount_error').hide();
+            checkDec(this);
+        });
+        function checkDec(el){
+            var ex = /^[0-9]+\.?[0-9]*$/;
+            if(ex.test(el.value)==false){
+                el.value = el.value.substring(0,el.value.length - 1);
+            }
+        }
+    </script>
+{% endblock %}

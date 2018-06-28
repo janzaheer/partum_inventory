@@ -8,8 +8,10 @@ from django.core.urlresolvers import reverse, reverse_lazy
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 
-from pis_product.models import PurchasedProduct
-from pis_product.forms import ProductForm, ProductDetailsForm
+from pis_product.models import PurchasedProduct, ExtraItems, ClaimedProduct
+from pis_product.forms import (
+    ProductForm, ProductDetailsForm, ClaimedProductForm)
+from pis_ledger.forms import PaymentForm
 
 
 class ProductItemList(TemplateView):
@@ -54,7 +56,8 @@ class ProductDetailList(TemplateView):
             raise Http404('Product not found with concerned User')
 
         context.update({
-            'items_details': product.product_detail.all(),
+            'items_details': product.product_detail.all().order_by(
+                '-created_at'),
             'product': product,
         })
 
@@ -81,10 +84,10 @@ class AddNewProduct(FormView):
     def form_valid(self, form):
         product = form.save()
         details_form_kwargs = {
-            'retail_price': self.request.POST.get('retail_price'),
-            'consumer_price': self.request.POST.get('consumer_price'),
-            'available_item': self.request.POST.get('available_item'),
-            'purchased_item': self.request.POST.get('purchased_item'),
+            'retail_price': self.request.POST.get('retail_price') or 0,
+            'consumer_price': self.request.POST.get('consumer_price') or 0,
+            'available_item': self.request.POST.get('available_item') or 0,
+            'purchased_item': self.request.POST.get('purchased_item') or 0,
         }
         self.add_product_details(
             product_id=product.id,
@@ -141,4 +144,101 @@ class PurchasedItems(TemplateView):
             'purchased_products': purchased_product
         })
 
+        return context
+
+
+class ExtraItemsView(TemplateView):
+    template_name = 'products/purchased_extraitems.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(ExtraItemsView, self).get_context_data(**kwargs)
+        extra_products = ExtraItems.objects.filter(
+            retailer=self.request.user.retailer_user.retailer
+        )
+
+        context.update({
+            'purchased_extra_items': extra_products
+        })
+
+        return context
+
+
+class ClaimedProductFormView(FormView):
+    template_name = 'products/claimed_product.html'
+    form_class = ClaimedProductForm
+
+    @staticmethod
+    def purchased_items_update(claimed_item, claimed_number):
+        product = (
+            claimed_item.product.product_detail.filter(
+                available_item__gte=claimed_number
+            ).first()
+        )
+        product.purchased_item = (
+            product.purchased_item - claimed_number
+        )
+        product.save()
+
+    def claimed_items_payment(self, claimed_item, amount):
+        payment_form_kwargs = {
+            'customer': claimed_item.customer.id,
+            'retailer': self.request.user.retailer_user.retailer.id,
+            'amount': amount,
+            'description': 'Amount Refunded from Claimed'
+                           ' Item ID (%s)' % claimed_item.id
+        }
+        payment_form = PaymentForm(payment_form_kwargs)
+        if payment_form.is_valid():
+            payment_form.save()
+
+    def form_valid(self, form):
+        claimed_item = form.save()
+
+        # update the purchased product accordingly
+        self.purchased_items_update(
+            claimed_item=claimed_item,
+            claimed_number=int(form.cleaned_data.get('claimed_items'))
+        )
+
+        # Doing a payment of claimed amount
+        self.claimed_items_payment(
+            claimed_item=claimed_item,
+            amount=form.cleaned_data.get('claimed_amount')
+        )
+
+        return HttpResponseRedirect(reverse('product:items_list'))
+    
+    def form_invalid(self, form):
+        return super(ClaimedProductFormView, self).form_invalid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super(
+            ClaimedProductFormView, self).get_context_data(**kwargs)
+
+        products = (
+            self.request.user.retailer_user.retailer.
+            retailer_product.all().order_by('name')
+        )
+        customers = (
+            self.request.user.retailer_user.retailer.
+            retailer_customer.all().order_by('customer_name')
+        )
+        context.update({
+            'products': products,
+            'customers': customers,
+        })
+
+        return context
+
+
+class ClaimedItemsListView(TemplateView):
+    template_name = 'products/claimed_product_list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(
+            ClaimedItemsListView, self).get_context_data(**kwargs)
+        context.update({
+            'claimed_items': ClaimedProduct.objects.all().order_by(
+                '-created_at')
+        })
         return context

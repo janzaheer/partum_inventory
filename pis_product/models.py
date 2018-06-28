@@ -24,6 +24,10 @@ class Product(models.Model):
         obj = self.product_detail.aggregate(Sum('purchased_item'))
         return obj.get('purchased_item__sum')
 
+    def total_num_of_claimed_items(self):
+        obj = self.claimed_product.aggregate(Sum('claimed_items'))
+        return obj.get('claimed_items__sum')
+
 
 class ProductDetail(DatedModel):
     product = models.ForeignKey(
@@ -49,12 +53,49 @@ class PurchasedProduct(DatedModel):
     quantity = models.DecimalField(
         max_digits=8, decimal_places=2, default=1, blank=True, null=True
     )
+    price = models.DecimalField(
+        max_digits=8, decimal_places=2, default=0, blank=True, null=True
+    )
     discount_percentage = models.DecimalField(
         max_digits=8, decimal_places=2, default=0, blank=True, null=True
     )
     purchase_amount = models.DecimalField(
         max_digits=8, decimal_places=2, default=0, blank=True, null=True
     )
+
+    def __unicode__(self):
+        return self.product.name
+
+
+class ExtraItems(DatedModel):
+    retailer = models.ForeignKey(
+        'pis_retailer.Retailer', related_name='retailer_extra_items'
+    )
+    item_name = models.CharField(
+        max_length=100, blank=True, null=True)
+    quantity = models.CharField(
+        max_length=100, blank=True, null=True)
+    price = models.DecimalField(
+        max_digits=8, decimal_places=2, default=0, blank=True, null=True)
+    discount_percentage = models.DecimalField(
+        max_digits=8, decimal_places=2, default=0, blank=True, null=True)
+    total = models.DecimalField(
+        max_digits=8, decimal_places=2, default=0, blank=True, null=True)
+
+    def __unicode__(self):
+        return self.item_name or ''
+
+
+class ClaimedProduct(DatedModel):
+    product = models.ForeignKey(Product, related_name='claimed_product')
+    customer = models.ForeignKey(
+        'pis_com.Customer', related_name='customer_claimed_items',
+        null=True, blank=True,
+    )
+    claimed_items = models.IntegerField(
+        default=1, verbose_name='No. of Claimed Items')
+    claimed_amount = models.DecimalField(
+        max_digits=8, decimal_places=2, default=0, blank=True, null=True)
 
     def __unicode__(self):
         return self.product.name
