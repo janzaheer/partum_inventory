@@ -12,6 +12,12 @@ class DatedModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
 
+class AdminConfiguration(models.Model):
+    production = models.BooleanField(default=False)
+    demo = models.BooleanField(default=False)
+    local = models.BooleanField(default=False)
+
+
 class UserProfile(models.Model):
     USER_TYPE_SHOP = 'shop'
     USER_TYPE_COMPANY = 'company'

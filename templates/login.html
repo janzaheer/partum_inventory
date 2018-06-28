@@ -37,7 +37,6 @@
 <body>
 <div id="login-page">
     <div class="container">
-
         <form class="form-login" method="post" action="{% url 'login' %}">
             <h2 class="form-login-heading">sign in now</h2>
             <div class="login-wrap">
@@ -92,8 +91,28 @@
 {#                    </div>#}
 {#                </div>#}
 {#            </div>#}
+            {% if config.demo %}
+                <hr>
+                <table class="table table-striped table-advance table-hover table-bordered">
+                    <h3 style="text-align: center">Test Accounts</h3>
+                    <thead>
+                        <tr>
+                            <th>User Type</th>
+                            <th>Username</th>
+                            <th>Password</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Owner</td>
+                            <td>demo</td>
+                            <td>Dairy000</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <br>
+            {% endif %}
         </form>
-
     </div>
 </div>
 

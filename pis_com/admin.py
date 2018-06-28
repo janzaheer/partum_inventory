@@ -3,6 +3,7 @@ from django.contrib import admin
 
 from pis_com.models import UserProfile
 from pis_com.models import Customer
+from pis_com.models import AdminConfiguration
 
 
 class UserProfileAdmin(admin.ModelAdmin):
@@ -36,3 +37,4 @@ class CustomerAdmin(admin.ModelAdmin):
 
 admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.register(Customer, CustomerAdmin)
+admin.site.register(AdminConfiguration)
