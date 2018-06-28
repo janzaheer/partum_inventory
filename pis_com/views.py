@@ -8,6 +8,8 @@ from django.views.generic import TemplateView, RedirectView, UpdateView
 from django.views.generic import FormView
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse, reverse_lazy
+from django.db.models import Sum
+from django.utils import timezone
 
 from pis_com.models import Customer
 from pis_com.forms import CustomerForm
@@ -149,6 +151,35 @@ class HomePageView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(HomePageView, self).get_context_data(**kwargs)
+
+        sales = self.request.user.retailer_user.retailer.retailer_sales.all()
+        sales_sum = sales.aggregate(
+            total_sales=Sum('grand_total')
+        )
+
+        today_sales = (
+            self.request.user.retailer_user.retailer.
+            retailer_sales.filter(
+                created_at__icontains=timezone.now().date()
+            )
+        )
+        today_sales_sum = today_sales.aggregate(
+            total_sales=Sum('grand_total')
+        )
+
+        context.update({
+            'sales_count': sales.count(),
+            'sales_sum': (
+                int(sales_sum.get('total_sales')) if
+                sales_sum.get('total_sales') else 0
+            ),
+            'today_sales_count': today_sales.count(),
+            'today_sales_sum': (
+                int(today_sales_sum.get('total_sales')) if
+                today_sales_sum.get('total_sales') else 0
+            )
+        })
+
         return context
 
 

@@ -6,7 +6,7 @@ $.get('/api/sales/daily/', function(result, status){
 
     $.each(result.sales_data, function(index, value){
 
-        $('.daily-sales-tbody').append('<tr><td>'+ value.date + '</td><td>' + value.sales + '</td><td>'+ value.profit+'</td></tr>');
+        $('.daily-sales-tbody').append('<tr><td>'+ value.date + '</td><td>' + value.sales + '</td></tr>');
 
         sales.push(value.sales);
         profit.push(value.profit);
@@ -18,10 +18,10 @@ $.get('/api/sales/daily/', function(result, status){
             type: 'area'
         },
         title: {
-            text: 'Partum Inventory Graph on Daily bases'
+            text: 'Sales Graph Weekly Bases'
         },
         subtitle: {
-            text: 'Partum Inventory'
+            text: 'Inventory'
         },
         xAxis: {
             categories: sales_date.reverse(),
@@ -32,7 +32,7 @@ $.get('/api/sales/daily/', function(result, status){
         },
         yAxis: {
             title: {
-                text: 'Rupees'
+                text: ''
             },
             labels: {
                 formatter: function () {
@@ -42,7 +42,7 @@ $.get('/api/sales/daily/', function(result, status){
         },
         tooltip: {
             split: true,
-            valueSuffix: ' rupees'
+            valueSuffix: 'Rs'
         },
         plotOptions: {
             area: {
@@ -59,9 +59,6 @@ $.get('/api/sales/daily/', function(result, status){
         series: [{
             name: 'Sales',
             data: sales.reverse()
-        }, {
-            name: 'Profit',
-            data: profit.reverse()
         }]
     });
 
@@ -75,7 +72,7 @@ $.get('/api/sales/weekly/', function(result, status){
 
     $.each(result.sales_data, function (index, value) {
 
-        $('.weekly-sales-tbody').append('<tr><td>'+ value.date + '</td><td>' + value.sales + '</td><td>'+ value.profit+'</td></tr>');
+        $('.weekly-sales-tbody').append('<tr><td>'+ value.date + '</td><td>' + value.sales + '</td></tr>');
         sales.push(value.sales);
         profit.push(value.profit);
         sales_date.push(value.date);
@@ -87,10 +84,10 @@ $.get('/api/sales/weekly/', function(result, status){
             type: 'area'
         },
         title: {
-            text: 'Partum Inventory Graph on weekly bases'
+            text: 'Sales Graph Weekly Bases'
         },
         subtitle: {
-            text: 'Partum Inventory'
+            text: 'Inventory'
         },
         xAxis: {
             categories: sales_date.reverse(),
@@ -101,7 +98,7 @@ $.get('/api/sales/weekly/', function(result, status){
         },
         yAxis: {
             title: {
-                text: 'Rupees'
+                text: ''
             },
             labels: {
                 formatter: function () {
@@ -111,7 +108,7 @@ $.get('/api/sales/weekly/', function(result, status){
         },
         tooltip: {
             split: true,
-            valueSuffix: ' Rupees'
+            valueSuffix: 'Rs'
         },
         plotOptions: {
             area: {
@@ -127,9 +124,6 @@ $.get('/api/sales/weekly/', function(result, status){
         series: [{
             name: 'Sales',
             data: sales.reverse()
-        }, {
-            name: 'Profit',
-            data: profit.reverse()
         }]
     });
 
@@ -147,7 +141,7 @@ $.get('/api/sales/monthly/', function (result, status) {
     var sales_date =[];
     console.log('coming here 11111');
     $.each(result.sales_data , function (index, value) {
-        $('.monthly-sales-tbody').append('<tr><td>'+ value.date + '</td><td>' + value.sales + '</td><td>'+ value.profit+'</td></tr>');
+        $('.monthly-sales-tbody').append('<tr><td>'+ value.date + '</td><td>' + value.sales + '</td></tr>');
 
 
         sales.push(value.sales);
@@ -202,10 +196,7 @@ $.get('/api/sales/monthly/', function (result, status) {
         },
         series: [{
             name: 'sales',
-            data: sales
-        }, {
-            name: 'profit',
-            data: profit
+            data: sales.reverse()
         }]
     });
 });

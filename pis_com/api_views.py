@@ -20,7 +20,6 @@ class DailySalesAPI(View):
                 int(sales.get('total_sales')) if
                 sales.get('total_sales') else 0
             ),
-            'profit': 200,
         }
         if week_date:
             data.update({
