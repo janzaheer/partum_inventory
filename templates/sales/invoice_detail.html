@@ -18,8 +18,8 @@
                 <div class="col-xs-12 col-md-12">
                     <div class="text-center">
                         <h1><strong>{{ request.user.retailer_user.retailer.name }}</strong></h1>
-                        <span><strong>{{ request.user.user_profile.address }}</strong></span><br>
-                        <small><strong>Phone No:</strong> {{ request.user.user_profile.phone_no }} </small> <small><strong>Mobile No: </strong>{{ request.user.user_profile.mobile_no }} </small>
+                        {% if request.user.user_profile.address %}<span><strong>{{ request.user.user_profile.address }}</strong></span><br>{% endif %}
+                        {% if request.user.user_profile.phone_no %}<small><strong>Phone No:</strong> {{ request.user.user_profile.phone_no }} </small>{% endif %} {% if request.user.user_profile.mobile_no %}<small><strong>Mobile No: </strong>{{ request.user.user_profile.mobile_no }} </small>{% endif %}
                         <h3>Invoice</h3>
                     </div>
                     <hr>
@@ -40,6 +40,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
 
             <div class="row">

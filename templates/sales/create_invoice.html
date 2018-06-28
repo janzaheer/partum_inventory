@@ -163,6 +163,7 @@
                 $(this).parent().parent().parent().find('.price').val(item_price);
             });
             $('#create-invoice').live('click', function () {
+
                 if ($('#item-name').hasClass('item-name') == false ) {
                     $('.item-error').show();
                     return;

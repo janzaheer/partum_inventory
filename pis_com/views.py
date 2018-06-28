@@ -167,7 +167,8 @@ class CreateCustomer(FormView):
         context = super(
             CreateCustomer, self).get_context_data(**kwargs)
 
-        customers = Customer.objects.all()
+        customers = Customer.objects.filter(
+            retailer=self.request.user.retailer_user.retailer.id)
         context.update({
             'customers': customers
         })
@@ -194,3 +195,4 @@ class CustomerUpdateView(UpdateView):
     form_class = CustomerForm
     template_name = 'customer/update_customer.html'
     model = Customer
+    success_url = reverse_lazy('customers')

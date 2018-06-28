@@ -32,12 +32,11 @@
                     {% if customers %}
                         {% for customer in customers %}
                             <tr>
-                                <td><a href="#">{{ customer.customer_name}}</a></td>
+                                <td><a href="{% url 'update_customer' pk=customer.id %}">{{ customer.customer_name|title }}</a></td>
                                 <td>{{ customer.customer_phone }}</td>
                                 <td>{{ customer.shop }}</td>
                                 <td>{{ customer.address }}</td>
                                 <td>
-                                    <a href="#"><button class="btn btn-success btn-xs"><i class="fa fa-eye"></i></button></a>
                                     <a href="{% url 'update_customer' pk=customer.id %}" title="Edit Customer"><button class="btn btn-danger btn-xs"><i class="fa fa-edit "></i></button></a>
                                 </td>
                             </tr>
