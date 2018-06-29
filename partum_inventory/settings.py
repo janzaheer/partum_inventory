@@ -146,5 +146,7 @@ MEDIA_ROOT = os.path.join(ROOT_DIR, 'media')
 
 # STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
-
-# from partum_inventory.settings_local import *
+try:
+    from partum_inventory.settings_local import *
+except ImportError:
+    pass

@@ -17,6 +17,12 @@ class AddNewLedger(FormView):
     form_class = CustomerForm
     template_name = 'ledger/create_ledger.html'
 
+    def dispatch(self, request, *args, **kwargs):
+        if not self.request.user.is_authenticated():
+            return HttpResponseRedirect(reverse('login'))
+
+        return super(AddNewLedger, self).dispatch(request, *args, **kwargs)
+
     def form_valid(self, form):
         customer = form.save()
         ledger_form_kwargs = {
@@ -51,6 +57,11 @@ class AddLedger(FormView):
     template_name = 'ledger/add_customer_ledger.html'
     form_class = LedgerForm
 
+    def dispatch(self, request, *args, **kwargs):
+        if not self.request.user.is_authenticated():
+            return HttpResponseRedirect(reverse('login'))
+        return super(AddLedger, self).dispatch(request, *args, **kwargs)
+
     def form_valid(self, form):
         ledger = form.save()
         return HttpResponseRedirect(
@@ -80,6 +91,12 @@ class AddLedger(FormView):
 
 class CustomerLedgerView(TemplateView):
     template_name = 'ledger/customer_ledger_list.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if not self.request.user.is_authenticated():
+            return HttpResponseRedirect(reverse('login'))
+        return super(
+            CustomerLedgerView, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super(CustomerLedgerView, self).get_context_data(**kwargs)
@@ -132,6 +149,12 @@ class CustomerLedgerView(TemplateView):
 class CustomerLedgerDetailsView(TemplateView):
     template_name = 'ledger/customer_ledger_details.html'
 
+    def dispatch(self, request, *args, **kwargs):
+        if not self.request.user.is_authenticated():
+            return HttpResponseRedirect(reverse('login'))
+        return super(
+            CustomerLedgerDetailsView, self).dispatch(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super(
             CustomerLedgerDetailsView, self).get_context_data(**kwargs)
@@ -178,6 +201,12 @@ class CustomerLedgerDetailsView(TemplateView):
 class PaymentLedgerView(FormView):
     template_name = 'ledger/payment_ledger.html'
     form_class = PaymentForm
+
+    def dispatch(self, request, *args, **kwargs):
+        if not self.request.user.is_authenticated():
+            return HttpResponseRedirect(reverse('login'))
+        return super(
+            PaymentLedgerView, self).dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
         form.save()

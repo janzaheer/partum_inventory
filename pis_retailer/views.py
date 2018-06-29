@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+from django.core.urlresolvers import reverse
 from django.views.generic import View
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseRedirect
 
 
 class RetailerProductsAPI(View):
@@ -13,6 +14,12 @@ class RetailerProductsAPI(View):
     URL Endpoint => /retailer/1/products/
     this API returns the retailer product details in json format
     """
+
+    def dispatch(self, request, *args, **kwargs):
+        if not self.request.user.is_authenticated():
+            return HttpResponseRedirect(reverse('login'))
+        return super(
+            RetailerProductsAPI, self).dispatch(request, *args, **kwargs)
 
     def get(self, requst, *args, **kwargs):
         retailer = self.request.user.retailer_user.retailer

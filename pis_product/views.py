@@ -19,7 +19,7 @@ class ProductItemList(TemplateView):
 
     def dispatch(self, request, *args, **kwargs):
         if not self.request.user.is_authenticated():
-            return HttpResponseRedirect(reverse_lazy('login'))
+            return HttpResponseRedirect(reverse('login'))
 
         return super(
             ProductItemList, self).dispatch(request, *args, **kwargs)
@@ -40,7 +40,7 @@ class ProductDetailList(TemplateView):
 
     def dispatch(self, request, *args, **kwargs):
         if not self.request.user.is_authenticated():
-            return HttpResponseRedirect(reverse_lazy('login'))
+            return HttpResponseRedirect(reverse('login'))
 
         return super(
             ProductDetailList, self).dispatch(request, *args, **kwargs)
@@ -67,6 +67,12 @@ class ProductDetailList(TemplateView):
 class AddNewProduct(FormView):
     form_class = ProductForm
     template_name = 'products/add_product.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if not self.request.user.is_authenticated():
+            return HttpResponseRedirect(reverse('login'))
+        return super(
+            AddNewProduct, self).dispatch(request, *args, **kwargs)
 
     @staticmethod
     def add_product_details(product_id, details_form_kwargs):
@@ -104,6 +110,11 @@ class AddProductItems(FormView):
     template_name = 'products/add_product_items.html'
     form_class = ProductDetailsForm
 
+    def dispatch(self, request, *args, **kwargs):
+        if not self.request.user.is_authenticated():
+            return HttpResponseRedirect(reverse('login'))
+        return super(AddProductItems, self).dispatch(request, *args, **kwargs)
+
     def form_valid(self, form):
         product_item_detail = form.save()
         return HttpResponseRedirect(
@@ -134,6 +145,11 @@ class AddProductItems(FormView):
 class PurchasedItems(TemplateView):
     template_name = 'products/purchased_items.html'
 
+    def dispatch(self, request, *args, **kwargs):
+        if not self.request.user.is_authenticated():
+            return HttpResponseRedirect(reverse('login'))
+        return super(PurchasedItems, self).dispatch(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super(PurchasedItems, self).get_context_data(**kwargs)
         purchased_product = PurchasedProduct.objects.filter(
@@ -149,6 +165,11 @@ class PurchasedItems(TemplateView):
 
 class ExtraItemsView(TemplateView):
     template_name = 'products/purchased_extraitems.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if not self.request.user.is_authenticated():
+            return HttpResponseRedirect(reverse('login'))
+        return super(ExtraItemsView, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super(ExtraItemsView, self).get_context_data(**kwargs)
@@ -166,6 +187,12 @@ class ExtraItemsView(TemplateView):
 class ClaimedProductFormView(FormView):
     template_name = 'products/claimed_product.html'
     form_class = ClaimedProductForm
+
+    def dispatch(self, request, *args, **kwargs):
+        if not self.request.user.is_authenticated():
+            return HttpResponseRedirect(reverse('login'))
+        return super(
+            ClaimedProductFormView, self).dispatch(request, *args, **kwargs)
 
     @staticmethod
     def purchased_items_update(claimed_item, claimed_number):
@@ -233,6 +260,12 @@ class ClaimedProductFormView(FormView):
 
 class ClaimedItemsListView(TemplateView):
     template_name = 'products/claimed_product_list.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if not self.request.user.is_authenticated():
+            return HttpResponseRedirect(reverse('login'))
+        return super(
+            ClaimedItemsListView, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super(

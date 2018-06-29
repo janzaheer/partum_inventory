@@ -4,11 +4,12 @@ import ast
 import json
 
 from django.db.models import Sum
-from django.http import JsonResponse, HttpResponse, Http404
+from django.http import JsonResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.utils.decorators import method_decorator
 from django.views.generic import FormView, View, TemplateView
 from django.utils import timezone
+from django.core.urlresolvers import reverse
 
 from pis_product.models import Product
 from pis_sales.models import SalesHistory
@@ -23,6 +24,12 @@ from pis_ledger.forms import LedgerForm
 class CreateInvoiceView(FormView):
     template_name = 'sales/create_invoice.html'
     form_class = BillingForm
+    
+    def dispatch(self, request, *args, **kwargs):
+        if not self.request.user.is_authenticated():
+            return HttpResponseRedirect(reverse('login'))
+        return super(
+            CreateInvoiceView, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super(CreateInvoiceView, self).get_context_data(**kwargs)
@@ -43,6 +50,13 @@ class CreateInvoiceView(FormView):
 
 
 class ProductItemAPIView(View):
+    
+    def dispatch(self, request, *args, **kwargs):
+        if not self.request.user.is_authenticated():
+            return HttpResponseRedirect(reverse('login'))
+        return super(
+            ProductItemAPIView, self).dispatch(request, *args, **kwargs)
+    
     def get(self, request, *args, **kwargs):
 
         products = (
@@ -89,6 +103,8 @@ class GenerateInvoiceAPIView(View):
 
     @csrf_exempt
     def dispatch(self, request, *args, **kwargs):
+        if not self.request.user.is_authenticated():
+            return HttpResponseRedirect(reverse('login'))
         return super(
             GenerateInvoiceAPIView, self).dispatch(request, *args, **kwargs)
 
@@ -207,6 +223,12 @@ class GenerateInvoiceAPIView(View):
 
 class InvoiceDetailView(TemplateView):
     template_name = 'sales/invoice_detail.html'
+    
+    def dispatch(self, request, *args, **kwargs):
+        if not self.request.user.is_authenticated():
+            return HttpResponseRedirect(reverse('login'))
+        return super(
+            InvoiceDetailView, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super(InvoiceDetailView, self).get_context_data(**kwargs)
@@ -221,6 +243,11 @@ class InvoiceDetailView(TemplateView):
 
 class InvoicesList(TemplateView):
     template_name = 'sales/invoice_list.html'
+    
+    def dispatch(self, request, *args, **kwargs):
+        if not self.request.user.is_authenticated():
+            return HttpResponseRedirect(reverse('login'))
+        return super(InvoicesList, self).dispatch(request, *args, **kwargs)
 
     def get_sales_history(self):
         return (

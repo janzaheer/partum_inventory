@@ -195,6 +195,12 @@ class CreateCustomer(FormView):
     form_class = CustomerForm
     template_name = 'customer/create_customer.html'
 
+    def dispatch(self, request, *args, **kwargs):
+        if not self.request.user.is_authenticated():
+            return HttpResponseRedirect(reverse('login'))
+        return super(
+            CreateCustomer, self).dispatch(request, *args, **kwargs)
+
     def form_valid(self, form):
         form.save()
         return HttpResponseRedirect(reverse('customers'))
@@ -217,6 +223,12 @@ class CreateCustomer(FormView):
 class CustomerTemplateView(TemplateView):
     template_name = 'customer/customer_list.html'
 
+    def dispatch(self, request, *args, **kwargs):
+        if not self.request.user.is_authenticated():
+            return HttpResponseRedirect(reverse('login'))
+        return super(
+            CustomerTemplateView, self).dispatch(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super(
             CustomerTemplateView, self).get_context_data(**kwargs)
@@ -235,3 +247,9 @@ class CustomerUpdateView(UpdateView):
     template_name = 'customer/update_customer.html'
     model = Customer
     success_url = reverse_lazy('customers')
+
+    def dispatch(self, request, *args, **kwargs):
+        if not self.request.user.is_authenticated():
+            return HttpResponseRedirect(reverse('login'))
+        return super(
+            CustomerUpdateView, self).dispatch(request, *args, **kwargs)
