@@ -65,11 +65,16 @@
 {#                        <a data-toggle="modal" href="login.html#myModal"> Forgot Password?</a>#}
 {#                    </span>#}
 {#                </label>#}
-                <label class="checkbox">
-                    <span class="pull-right">
-                       Not registered? <a data-toggle="modal" href="{% url 'register' %}"> Join now</a>
-                    </span>
-                </label>
+                {% if not config.demo %}
+                    <label class="checkbox">
+                        <span class="pull-right">
+                           Not registered? <a data-toggle="modal" href="{% url 'register' %}"> Join now</a>
+                        </span>
+                    </label>
+                {% else %}
+                    <br>
+                {% endif %}
+
                 <button class="btn btn-primary btn-block" type="submit"><i class="fa fa-lock"></i> SIGN IN</button>
             </div>
 {#            <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade">#}
