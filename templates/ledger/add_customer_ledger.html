@@ -4,7 +4,7 @@
 {% block content %}
     <div class="col-md-6">
         <br>
-        <a href="{% url 'ledger:customer_ledger_list'%}"><button type="button" class="btn btn-primary" style="float: left">Back to Ledger List</button></a>
+        <a href="{% url 'ledger:customer_ledger_list'%}"><button type="button"  class="btn btn-primary" style="float: left" >Back to Ledger List</button></a>
         <br><br><br>
         <div class="content-panel">
             <h3 class="text-center">{{ customer.customer_name }} <small>New Ledger</small></h3>
@@ -19,7 +19,7 @@
                             <textarea maxlength="500" rows="4" name="description" class="form-control description"  placeholder ="Description"></textarea> <br>
                             <input type="hidden" name="customer" value="{{ customer.id }}">
                             <input type="hidden" name="retailer" value="{{ request.user.retailer_user.retailer.id }}">
-                            <button type="button" class="btn btn-primary ledger-submit-btn" style="float: right">Save Ledger</button>
+                            <button type="button" id="save" class="btn btn-primary ledger-submit-btn" style="float: right" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing Order">Save Ledger</button>
 
                         </div>
                     </div>
@@ -31,6 +31,8 @@
     <script>
         $('.document').ready(function () {
             $('.ledger-submit-btn').on('click', function () {
+                $(this).addClass('disabled');
+                $(this).html('<i class="fa fa-circle-o-notch fa-spin"></i> Loading...');
                 var error = false;
 
                 if ($('.amount').val() ==""){
@@ -48,12 +50,18 @@
                     $('.description-error').hide();
 
                 }
-                if (error == false)
-                {
+                if (error == false){
                     $('.new_ledger').submit();
+                }
+                else
+                {
+                 $(this).removeClass('disabled');
+                 $(this).html('Save');
+                 return;
                 }
 
             });
+        });
 
             $('.amount').keyup(function () {
                 $('.amount-error').hide();
@@ -67,8 +75,9 @@
             }
             $('.description').keyup(function () {
                 $('.description-error').hide();
-            })
-        });
+            });
+
 
     </script>
+
 {% endblock %}

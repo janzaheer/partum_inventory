@@ -4,7 +4,7 @@
 {% block content %}
     <div class="col-md-6">
         <br>
-        <a href="{% url 'ledger:customer_ledger_list' %}"><button type="button" class="btn btn-primary" style="float: left">Back to Ledger List</button></a>
+        <a href="{% url 'ledger:customer_ledger_list' %}"><button type="button"   class="btn btn-primary" style="float: left" >Back to Ledger List</button></a>
         <br><br><br>
         <div class="content-panel">
             <h3 class="text-center">{{ request.user.retailer_user.retailer.name }} Ledger</h3>
@@ -23,7 +23,7 @@
                             <span class="description-error" style="color: red; display: none" >this field is requried</span>
                             <textarea maxlength="500" rows="4" name="description" class="form-control description"  placeholder ="Description"></textarea> <br>
                             <input type="hidden" name="retailer" value="{{ request.user.retailer_user.retailer.id }}">
-                            <button type="button" class="btn btn-primary ledger-submit-btn" style="float: right">Save Ledger</button>
+                            <button type="button" id="save" class="btn btn-primary ledger-submit-btn" style="float: right" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing Order">Save Ledger</button>
                         </div>
                     </div>
                 </form>
@@ -34,6 +34,8 @@
         $('document').ready(function () {
 
             $('.ledger-submit-btn').on ('click', function () {
+                $(this).addClass('disabled');
+                $(this).html('<i class="fa fa-circle-o-notch fa-spin"></i> Loading...');
                 var error = false;
 
                 if ($('.customer').val() ==""){
@@ -42,14 +44,6 @@
                 }
                 else {
                     $('.customer-error').hide();
-                }
-
-                if ($('.customer_phone').val()==""){
-                    $('.customer-phone-error').show();
-                    error = true;
-                }
-                else {
-                    $('.customer-phone-error').hide();
                 }
 
                 if ($('.amount').val() =="" ) {
@@ -67,6 +61,8 @@
                     $('.description-error').hide();
                 }
                 if (error == true ) {
+                    $(this).removeClass('disabled');
+                    $(this).html('Save');
                     return;
                 } else {
                     {% for customer in customers %}
@@ -80,11 +76,16 @@
                 if (error == false) {
                     $('.add-ledger-form').submit();
                 }
+                 else {
+                     $(this).removeClass('disabled');
+                     $(this).html('Save');
+                     return;
+                 }
             });
 
             $('.customer').keyup(function () {
                 $('.customer-error').hide();
-            })
+            });
 
 
             $('.customer_phone').keyup(function () {
@@ -113,4 +114,6 @@
         });
 
     </script>
+
+
 {% endblock %}

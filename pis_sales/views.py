@@ -15,7 +15,7 @@ from pis_product.models import Product
 from pis_sales.models import SalesHistory
 from pis_product.forms import PurchasedProductForm
 from pis_sales.forms import BillingForm
-from pis_product.forms import ExtraItemForm
+from pis_product.forms import ExtraItemForm, StockOutForm
 from pis_com.forms import CustomerForm
 from pis_ledger.models import Ledger
 from pis_ledger.forms import LedgerForm
@@ -141,6 +141,16 @@ class GenerateInvoiceAPIView(View):
                     purchased_item = form.save()
                     purchased_items_id.append(purchased_item.id)
 
+                    stock_out_form_kwargs = {
+                        'product': product.id,
+                        'stock_out_quantity': item.get('qty'),
+                        'dated': timezone.now().date()
+                    }
+
+                    stock_out_form = StockOutForm(stock_out_form_kwargs)
+                    if stock_out_form.is_valid():
+                        stock_out_form.save()
+
                     product_details = (
                         purchased_item.product.product_detail.filter(
                             available_item__gte=int(item.get('qty'))).first()
@@ -169,7 +179,6 @@ class GenerateInvoiceAPIView(View):
                     extra_items_id.append(extra_item.id)
 
         billing_form_kwargs = {
-            'sub_total': sub_total,
             'discount': discount,
             'grand_total': grand_total,
             'total_quantity': totalQty,

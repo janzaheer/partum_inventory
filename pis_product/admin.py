@@ -6,6 +6,7 @@ from pis_product.models import ProductDetail
 from pis_product.models import PurchasedProduct
 from pis_product.models import ExtraItems
 from pis_product.models import ClaimedProduct
+from pis_product.models import StockIn,StockOut
 
 
 class ProductAdmin(admin.ModelAdmin):
@@ -111,9 +112,24 @@ class ClaimedProductAdmin(admin.ModelAdmin):
     def customer(obj):
         return obj.customer.customer_name or None
 
+class StockInAdmin(admin.ModelAdmin):
+    list_display = (
+        '__unicode__', 'product', 'quantity', 'price_per_item',
+        'total_amount', 'dated_order','stock_expiry'
+    )
+    search_fields = ('product__name','stock_expiry','dated_order')
+
+class StockOutAdmin(admin.ModelAdmin):
+    list_display = (
+        '__unicode__', 'product', 'stock_out_quantity', 'dated',
+    )
+    search_fields = ('product__name','stock_out_quantity','dated')
+
 
 admin.site.register(Product, ProductAdmin)
 admin.site.register(ProductDetail, ProductDetailAdmin)
 admin.site.register(PurchasedProduct, PurchasedProductAdmin)
 admin.site.register(ExtraItems, ExtraItemsAdmin)
 admin.site.register(ClaimedProduct, ClaimedProductAdmin)
+admin.site.register(StockIn, StockInAdmin)
+admin.site.register(StockOut, StockOutAdmin)

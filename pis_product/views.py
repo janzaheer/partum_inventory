@@ -7,11 +7,13 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
-
-from pis_product.models import PurchasedProduct, ExtraItems, ClaimedProduct
+from django.db.models import Sum
+from pis_product.models import PurchasedProduct, ExtraItems, ClaimedProduct,StockOut, StockIn, Product
 from pis_product.forms import (
-    ProductForm, ProductDetailsForm, ClaimedProductForm)
+    ProductForm, ProductDetailsForm, ClaimedProductForm,StockDetailsForm,StockOutForm)
 from pis_ledger.forms import PaymentForm
+from django.utils import timezone
+
 
 
 class ProductItemList(TemplateView):
@@ -154,7 +156,7 @@ class PurchasedItems(TemplateView):
         context = super(PurchasedItems, self).get_context_data(**kwargs)
         purchased_product = PurchasedProduct.objects.filter(
             product__retailer=self.request.user.retailer_user.retailer
-        )
+        ).order_by('-created_at')
 
         context.update({
             'purchased_products': purchased_product
@@ -275,3 +277,117 @@ class ClaimedItemsListView(TemplateView):
                 '-created_at')
         })
         return context
+
+class StockItemList(TemplateView):
+    template_name = 'products/stock_list.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if not self.request.user.is_authenticated():
+            return HttpResponseRedirect(reverse('login'))
+
+        return super(
+            StockItemList, self).dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(StockItemList, self).get_context_data(**kwargs)
+        products = (
+            self.request.user.retailer_user.retailer.retailer_product.all()
+        )
+        context.update({
+            'products': products
+        })
+        return context
+
+class AddStockItems(FormView):
+    template_name = 'products/add_stock_item.html'
+    form_class = StockDetailsForm
+
+    def dispatch(self, request, *args, **kwargs):
+        if not self.request.user.is_authenticated():
+            return HttpResponseRedirect(reverse('login'))
+        return super(AddStockItems, self).dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        product_item_detail = form.save()
+        return HttpResponseRedirect(
+            reverse('product:stock_items_list'
+                    )
+        )
+
+    def form_invalid(self, form):
+        return super(AddStockItems, self).form_invalid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super(AddStockItems, self).get_context_data(**kwargs)
+        try:
+            product = (
+                self.request.user.retailer_user.retailer.
+                retailer_product.get(id=self.kwargs.get('product_id'))
+            )
+        except ObjectDoesNotExist:
+            raise Http404('Product not found with concerned User')
+
+        context.update({
+            'product': product
+        })
+        return context
+
+class StockOutItems(FormView):
+    form_class = StockOutForm
+    template_name = 'products/stock_out.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if not self.request.user.is_authenticated():
+            return HttpResponseRedirect(reverse('login'))
+        return super(StockOutItems, self).dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        product_item_detail = form.save()
+        return HttpResponseRedirect(
+            reverse('product:stock_items_list')
+        )
+
+    def form_invalid(self, form):
+        return super(StockOutItems, self).form_invalid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super(StockOutItems, self).get_context_data(**kwargs)
+        try:
+            product = (
+                self.request.user.retailer_user.retailer.
+                    retailer_product.get(id=self.kwargs.get('product_id'))
+            )
+        except ObjectDoesNotExist:
+            raise Http404('Product not found with concerned User')
+
+        context.update({
+            'product': product
+        })
+        return context
+
+class StockDetailView(TemplateView):
+    template_name = 'products/stock_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(
+            StockDetailView, self).get_context_data(**kwargs)
+
+        try:
+            item = Product.objects.get(id=self.kwargs.get('product_id'))
+        except StockIn.DoesNotExist:
+            return Http404('Item does not exists in database')
+
+        item_stocks_in = item.stockin_product.all()
+        item_stocks_out = item.stockout_product.all()
+
+        context.update({
+            'item': item,
+            'item_stock_in': item_stocks_in.order_by('-dated_order'),
+            'item_stock_out': item_stocks_out.order_by('-dated'),
+        })
+
+        return context
+
+
+
+

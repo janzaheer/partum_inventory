@@ -1,9 +1,9 @@
 bootstrap-admin==0.3.7.1
-Django==1.11.10
+django==1.11.10
 django-mailviews==0.6.3
-gnureadline==6.3.3
+#gnureadline==6.3.3
 ipython==2.3.1
-MySQL-python==1.2.5
+#MySQL-python==1.2.5
 olefile==0.44
 Pillow==4.0.0
 python-dateutil==2.6.0

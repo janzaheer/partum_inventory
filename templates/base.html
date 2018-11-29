@@ -1,6 +1,7 @@
-{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+{% load static %}
+{% load template_tags %}
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,6 +14,28 @@
     <!-- Bootstrap core CSS -->
     <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
     <!--external css-->
+    <style>
+    .msg{
+        color: #68dff0 !important;
+        border:none !important;
+        border: 1px solid #68dff0 !important;
+    }
+    .right_div{
+        float:right;
+    }
+    .notify-row{
+       margin-left: -45px !important;
+    }
+    .open > .dropdown-menu{
+        left: inherit;
+        }
+    .dropdown-menu{
+        right:12px !important;
+    }
+    .notify-arrow{
+        left:88% !important;
+    }
+    </style>
     <link href="{% static 'font-awesome/css/font-awesome.css' %}" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/zabuto_calendar.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'js/gritter/css/jquery.gritter.css' %}" />
@@ -39,6 +62,50 @@
             <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
         </div>
         <a href="{% url 'index' %}" class="logo"><b>{{ request.user.retailer_user.retailer.name }} Dairy</b></a>
+        <div class="right_div">
+        <div class="nav notify-row" id="top_menu">
+                <!--  notification start -->
+                <ul class="nav top-menu">
+                    <!-- inbox dropdown start-->
+                    <li id="header_inbox_bar" class="dropdown">
+                        <a data-toggle="dropdown" class="dropdown-toggle msg" href="index.html#">
+                            <i class="fa fa-envelope-o"></i>
+                        </a>
+                        <ul class="dropdown-menu extended inbox">
+                            <div class="notify-arrow notify-arrow-green"></div>
+                            <li>
+                                <p class="green">Notification</p>
+                            </li>
+                            <li>
+                                <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th> Item Name</th>
+                                    <th>Available Items</th>
+                                </tr>
+                                </thead>
+                            <tbody style="text-align:center">
+                                        <span class="message">
+                                           {% product_notifications retailer_id=request.user.retailer_user.retailer.id as p_n %}
+                                {% for p in p_n %}
+                                    {% if p.product_available_items < 5 %}
+                                            <b><tr><td><span style="color:red">Alert !</span> {{ p.name }}</td>
+                                                <td>{{ p.product_available_items|floatformat:'-2' }}</td></tr></b>
+                                    {% endif %}
+                                {% endfor %}
+
+                                        </span>
+                            </tbody>
+                            </table>
+                            </li>
+
+                        </ul>
+                    </li>
+
+                    <!-- inbox dropdown end -->
+                </ul>
+                <!--  notification end -->
+            </div>
         <div class="top-menu">
             <ul class="nav pull-right top-menu">
                 <li>
@@ -47,10 +114,12 @@
                             <span class="caret"></span></button>
                         <ul class="dropdown-menu">
                             <li><a tabindex="logout" href="{% url 'logout' %}">Logout</a></li>
+
                         </ul>
                     </div>
                 </li>
             </ul>
+        </div>
         </div>
     </header>
 
@@ -105,7 +174,7 @@
                         </a>
                         <ul class="sub">
                             <li class="{% block submenu_add_product %}{% endblock %}"><a  href="{% url 'product:add_product' retailer_id=request.user.retailer_user.retailer.id %}">Add Product</a></li>
-                            <li class="{% block submenu_list_items %}{% endblock %}"><a  href="{% url 'product:items_list' %}">List Products</a></li>
+                            <li class="{% block submenu_list_items %}{% endblock %}"><a  href="{% url 'product:stock_items_list' %}">List Products</a></li>
                             <li class="{% block submenu_purchased_items %}{% endblock %}"><a  href="{% url 'product:purchased_items' %}">Purchased Items</a></li>
                             <li class="{% block submenu_purchased_extraitems %}{% endblock %}"><a  href="{% url 'product:purchased_extra_items' %}">Purchased Extra Items</a></li>
                             <li class="{% block submenu_purchased_claimeditems %}{% endblock %}"><a  href="{% url 'product:claimed_items' %}">Claimed Items</a></li>
@@ -125,6 +194,7 @@
                         </ul>
                     </li>
                 {% endif %}
+
             </ul>
               <!-- sidebar menu end-->
           </div>

@@ -253,3 +253,4 @@ class CustomerUpdateView(UpdateView):
             return HttpResponseRedirect(reverse('login'))
         return super(
             CustomerUpdateView, self).dispatch(request, *args, **kwargs)
+

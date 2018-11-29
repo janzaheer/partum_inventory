@@ -124,7 +124,7 @@
 							</tbody>
 						</table>
 					</div>
-					<a id="create-invoice" href="javascript:;" title="Create Invoice" class="btn btn-primary pull-right">Create Invoice</a>
+					<a id="create-invoice" href="javascript:;" title="Create Invoice" class="btn btn-primary pull-right" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing Order">Create Invoice</a>
 				</div>
 			</div>
 		</div>
@@ -289,7 +289,7 @@
 
             $('.added-customer').on('click', function () {
                 $('.existing-customer').show();
-                $('.new-customer-form').hide();
+                $('.new-customer-form').hide();`
                 $('.customer_name').val('');
                 $('.customer_phone').val('');
             });
@@ -300,5 +300,21 @@
         });
 
 	</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script>
+$('#create-invoice').on('click', function() {
+    var $this = $(this);
+  $this.button('loading');
+    setTimeout(function() {
+       $this.button('reset');
+   }, 5000);
+});
+
+$('.form-control').click (function () {
+    $('.list-error').hide();
+    checkDec(this);
+
+});
+    </script>
 
 {% endblock %}
