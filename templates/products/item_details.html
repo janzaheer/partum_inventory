@@ -22,9 +22,6 @@
                     <tr>
                         <th><i class="fa fa-bullhorn"></i> Item</th>
                         <th><i class="fa fa-question-circle"></i> Brand Name</th>
-                        <th><i class=" fa fa-try"></i> Consumer Price (pkr)</th>
-                        <th><i class=" fa fa-rebel"></i> Remaining Items</th>
-                        <th><i class=" fa fa-shield"></i> Purchased Items</th>
                         <th><i class=" fa fa-calendar"></i> Date</th>
                     </tr>
                     </thead>
@@ -33,9 +30,7 @@
                         <tr>
                             <td><a href="#">{{ detail.product.name}}</a></td>
                             <td class="#">{{ detail.product.brand_name }}</td>
-                            <td>{{ detail.consumer_price|floatformat:-2 }}</td>
-                            <td>{{ detail.available_item }}</td>
-                            <td>{{ detail.purchased_item }}</td>
+
                             <td>{{ detail.created_at|date }}</td>
                         </tr>
                     {% endfor %}

@@ -5,7 +5,7 @@
 {% block content %}
     <div class="col-md-6">
         <br>
-        <a href="{% url 'product:items_list' %}"><button type="button" class="btn btn-primary" style="float: left">Back to Product Item List</button></a>
+        <a href="{% url 'product:items_list' %}"><button type="button" id="back-product" class="btn btn-primary" style="float: left" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing Order">Back to Product Item List</button></a>
         <br><br><br>
         <div class="content-panel">
             <h3 class="text-center">Claimed items</h3>
@@ -117,5 +117,21 @@
                 el.value = el.value.substring(0,el.value.length - 1);
             }
         }
+    </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script>
+$('#back-product').on('click', function() {
+    var $this = $(this);
+  $this.button('loading');
+    setTimeout(function() {
+       $this.button('reset');
+   }, 5000);
+});
+
+$('.form-control').click (function () {
+    $('.list-error').hide();
+    checkDec(this);
+
+});
     </script>
 {% endblock %}

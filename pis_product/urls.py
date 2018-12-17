@@ -8,6 +8,10 @@ from pis_product.views import PurchasedItems
 from pis_product.views import ExtraItemsView
 from pis_product.views import ClaimedProductFormView
 from pis_product.views import ClaimedItemsListView
+from pis_product.views import StockItemList
+from pis_product.views import AddStockItems
+from pis_product.views import StockOutItems
+from pis_product.views import StockDetailView
 
 
 urlpatterns = [
@@ -42,5 +46,26 @@ urlpatterns = [
     url(
         r'^items/claimed/list/$', ClaimedItemsListView.as_view(),
         name='claimed_items_list'
+    ),
+    url(
+        r'^retailer/(?P<retailer_id>\d+)/add/$',
+        AddNewProduct.as_view(),
+        name='add_product'
+    ),
+    url(r'^stock/items/list/$', StockItemList.as_view(), name='stock_items_list'),
+    url(
+        r'^stock/item/(?P<product_id>\d+)/add/$',
+        AddStockItems.as_view(),
+        name='add_stock_items'
+    ),
+    url(
+        r'^stock/item/(?P<product_id>\d+)/out/$',
+        StockOutItems.as_view(),
+        name='stock_out_items'
+    ),
+    url(
+        r'^stock/item/(?P<product_id>\d+)/detail/$',
+        StockDetailView.as_view(),
+        name='stock_detail'
     ),
 ]

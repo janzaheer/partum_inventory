@@ -16,17 +16,74 @@ class Product(models.Model):
     def __unicode__(self):
         return self.name
 
+    def total_items(self):
+        try:
+            obj_stock_in = self.stockin_product.aggregate(Sum('quantity'))
+            stock_in = float(obj_stock_in.get('quantity__sum'))
+        except:
+            stock_in = 0
+
+        return stock_in
+
+
     def product_available_items(self):
-        obj = self.product_detail.aggregate(Sum('available_item'))
-        return obj.get('available_item__sum')
+        try:
+            obj_stock_in = self.stockin_product.aggregate(Sum('quantity'))
+            stock_in = float(obj_stock_in.get('quantity__sum'))
+        except:
+            stock_in = 0
+
+        try:
+            obj_stock_out = self.stockout_product.aggregate(
+                Sum('stock_out_quantity'))
+            stock_out = float(obj_stock_out.get('stock_out_quantity__sum'))
+        except:
+            stock_out = 0
+        return  stock_in - stock_out
 
     def product_purchased_items(self):
-        obj = self.product_detail.aggregate(Sum('purchased_item'))
-        return obj.get('purchased_item__sum')
+        try:
+            obj_stock_out = self.stockout_product.aggregate(
+                Sum('stock_out_quantity'))
+            stock_out = float(obj_stock_out.get('stock_out_quantity__sum'))
+        except:
+            stock_out = 0
+        return  stock_out
 
     def total_num_of_claimed_items(self):
         obj = self.claimed_product.aggregate(Sum('claimed_items'))
         return obj.get('claimed_items__sum')
+
+class StockIn(models.Model):
+    product = models.ForeignKey(
+        Product, related_name='stockin_product'
+    )
+    quantity=models.CharField(
+        max_length=100, blank=True, null=True
+    )
+    price_per_item=models.DecimalField(
+        max_digits=8, decimal_places=2, default=0, blank=True, null=True
+    )
+    total_amount=models.DecimalField(
+        max_digits=100, decimal_places=2, default=0, blank=True, null=True
+    )
+    dated_order=models.DateField(blank=True, null=True)
+    stock_expiry=models.DateField(blank=True, null=True)
+
+    def __unicode__(self):
+        return self.product.name
+
+class StockOut(models.Model):
+    product = models.ForeignKey(
+        Product, related_name='stockout_product'
+    )
+    stock_out_quantity=models.CharField(max_length=100, blank=True, null=True)
+    dated=models.DateField(blank=True, null=True)
+
+    def __unicode__(self):
+        return self.product.name
+
+
 
 
 class ProductDetail(DatedModel):
