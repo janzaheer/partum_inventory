@@ -73,21 +73,20 @@ class ProductItemAPIView(View):
                 'brand_name': product.brand_name,
             }
 
-            if product.product_detail.exists():
-                detail = product.product_detail.all().latest('id')
+            if product.stockin_product.exists():
+                stock_detail = product.stockin_product.all().latest('id')
                 p.update({
-                    'retail_price': detail.retail_price,
-                    'consumer_price': detail.consumer_price,
+                    'retail_price': stock_detail.price_per_item,
+                    'consumer_price': stock_detail.price_per_item,
                 })
 
-                item = product.product_detail.aggregate(
-                    available=Sum('available_item'),
-                    purchased=Sum('purchased_item')
+            else:
+                p.update(
+                    {
+                        'retail_price':0,
+                        'consumer_price':0
+                    }
                 )
-                p.update({
-                    'available_item': item.get('available'),
-                    'purchased_item': item.get('purchased'),
-                })
 
             items.append(p)
 
@@ -151,18 +150,6 @@ class GenerateInvoiceAPIView(View):
                     if stock_out_form.is_valid():
                         stock_out_form.save()
 
-                    product_details = (
-                        purchased_item.product.product_detail.filter(
-                            available_item__gte=int(item.get('qty'))).first()
-                    )
-                    product_details.available_item = (
-                        product_details.available_item - int(
-                            item.get('qty'))
-                    )
-                    product_details.purchased_item = (
-                        product_details.purchased_item + int(
-                            item.get('qty')))
-                    product_details.save()
 
             except Product.DoesNotExist:
                 extra_item_kwargs = {

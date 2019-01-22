@@ -76,31 +76,8 @@ class AddNewProduct(FormView):
         return super(
             AddNewProduct, self).dispatch(request, *args, **kwargs)
 
-    @staticmethod
-    def add_product_details(product_id, details_form_kwargs):
-        form_kwargs = {
-            'product': product_id,
-        }
-        form_kwargs.update(details_form_kwargs)
-        form = ProductDetailsForm(form_kwargs)
-        if form.is_valid():
-            form.save()
-        else:
-            return
-        return form
-
     def form_valid(self, form):
         product = form.save()
-        details_form_kwargs = {
-            'retail_price': self.request.POST.get('retail_price') or 0,
-            'consumer_price': self.request.POST.get('consumer_price') or 0,
-            'available_item': self.request.POST.get('available_item') or 0,
-            'purchased_item': self.request.POST.get('purchased_item') or 0,
-        }
-        self.add_product_details(
-            product_id=product.id,
-            details_form_kwargs=details_form_kwargs
-        )
 
         return HttpResponseRedirect(reverse('product:items_list'))
 

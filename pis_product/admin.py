@@ -11,11 +11,11 @@ from pis_product.models import StockIn,StockOut
 
 class ProductAdmin(admin.ModelAdmin):
     list_display = (
-        '__unicode__', 'brand_name', 'retailer',
-        'quantity', 'retail_price', 'consumer_price'
+        '__unicode__', 'brand_name','UNIT_TYPE_QUANTITY', 'retailer',
+        'quantity', 'retail_price', 'consumer_price','bar_code'
     )
     search_fields = (
-        'name', 'brand_name', 'retailer__name'
+        'name', 'brand_name', 'retailer__name','bar_code','unit_type'
     )
     raw_id_fields = ('retailer',)
 

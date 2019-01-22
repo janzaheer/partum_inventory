@@ -22,6 +22,7 @@
                     <tr>
                         <th><i class="fa fa-bullhorn"></i> Item Name</th>
                         <th><i class="fa fa-question-circle"></i> Brand Name</th>
+                        <th><i class=" fa fa-bookmark"></i> Unit</th>
                         <th><i class=" fa fa-bookmark"></i> Available Items</th>
                         <th><i class=" fa fa-edit"></i> Purchased Items</th>
                         <th><i class=" fa fa-edit"></i> Claimed Items</th>
@@ -33,6 +34,7 @@
                         <tr>
                             <td><a href="{% url 'product:item_details' pk=item.id %}">{{ item.name}}</a></td>
                             <td class="#">{{ item.brand_name }}</td>
+                            <td class="#">{{ item.unit_type }}</td>
                             <td>{{ item.product_available_items }}</td>
                             <td>{{ item.product_purchased_items }}</td>
                             <td>{{ item.total_num_of_claimed_items }}</td>

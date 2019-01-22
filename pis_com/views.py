@@ -40,12 +40,6 @@ class LoginView(FormView):
     def form_valid(self, form):
         user = form.get_user()
         auth_login(self.request, user)
-        if (
-            user.retailer_user.role_type ==
-            user.retailer_user.ROLE_TYPE_LEDGER_VIEW
-        ):
-            return HttpResponseRedirect(
-                reverse('ledger:customer_ledger_list'))
 
         return HttpResponseRedirect(reverse('index'))
     
