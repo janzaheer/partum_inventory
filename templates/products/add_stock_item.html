@@ -99,7 +99,7 @@ $('.form-control').click (function () {
 function sum() {
       var txtFirstNumberValue = document.getElementById('quantity').value;
       var txtSecondNumberValue = document.getElementById('price_per_item').value;
-      var result = parseInt(txtFirstNumberValue) + parseInt(txtSecondNumberValue);
+      var result = parseInt(txtFirstNumberValue) * parseInt(txtSecondNumberValue);
       if (!isNaN(result)) {
          document.getElementById('total_amount').value = result;
       }

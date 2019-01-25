@@ -26,6 +26,8 @@
                                         <option value="Quantity"></option>
                                     </datalist>
                                     <br>
+                            <input type="number" class="form-control bar_code" name="bar_code" placeholder="Bar Code">
+                            <span style="color: #68dff0">For example: 1234567899876 (13 digit number)</span><br><br>
                             <input type="hidden" name="retailer" value="{{ request.user.retailer_user.retailer.id }}">
                             <button type="button" id="save" class="btn btn-primary product-submit-btn" style="float: right" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing Order">Save Product</button>
                         </div>
