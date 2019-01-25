@@ -45,7 +45,7 @@
 						<div class="col-xs-6 col-md-6">
 							<div><strong>Billed To:</strong> <span style="float: right" >29 april 2018</span></div><br>
 							<div class="existing-customer">
-                                <span class="customer-error" style="color: red; display: none">Customer Doesn't exist please add Customer</span>
+                                <span class="customererror" style="color: red; display: none">Customer Doesn't exist please add Customer</span>
                                 <input class="form-control customer" id="customer-id" placeholder="Customer" list="customer-list" >
                                 <datalist id="customer-list">
                                     {% for customer in customers %}
@@ -171,13 +171,13 @@
                 var error = false;
                 if ($('.customer').is(":visible") == true)
                 {
-                    if ($('.customer').val() =="")
-                    {
-                        $('.customer').css('border-color', 'red');
-                        error = true;
-                    } else {
-                        $('.customer').css('border', 'none');
-                    }
+                    // if ($('.customer').val() =="")
+                    // {
+                    //     $('.customer').css('border-color', 'red');
+                    //     error = true;
+                    // } else {
+                    //     $('.customer').css('border', 'none');
+                    // }
                     var existing_customers_id = [];
                     {% for customer in customers %}
                         existing_customers_id.push({{ customer.id }});
@@ -185,13 +185,13 @@
 
                     var cus_val = $('.customer').val();
                     var cus_id = $('#customer-list [value="' + cus_val + '"]').data('id');
-                    if(jQuery.inArray( cus_id, existing_customers_id ) == -1) {
-                        $('.customer-error').show();
-                        $('.customer').css('border-color', 'red');
-                        return;
-                    } else {
-                        $('.customer-error').hide();
-                    }
+                    // if(jQuery.inArray( cus_id, existing_customers_id ) == -1) {
+                    //     $('.customer-error').show();
+                    //     $('.customer').css('border-color', 'red');
+                    //     return;
+                    // } else {
+                    //     $('.customer-error').hide();
+                    // }
                 }
                 if ($('.customer_name').is(":visible") == true) {
                     if ($('.customer_name').val() == "") {
@@ -278,7 +278,10 @@
                     }, function (result, status) {
                         window.location.href = '/sales/invoice/'+ result.invoice_id +/detail/;
                     }
-                )
+                ).fail(function (xhr, status, errors) {
+                    alert('Something is wrong! please check all fields and try again');
+
+                });
             });
 
             $('.new-customer').on('click', function () {
@@ -289,7 +292,7 @@
 
             $('.added-customer').on('click', function () {
                 $('.existing-customer').show();
-                $('.new-customer-form').hide();`
+                $('.new-customer-form').hide();
                 $('.customer_name').val('');
                 $('.customer_phone').val('');
             });
@@ -300,14 +303,13 @@
         });
 
 	</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/bootstrap.min.js"></script>
 <script>
 $('#create-invoice').on('click', function() {
     var $this = $(this);
   $this.button('loading');
     setTimeout(function() {
        $this.button('reset');
-   }, 5000);
+   }, 1000);
 });
 
 $('.form-control').click (function () {
@@ -315,6 +317,13 @@ $('.form-control').click (function () {
     checkDec(this);
 
 });
+
+function checkDec(el){
+	 var ex = /^[0-9]+\.?[0-9]*$/;
+	 if(ex.test(el.value)==false){
+		 el.value = el.value.substring(0,el.value.length - 1);
+	 }
+ }
     </script>
 
 {% endblock %}

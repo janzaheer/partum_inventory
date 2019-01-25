@@ -1,17 +1,36 @@
 from __future__ import unicode_literals
 from django.db import models
 from django.db.models import Sum
+import random
+from django.db.models.signals import post_save
 
 from pis_com.models import DatedModel
 
 
 class Product(models.Model):
+    UNIT_TYPE_KG = 'Kilogram'
+    UNIT_TYPE_GRAM = 'Gram'
+    UNIT_TYPE_LITRE = 'Litre'
+    UNIT_TYPE_QUANTITY = 'Quantity'
+
+    UNIT_TYPES = (
+        (UNIT_TYPE_KG, 'Kilogram'),
+        (UNIT_TYPE_GRAM, 'Gram'),
+        (UNIT_TYPE_LITRE, 'Litre'),
+        (UNIT_TYPE_QUANTITY, 'Quantity'),
+    )
+    unit_type = models.CharField(
+        choices=UNIT_TYPES, default=UNIT_TYPE_QUANTITY,
+        blank=True, null=True, max_length=200
+    )
     name = models.CharField(max_length=100)
     brand_name = models.CharField(max_length=200)
     retailer = models.ForeignKey(
         'pis_retailer.Retailer',
         related_name='retailer_product'
     )
+    bar_code = models.CharField(max_length=13, unique=True, blank=True,
+                                null=True)
 
     def __unicode__(self):
         return self.name
@@ -53,6 +72,24 @@ class Product(models.Model):
     def total_num_of_claimed_items(self):
         obj = self.claimed_product.aggregate(Sum('claimed_items'))
         return obj.get('claimed_items__sum')
+
+# Signals Function for bar code
+def create_save_bar_code(sender, instance, created, **kwargs):
+    if created and not instance.bar_code:
+        while True:
+            random_bar_code = random.randint(1000000000000, 9999999999999)
+            if (
+                not Product.objects.filter(bar_code=random_bar_code).exists()
+            ):
+                break
+
+        instance.bar_code = random_bar_code
+        instance.save()
+
+# Signal Calls bar code
+post_save.connect(create_save_bar_code, sender=Product)
+
+
 
 class StockIn(models.Model):
     product = models.ForeignKey(

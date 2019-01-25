@@ -32,8 +32,8 @@
         $('.document').ready(function () {
             $('.ledger-submit-btn').on('click', function () {
                 $(this).addClass('disabled');
-                $(this).html('<i class="fa fa-circle-o-notch fa-spin"></i> Loading...');
-                var error = false;
+               $(this).html('<i class="fa fa-circle-o-notch fa-spin"></i> Loading...');
+                 var error= false;
 
                 if ($('.amount').val() ==""){
                     $('.amount-error').show();
@@ -53,12 +53,12 @@
                 if (error == false){
                     $('.new_ledger').submit();
                 }
-                else
-                {
-                 $(this).removeClass('disabled');
-                 $(this).html('Save');
-                 return;
-                }
+                 else
+                 {
+                     $(this).removeClass('disabled');
+                     $(this).html('Save');
+                     return;
+                 }
 
             });
         });

@@ -32,7 +32,7 @@
          $(document).ready (function () {
              $('.product-sub-btn').on ('click', function () {
                 $(this).addClass('disabled');
-                $(this).html('<i class="fa fa-circle-o-notch fa-spin"></i> Loading...');
+               $(this).html('<i class="fa fa-circle-o-notch fa-spin"></i> Loading...');
                  var error= false;
 
                  if ($('.customer_name').val()== "") {
@@ -57,7 +57,7 @@
                  else
                  {
                      $(this).removeClass('disabled');
-                     $(this).html('Save Customer');
+                     $(this).html('Add Customer');
                      return;
                  }
 
