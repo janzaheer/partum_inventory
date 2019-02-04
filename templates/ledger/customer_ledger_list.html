@@ -19,8 +19,9 @@
                 <hr>
                 <thead>
                     <tr>
-                        <th><i class="fa fa-bullhorn"></i> Customer Name</th>
-                        <th><i class=" fa fa-bookmark"></i> Customer Phone</th>
+                        <th><i class="fa fa-bullhorn"></i> Name</th>
+                        <th><i class=" fa fa-bookmark"></i> Phone</th>
+                        <th><i class=" fa fa-bookmark"></i> Person Type</th>
                         <th><i class=" fa fa-edit"></i> Total Ledger</th>
                         <th><i class=" fa fa-edit"></i> Total Payment</th>
                         <th><i class=" fa fa-bookmark"></i> Remaining Ledger</th>
@@ -33,6 +34,7 @@
                             <tr>
                                 <td><a href="{% url 'ledger:customer_ledger_detail' customer_id=customer_ledger.id %}">{{ customer_ledger.customer_name}}</a></td>
                                 <td>{{ customer_ledger.customer_phone }}</td>
+                                <td>{{ customer_ledger.customer_type}}</td>
                                 <td>{{ customer_ledger.ledger_amount|floatformat:-2 }}</td>
                                 <td>{{ customer_ledger.payment_amount|floatformat:-2 }}</td>
                                 <td>{{ customer_ledger.remaining_ledger|floatformat:-2 }}</td>

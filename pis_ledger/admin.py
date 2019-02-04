@@ -6,11 +6,11 @@ from pis_ledger.models import PaymentLedger
 
 class LedgerAdmin(admin.ModelAdmin):
     list_display = (
-        '__unicode__', 'retailer', 'amount', 'description', 'created_at'
+        '__unicode__', 'retailer','person', 'amount', 'description', 'created_at'
     )
     search_fields = (
         'customer__customer_name', 'customer__customer_phone',
-        'customer__retailer__name'
+        'customer__person_type','customer__retailer__name'
     )
     raw_id_fields = ('customer',)
 
@@ -25,7 +25,7 @@ class PaymentLedgerAdmin(admin.ModelAdmin):
     )
     search_fields = (
         'customer__customer_name', 'customer__customer_phone',
-        'customer__retailer__name', 'payment_type'
+        'customer__person_type','customer__retailer__name', 'payment_type'
     )
     raw_id_fields = ('customer',)
 

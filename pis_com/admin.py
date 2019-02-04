@@ -31,7 +31,7 @@ class UserProfileAdmin(admin.ModelAdmin):
 
 class CustomerAdmin(admin.ModelAdmin):
     list_display = (
-        '__unicode__', 'customer_phone', 'retailer'
+        '__unicode__', 'customer_phone','customer_type', 'retailer'
     )
 
 

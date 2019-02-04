@@ -194,6 +194,31 @@
                         </ul>
                     </li>
                 {% endif %}
+                 {% if request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_SALESMAN or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_OWNER or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_VIEW_ACCOUNT %}
+                    <li class="sub-menu">
+                        <a class="{% block menu_expense %}{% endblock %}" href="javascript:;" >
+                            <i class="fa fa-gavel"></i>
+                            <span>Expense</span>
+                        </a>
+                        <ul class="sub">
+                            <li class="{% block submenu_create_expense %}{% endblock %}"><a  href="{% url 'expense:add_new_expense' %}">Create Expense</a></li>
+                            <li class="{% block submenu_list_expense %}{% endblock %}"><a  href="{% url 'expense:expense_list' %}">Expenses</a></li>
+                        </ul>
+                    </li>
+                {% endif %}
+                 {% if request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_SALESMAN or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_OWNER or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_VIEW_ACCOUNT %}
+                    <li class="sub-menu">
+                        <a class="{% block menu_employee %}{% endblock %}" href="javascript:;" >
+                            <i class="fa fa-user"></i>
+                            <span>Employee</span>
+                        </a>
+                        <ul class="sub">
+                            <li class="{% block submenu_create_employee %}{% endblock %}"><a  href="{% url 'employee:add_new_employee' %}">Create Employee</a></li>
+                            <li class="{% block submenu_list_employee %}{% endblock %}"><a  href="{% url 'employee:employee_list' %}">Employees</a></li>
+                        </ul>
+                    </li>
+                {% endif %}
+
 
             </ul>
               <!-- sidebar menu end-->

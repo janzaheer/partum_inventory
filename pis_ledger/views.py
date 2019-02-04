@@ -28,6 +28,7 @@ class AddNewLedger(FormView):
         ledger_form_kwargs = {
             'retailer': self.request.POST.get('retailer'),
             'customer': customer.id,
+            'person':self.request.POST.get('customer_type'),
             'amount': self.request.POST.get('amount'),
             'description': self.request.POST.get('description'),
         }
@@ -135,6 +136,7 @@ class CustomerLedgerView(TemplateView):
                 'customer_name': customer.customer_name,
                 'customer_phone': customer.customer_phone,
                 'remaining_ledger': remaining_ledger,
+                'customer_type':customer.customer_type,
             })
 
             customer_ledger.append(customer_data)

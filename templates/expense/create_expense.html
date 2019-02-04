@@ -1,30 +1,24 @@
 {% extends 'base.html' %}
-{% block submenu_add_new_ledger %}active{% endblock %}
-{% block menu_ledger %}active{% endblock %}
+{% block submenu_create_expense %}active{% endblock %}
+{% block menu_expense %}active{% endblock %}
 {% block content %}
     <div class="col-md-6">
         <br>
-        <a href="{% url 'ledger:customer_ledger_list' %}"><button type="button"   class="btn btn-primary" style="float: left" >Back to Ledger List</button></a>
+        <a href="{% url 'expense:expense_list' %}"><button type="button"   class="btn btn-primary" style="float: left" >Back to Expense List</button></a>
         <br><br><br>
         <div class="content-panel">
-            <h3 class="text-center">{{ request.user.retailer_user.retailer.name }} Ledger</h3>
+            <h3 class="text-center">{{ request.user.retailer_user.retailer.name }} Expense</h3>
             <div class="panel-body">
-                <form class="form-horizontal add-ledger-form" action="{% url 'ledger:add_new_ledger' %}" method="post" >
+                <form class="form-horizontal add-ledger-form" action="{% url 'expense:add_new_expense' %}" method="post" >
                     <div class="form-group">
                         <div class="col-sm-12">
                             {% csrf_token %}
-                            <span class="customer-existing" style="color: red; display: none" >Customer Already Exisit</span>
-                            <span class="customer-error" style="color: red; display: none" >this field is requried</span>
-                            <input type="text" class="form-control customer" name="customer_name" placeholder="Name"><br>
-                            <span class="customer-phone-error" style="color: red; display: none" >this field is requried</span>
-                            <input type="text" class="form-control customer_phone" name="customer_phone" placeholder="Phone"><br>
-                            <span class="customer-type-error" style="color: red; display: none" >this field is requried</span>
-                            <input type="text" class="form-control customer_type" name="customer_type" placeholder="Person Type">
-                            <span style="color:#00ccff">For example: Retailer, WholeSale Dealer etc</span><br><br>
                             <span class="amount-error" style="color: red; display: none" >this field is requried</span>
                             <input type="text" class="form-control amount" name="amount" placeholder="Amount"><br>
                             <span class="description-error" style="color: red; display: none" >this field is requried</span>
-                            <textarea maxlength="500" rows="4" name="description" class="form-control description"  placeholder ="Description"></textarea> <br>
+                            <textarea class="form-control description" name="description" placeholder="Description"></textarea><br>
+                            <span class="date-error" style="color: red; display: none" >this field is requried</span>
+                            <input type="text" class="form-control date" name="date" placeholder=" Date" onfocus="(this.type='date')" onblur="(this.type='text')"><br>
                             <input type="hidden" name="retailer" value="{{ request.user.retailer_user.retailer.id }}">
                             <button type="button" id="save" class="btn btn-primary ledger-submit-btn" style="float: right" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing Order">Save Ledger</button>
                         </div>
@@ -41,46 +35,32 @@
                 $(this).html('<i class="fa fa-circle-o-notch fa-spin"></i> Loading...');
                 var error = false;
 
-                if ($('.customer').val() ==""){
-                    $('.customer-error').show();
-                    error= true;
-                }
-                else {
-                    $('.customer-error').hide();
-                }
-                if ($('.customer_type').val() ==""){
-                    $('.customer-type-error').show();
-                    error= true;
-                }
-                else {
-                    $('.customer-type-error').hide();
-                }
-
-                if ($('.amount').val() =="" ) {
+                if ($('.amount').val() ==""){
                     $('.amount-error').show();
-                    error = true;
+                    error= true;
                 }
                 else {
-                    $('.customer-error').hide();
+                    $('.amount-error').hide();
                 }
-                if ($('.description').val()== ""){
+                if ($('.description').val() ==""){
                     $('.description-error').show();
-                    error =true ;
+                    error= true;
                 }
                 else {
                     $('.description-error').hide();
+                }
+
+                if ($('.date').val() =="" ) {
+                    $('.date-error').show();
+                    error = true;
+                }
+                else {
+                    $('.date-error').hide();
                 }
                 if (error == true ) {
                     $(this).removeClass('disabled');
                     $(this).html('Save');
                     return;
-                } else {
-                    {% for customer in customers %}
-                        if ($('.customer_phone').val()== '{{ customer.customer_phone }}') {
-                            $('.customer-existing').show();
-                            return;
-                        }
-                    {% endfor %}
                 }
 
                 if (error == false) {

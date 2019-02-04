@@ -24,6 +24,8 @@ urlpatterns = [
     url(r'^retailer/', include('pis_retailer.urls', namespace='retailer')),
     url(r'^sales/', include('pis_sales.urls', namespace='sales')),
     url(r'^ledger/', include('pis_ledger.urls', namespace='ledger')),
+    url(r'^expense/', include('pis_expense.urls', namespace='expense')),
+    url(r'^employee/', include('pis_employees.urls', namespace='employee')),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
