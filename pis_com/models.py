@@ -2,6 +2,8 @@ from __future__ import unicode_literals
 from django.db import models
 from django.db.models.signals import post_save
 from django.contrib.auth.models import User
+from django.utils import timezone
+
 
 
 class DatedModel(models.Model):
@@ -59,6 +61,17 @@ class Customer(models.Model):
     def __unicode__(self):
         return self.customer_name
 
+
+class FeedBack(models.Model):
+    retailer = models.ForeignKey(
+        'pis_retailer.Retailer',
+        related_name='retailer_feedback', null=True, blank=True
+    )
+    description= models.CharField(max_length=200, null=True, blank=True)
+    date=date=models.DateField(default=timezone.now, null=True, blank=True)
+
+    def __unicode__(self):
+        return self.description
 
 # Signal Functions
 def create_profile(sender, instance, created, **kwargs):

@@ -47,3 +47,11 @@ class ExpenseListView(ListView):
     def get_queryset(self):
         query_set = ExtraExpense.objects.all().order_by('-date')
         return query_set
+
+class ExpenseDelete(DeleteView):
+    model= ExtraExpense
+    success_url= reverse_lazy('expense:expense_list')
+    success_message=''
+
+    def get(self, request, *args, **kwargs):
+        return self.post(request, *args, **kwargs)

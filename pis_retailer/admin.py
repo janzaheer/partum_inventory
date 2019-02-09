@@ -6,7 +6,7 @@ from pis_retailer.models import RetailerUser
 
 
 class RetailerAdmin(admin.ModelAdmin):
-    list_display = ('__unicode__', 'slug', 'created_at', 'updated_at')
+    list_display = ('__unicode__', 'slug', 'created_at', 'updated_at', 'package', 'package_price')
     search_fields = ('name', 'slug',)
     prepopulated_fields = {"slug": ("name",)}
 

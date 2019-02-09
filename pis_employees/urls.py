@@ -1,7 +1,8 @@
 from django.conf.urls import url
 
 from pis_employees.views import (
-    AddNewEmployee, EmployeeListView,EmployeeDelete
+    AddNewEmployee, EmployeeListView,EmployeeDelete,EmployeeSalaryView,
+    EmployeeSalaryDetail
 )
 
 urlpatterns = [
@@ -16,6 +17,16 @@ urlpatterns = [
         r'delete/(?P<pk>\d+)/$',
         EmployeeDelete.as_view(),
         name='delete_employee'
+    ),
+    url(
+        r'salary/(?P<pk>\d+)/$',
+        EmployeeSalaryView.as_view(),
+        name='employee_salary'
+    ),
+    url(
+        r'salary/(?P<pk>\d+)/detail/$',
+        EmployeeSalaryDetail.as_view(),
+        name='employee_salary_detail'
     ),
 
 ]

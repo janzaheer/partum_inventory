@@ -18,14 +18,14 @@ class EmployeeAdmin(admin.ModelAdmin):
 
 class EmployeeSalaryAdmin(admin.ModelAdmin):
     list_display = (
-        '__unicode__', 'employee', 'salary_amount', 'date'
+        '__unicode__', 'employee' ,'salary_amount', 'date'
     )
 
     @staticmethod
     def employee(obj):
         return obj.employee.name
     search_fields = (
-        'employee', 'date',
+         'date',
     )
 
 admin.site.register(Employee, EmployeeAdmin)

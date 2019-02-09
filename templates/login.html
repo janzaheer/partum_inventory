@@ -31,12 +31,61 @@
             font-size: xx-large;
             color: red;
         }
+		.heading-text{
+				margin: 0px;
+			    padding: 20px;
+			    background: #295D84;
+			    border-top-left-radius: 5px;
+			    border-top-right-radius: 5px;
+			    text-align: center;
+			    color: #fff;
+			    font-weight: 100;
+			}
     </style>
 </head>
 
-<body>
+<body style="background-image:url('{{ STATIC_URL }}img/bg-img.png')">
 <div id="login-page">
     <div class="container">
+	<div class="row">
+	      			<!--1st div -->
+	      			<div class="col-md-5" style="background: #fff; margin-top:100px; border-radius: 5px;padding: 0px">
+	      				<form class="">
+	      					<h2 class="heading-text">REGISTER NOW</h2>
+	      					<div class="login-wrap">
+
+	      						<table class="table table-advance table-hover table-bordered">
+
+                    <thead>
+                        <tr>
+                            <th colspan="4" style="text-align: center; font-size: 22px;color: #000">Our Packages</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    	<tr>
+                            <th style="color:#000;text-align:center; ">3 Month</th>
+                            <th style="color:#000;text-align:center;">6 Month</td>
+                            <th style="color:#000;text-align:center;">Yearly</td>
+                            <th style="color:#000;text-align:center;">Trial Version</th>
+                        </tr>
+                        <tr>
+                            <th style="color:#000;text-align:center;">$60</th>
+                            <th style="color:#000;text-align:center;">$100</td>
+                            <th style="color:#000;text-align:center;">$150</td>
+                            <th style="color:#000;text-align:center;">15 Days</th>
+                        </tr>
+                    </tbody>
+                </table>
+                                <h4 style="color: #000; margin-top: 0px;text-align:center">For Registration Email us Your Details</h4>
+	      						<h4 style="text-align:center; color:#000;line-height: 6px;text-decoration: underline;">zaheerjanbadini@gmail.com</h4>
+	      						<h6 style="text-align:center">e.g(Name, Email and Package)</h6>
+	      					</div>
+	      				<!-- Modal -->
+	      				<!-- modal -->
+	      			</form>
+	      		</div>
+	      		<!-- 2nd div-->
+	      		<div class="col-md-7">
         <form class="form-login" method="post" action="{% url 'login' %}">
             <h2 class="form-login-heading">sign in now</h2>
             <div class="login-wrap">
@@ -91,7 +140,7 @@
 {#                        </div>#}
 {#                        <div class="modal-footer">#}
 {#                            <button data-dismiss="modal" class="btn btn-default" type="button">Cancel</button>#}
-{#                            <button class="btn btn-primary" type="button">Submit</button>#}
+{#                            <button class="btn btn-primary" type="button" >Submit</button>#}
 {#                        </div>#}
 {#                    </div>#}
 {#                </div>#}
@@ -118,6 +167,8 @@
                 <br>
             {% endif %}
         </form>
+		</div>
+		</div>
     </div>
 </div>
 

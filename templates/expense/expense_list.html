@@ -6,8 +6,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <br>
-                <a href=""><button type="button" class="btn btn-primary">Home</button></a>
-                <a href=""><button type="button" class="btn btn-primary">Create New Expense</button></a>
+                <a href="{% url 'expense:add_new_expense' %}"><button type="button" class="btn btn-primary">Create New Expense</button></a>
                 <br><br>
                 <div class="content-panel table-responsive">
                     <h2 class="text-center">Orders</h2><div class="input-group custom-search-form col-md-4" style="left: 5px">
@@ -37,7 +36,7 @@
                             <td>{{ expense.description }}</td>
                             <td>{{ expense.date }}</td>
                             <td>
-                                <a href="#"><button class="btn btn-danger btn-xs"><i class="fa  fa-trash-o"></i></button></a>
+                                <a href="{% url 'expense:delete_expense' pk=expense.id %}"><button class="btn btn-danger btn-xs"><i class="fa  fa-trash-o"></i></button></a>
                             </td>
                         </tr>
                     {% endfor %}

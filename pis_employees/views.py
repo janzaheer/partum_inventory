@@ -5,6 +5,8 @@ from django.views.generic import FormView, DeleteView, ListView
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.shortcuts import render
+from django.http import Http404
+
 from pis_com.models import Customer
 from pis_employees.forms import EmployeeSalaryForm, EmployeeForm
 from pis_employees.models import EmployeeSalary, Employee
@@ -53,3 +55,47 @@ class EmployeeDelete(DeleteView):
     def get(self, request, *args, **kwargs):
         return self.post(request, *args, **kwargs)
 
+class EmployeeSalaryView(FormView):
+    form_class = EmployeeSalaryForm
+    template_name = 'employee/employee_salary.html'
+
+    def form_valid(self, form):
+       obj=form.save()
+       obj.employee=Employee.objects.get(name=self.request.POST.get('employee_name'))
+       obj.save()
+       return HttpResponseRedirect(reverse('employee:employee_list'))
+
+    def form_invalid(self, form):
+        return super(EmployeeSalaryView, self).form_invalid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super(EmployeeSalaryView, self).get_context_data(**kwargs)
+        employee = (
+            Employee.objects.get(id=self.kwargs.get('pk'))
+        )
+        context.update({
+            'employee': employee
+        })
+        return context
+
+class EmployeeSalaryDetail(TemplateView):
+    template_name = 'employee/employee_salary_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(
+            EmployeeSalaryDetail, self).get_context_data(**kwargs)
+
+        try:
+            salaries = EmployeeSalary.objects.filter(
+                employee__id=self.kwargs.get('pk')
+            )
+        except Employee.DoesNotExist:
+            raise Http404
+
+        context.update({
+            'salaries': salaries,
+            'employee':Employee.objects.get(id=self.kwargs.get('pk'))
+
+        })
+
+        return context
