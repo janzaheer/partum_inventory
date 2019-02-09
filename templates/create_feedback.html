@@ -25,17 +25,14 @@
         $('document').ready(function () {
 
             $('.ledger-submit-btn').on ('click', function () {
-                $(this).addClass('disabled');
-                $(this).html('<i class="fa fa-circle-o-notch fa-spin"></i> Loading...');
                 var error = false;
 
-                if ($('.amount').val() ==""){
-                    $('.amount-error').show();
-                    error= true;
-                }
-                else {
-                    $('.amount-error').hide();
-                }
+             Swal.fire(
+                          'Good job!',
+                          'You clicked the button!',
+                          'success'
+                        )
+
                 if ($('.description').val() ==""){
                     $('.description-error').show();
                     error= true;
@@ -43,57 +40,15 @@
                 else {
                     $('.description-error').hide();
                 }
-
-                if ($('.date').val() =="" ) {
-                    $('.date-error').show();
-                    error = true;
-                }
-                else {
-                    $('.date-error').hide();
-                }
-                if (error == true ) {
-                    $(this).removeClass('disabled');
-                    $(this).html('Save');
-                    return;
-                }
                 if (error == false) {
                     $('.add-ledger-form').submit();
                 }
-                 else {
-                     $(this).removeClass('disabled');
-                     $(this).html('Save');
-                     return;
-                 }
             });
 
-            $('.customer').keyup(function () {
-                $('.customer-error').hide();
-            });
-
-
-            $('.customer_phone').keyup(function () {
-               $('.customer-phone-error').hide();
-               checkDec(this);
-            });
-            function checkDec(el){
-            var ex = /^[0-9]+\.?[0-9]*$/;
-            if(ex.test(el.value)==false){
-                el.value = el.value.substring(0,el.value.length - 1);
-            }
-        }
-            $('.amount').keyup(function () {
-               $('.amount-error').hide();
-                checkDec(this);
-            });
-            function checkDec(el){
-            var ex = /^[0-9]+\.?[0-9]*$/;
-            if(ex.test(el.value)==false){
-                el.value = el.value.substring(0,el.value.length - 1);
-            }
-        }
             $('.description').keyup(function () {
                 $('.description-error').hide();
             });
+
         });
 
     </script>
