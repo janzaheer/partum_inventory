@@ -60,7 +60,7 @@
         <div class="sidebar-toggle-box">
             <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
         </div>
-        <a href="{% url 'index' %}" class="logo"><b>{{ request.user.retailer_user.retailer.name }} Dairy</b></a>
+        <a href="{% url 'index' %}" class="logo"><b>{{ request.user.retailer_user.retailer.name }}</b></a>
         <div class="right_div">
         <div class="nav notify-row" id="top_menu">
                 <!--  notification start -->
@@ -218,14 +218,20 @@
                     </li>
                 {% endif %}
                  {% if request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_SALESMAN or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_OWNER or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_VIEW_ACCOUNT %}
-                    <li class="sub-menu">
-                        <a class="{% block menu_feedback %}{% endblock %}" href="javascript:;" >
+{#                    <li class="sub-menu">#}
+{#                        <a class="{% block menu_feedback %}{% endblock %}" href="javascript:;" >#}
+{#                            <i class="fa fa-comments-o"></i>#}
+{#                            <span>FeedBack</span>#}
+{#                        </a>#}
+{#                        <ul class="sub">#}
+{#                            <li class="{% block submenu_create_feedback %}{% endblock %}"><a  href="{% url 'create_feedback' %}">FeedBack</a></li>#}
+{#                        </ul>#}
+{#                    </li>#}
+                     <li class="">
+                        <a class="{% block menu_feedback %}{% endblock %}" href="{% url 'create_feedback' %}">
                             <i class="fa fa-comments-o"></i>
-                            <span>FeedBack</span>
+                            <span>Feedback</span>
                         </a>
-                        <ul class="sub">
-                            <li class="{% block submenu_create_feedback %}{% endblock %}"><a  href="{% url 'create_feedback' %}">FeedBack</a></li>
-                        </ul>
                     </li>
                 {% endif %}
 

@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
-{% block submenu_create_feedback %}active{% endblock %}
 {% block menu_feedback %}active{% endblock %}
+{#{% block menu_feedback %}active{% endblock %}#}
 {% block content %}
     <div class="col-md-6">
         <br>
@@ -12,7 +12,7 @@
                         <div class="col-sm-12">
                             {% csrf_token %}
                             <span class="description-error" style="color: red; display: none" >this field is requried</span>
-                            <textarea class="form-control description" name="description" placeholder="FeedBack"></textarea><br>
+                            <textarea class="form-control description" name="description" placeholder="FeedBack" rows="10"></textarea><br>
                             <input type="hidden" name="retailer" value="{{ request.user.retailer_user.retailer.id }}">
                             <button type="button"  id="save" class="btn btn-primary ledger-submit-btn" style="float: right" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing Order">Done</button>
                         </div>
@@ -27,21 +27,23 @@
             $('.ledger-submit-btn').on ('click', function () {
                 var error = false;
 
-             Swal.fire(
-                          'Good job!',
-                          'You clicked the button!',
-                          'success'
-                        )
-
                 if ($('.description').val() ==""){
                     $('.description-error').show();
                     error= true;
                 }
                 else {
                     $('.description-error').hide();
+                    Swal.fire({
+                        type: 'success',
+                        title: 'Thank You',
+                        text: 'Your feedback is very important for us',
+                        showConfirmButton: true,
+                    }).then((result) => {
+                        $('.add-ledger-form').submit();
+                })
                 }
                 if (error == false) {
-                    $('.add-ledger-form').submit();
+
                 }
             });
 
