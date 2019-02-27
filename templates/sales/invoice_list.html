@@ -39,6 +39,7 @@
                             <td>{{ invoice.created_at|date }}</td>
                             <td>
                                 <a href="{% url 'sales:invoice_detail' invoice_id=invoice.id %}"><button class="btn btn-success btn-xs"><i class="fa fa-eye" title="Invoice list"></i></button></a>
+                                <a href="{% url 'sales:invoice_update' id=invoice.id %}"><button class="btn btn-success btn-xs"><i class="fa fa-edit" title="Invoice edit"></i></button></a>
 
                             </td>
                         </tr>

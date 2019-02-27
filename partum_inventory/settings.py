@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'pis_retailer',
     'pis_product',
     'pis_sales',
+    'pis_expense',
+    'pis_employees',
 ]
 
 MIDDLEWARE = [

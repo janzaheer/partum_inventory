@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block submenu_create_feedback %}active{% endblock %}
+{% block menu_feedback %}active{% endblock %}
+{% block content %}
+    <div class="col-md-6">
+        <br>
+        <div class="content-panel">
+            <h3 class="text-center">{{ request.user.retailer_user.retailer.name }} FeedBack</h3>
+            <div class="panel-body">
+                <form class="form-horizontal add-ledger-form" action="{% url 'create_feedback' %}" method="post" >
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            {% csrf_token %}
+                            <span class="description-error" style="color: red; display: none" >this field is requried</span>
+                            <textarea class="form-control description" name="description" placeholder="FeedBack"></textarea><br>
+                            <input type="hidden" name="retailer" value="{{ request.user.retailer_user.retailer.id }}">
+                            <button type="button"  id="save" class="btn btn-primary ledger-submit-btn" style="float: right" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing Order">Done</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        $('document').ready(function () {
+
+            $('.ledger-submit-btn').on ('click', function () {
+                var error = false;
+
+             Swal.fire(
+                          'Good job!',
+                          'You clicked the button!',
+                          'success'
+                        )
+
+                if ($('.description').val() ==""){
+                    $('.description-error').show();
+                    error= true;
+                }
+                else {
+                    $('.description-error').hide();
+                }
+                if (error == false) {
+                    $('.add-ledger-form').submit();
+                }
+            });
+
+            $('.description').keyup(function () {
+                $('.description-error').hide();
+            });
+
+        });
+
+    </script>
+
+
+{% endblock %}

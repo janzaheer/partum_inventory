@@ -10,6 +10,7 @@ class Ledger(DatedModel):
     customer = models.ForeignKey(
         'pis_com.Customer', related_name='customer_ledger'
     )
+    person=models.CharField(max_length=200, default='customer', blank=True, null=True)
     amount = models.DecimalField(
         max_digits=8, decimal_places=2, default=0, blank=True, null=True
     )

@@ -11,9 +11,9 @@ from django.core.urlresolvers import reverse, reverse_lazy
 from django.db.models import Sum
 from django.utils import timezone
 
-from pis_com.models import Customer
+from pis_com.models import Customer,FeedBack
 from pis_com.models import AdminConfiguration
-from pis_com.forms import CustomerForm
+from pis_com.forms import CustomerForm,FeedBackForm
 
 from pis_retailer.models import RetailerUser
 from pis_retailer.forms import RetailerForm, RetailerUserForm
@@ -248,3 +248,20 @@ class CustomerUpdateView(UpdateView):
         return super(
             CustomerUpdateView, self).dispatch(request, *args, **kwargs)
 
+
+class CreateFeedBack(FormView):
+    form_class = FeedBackForm
+    template_name = 'create_feedback.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if not self.request.user.is_authenticated():
+            return HttpResponseRedirect(reverse('login'))
+        return super(
+            CreateFeedBack, self).dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        form.save()
+        return HttpResponseRedirect(reverse('create_feedback'))
+
+    def form_invalid(self, form):
+        return super(CreateFeedBack, self).form_invalid(form)

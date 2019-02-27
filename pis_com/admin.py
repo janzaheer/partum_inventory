@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 from django.contrib import admin
 
 from pis_com.models import UserProfile
-from pis_com.models import Customer
+from pis_com.models import Customer, FeedBack
 from pis_com.models import AdminConfiguration
 
 
@@ -31,10 +31,17 @@ class UserProfileAdmin(admin.ModelAdmin):
 
 class CustomerAdmin(admin.ModelAdmin):
     list_display = (
-        '__unicode__', 'customer_phone', 'retailer'
+        '__unicode__', 'customer_phone','customer_type', 'retailer'
     )
+
+class FeedbackAdmin(admin.ModelAdmin):
+    list_display = (
+        '__unicode__', 'retailer','description','date'
+    )
+
 
 
 admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.register(Customer, CustomerAdmin)
+admin.site.register(FeedBack, FeedbackAdmin)
 admin.site.register(AdminConfiguration)

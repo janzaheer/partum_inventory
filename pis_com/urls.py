@@ -5,7 +5,7 @@ from pis_com.views import HomePageView
 from pis_com.views import LoginView
 from pis_com.views import LogoutView
 from pis_com.views import (
-    CreateCustomer, CustomerTemplateView, CustomerUpdateView)
+    CreateCustomer, CustomerTemplateView, CustomerUpdateView, CreateFeedBack)
 from pis_com.views import RegisterView
 
 urlpatterns = [
@@ -34,5 +34,10 @@ urlpatterns = [
         name='update_customer'
     ),
     url(r'^register/$', RegisterView.as_view(), name='register'),
+    url(
+        r'^feedback/create/$',
+        CreateFeedBack.as_view(),
+        name='create_feedback'
+    ),
 ]
 
