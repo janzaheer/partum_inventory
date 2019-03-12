@@ -22,8 +22,8 @@ class Migration(migrations.Migration):
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('item_name', models.CharField(blank=True, max_length=100, null=True)),
                 ('quantity', models.CharField(blank=True, max_length=100, null=True)),
-                ('price', models.DecimalField(blank=True, decimal_places=2, default=0, max_digits=8, null=True)),
-                ('total', models.DecimalField(blank=True, decimal_places=2, default=0, max_digits=8, null=True)),
+                ('price', models.DecimalField(blank=True, decimal_places=2, default=0, max_digits=65, null=True)),
+                ('total', models.DecimalField(blank=True, decimal_places=2, default=0, max_digits=65, null=True)),
                 ('retailer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='retailer_extra_items', to='pis_retailer.Retailer')),
             ],
             options={

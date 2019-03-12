@@ -18,8 +18,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('quantity', models.CharField(blank=True, max_length=100, null=True)),
-                ('price_per_item', models.DecimalField(blank=True, decimal_places=2, default=0, max_digits=8, null=True)),
-                ('total_amount', models.DecimalField(blank=True, decimal_places=2, default=0, max_digits=100, null=True)),
+                ('price_per_item', models.DecimalField(blank=True, decimal_places=2, default=0, max_digits=65, null=True)),
+                ('total_amount', models.DecimalField(blank=True, decimal_places=2, default=0, max_digits=65, null=True)),
                 ('dated_order', models.DateField(blank=True, null=True)),
                 ('stock_expiry', models.DateField(blank=True, null=True)),
                 ('product', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='stockin_product', to='pis_product.Product')),

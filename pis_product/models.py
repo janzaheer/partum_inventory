@@ -99,10 +99,10 @@ class StockIn(models.Model):
         max_length=100, blank=True, null=True
     )
     price_per_item=models.DecimalField(
-        max_digits=8, decimal_places=2, default=0, blank=True, null=True
+        max_digits=65, decimal_places=2, default=0, blank=True, null=True
     )
     total_amount=models.DecimalField(
-        max_digits=100, decimal_places=2, default=0, blank=True, null=True
+        max_digits=65, decimal_places=2, default=0, blank=True, null=True
     )
     dated_order=models.DateField(blank=True, null=True)
     stock_expiry=models.DateField(blank=True, null=True)
@@ -128,10 +128,10 @@ class ProductDetail(DatedModel):
         Product, related_name='product_detail'
     )
     retail_price = models.DecimalField(
-        max_digits=8, decimal_places=2, default=0
+        max_digits=65, decimal_places=2, default=0
     )
     consumer_price = models.DecimalField(
-        max_digits=8, decimal_places=2, default=0
+        max_digits=65, decimal_places=2, default=0
     )
     available_item = models.IntegerField(default=1)
     purchased_item = models.IntegerField(default=0)
@@ -145,16 +145,16 @@ class PurchasedProduct(DatedModel):
         Product, related_name='purchased_product'
     )
     quantity = models.DecimalField(
-        max_digits=8, decimal_places=2, default=1, blank=True, null=True
+        max_digits=65, decimal_places=2, default=1, blank=True, null=True
     )
     price = models.DecimalField(
-        max_digits=8, decimal_places=2, default=0, blank=True, null=True
+        max_digits=65, decimal_places=2, default=0, blank=True, null=True
     )
     discount_percentage = models.DecimalField(
-        max_digits=8, decimal_places=2, default=0, blank=True, null=True
+        max_digits=65, decimal_places=2, default=0, blank=True, null=True
     )
     purchase_amount = models.DecimalField(
-        max_digits=8, decimal_places=2, default=0, blank=True, null=True
+        max_digits=65, decimal_places=2, default=0, blank=True, null=True
     )
 
     def __unicode__(self):
@@ -170,11 +170,11 @@ class ExtraItems(DatedModel):
     quantity = models.CharField(
         max_length=100, blank=True, null=True)
     price = models.DecimalField(
-        max_digits=8, decimal_places=2, default=0, blank=True, null=True)
+        max_digits=65, decimal_places=2, default=0, blank=True, null=True)
     discount_percentage = models.DecimalField(
-        max_digits=8, decimal_places=2, default=0, blank=True, null=True)
+        max_digits=65, decimal_places=2, default=0, blank=True, null=True)
     total = models.DecimalField(
-        max_digits=8, decimal_places=2, default=0, blank=True, null=True)
+        max_digits=65, decimal_places=2, default=0, blank=True, null=True)
 
     def __unicode__(self):
         return self.item_name or ''
@@ -189,7 +189,7 @@ class ClaimedProduct(DatedModel):
     claimed_items = models.IntegerField(
         default=1, verbose_name='No. of Claimed Items')
     claimed_amount = models.DecimalField(
-        max_digits=8, decimal_places=2, default=0, blank=True, null=True)
+        max_digits=65, decimal_places=2, default=0, blank=True, null=True)
 
     def __unicode__(self):
         return self.product.name

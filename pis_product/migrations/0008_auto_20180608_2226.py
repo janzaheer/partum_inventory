@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='claimedproduct',
             name='claimed_amount',
-            field=models.DecimalField(blank=True, decimal_places=2, default=0, max_digits=8, null=True),
+            field=models.DecimalField(blank=True, decimal_places=2, default=0, max_digits=65, null=True),
         ),
         migrations.AddField(
             model_name='claimedproduct',

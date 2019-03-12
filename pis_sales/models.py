@@ -40,27 +40,27 @@ class SalesHistory(DatedModel):
         max_length=10, blank=True, null=True, default=1)
 
     sub_total = models.DecimalField(
-        max_digits=8, decimal_places=2, default=0, blank=True, null=True
+        max_digits=65, decimal_places=2, default=0, blank=True, null=True
     )
 
     paid_amount = models.DecimalField(
-        max_digits=8, decimal_places=2, default=0, blank=True, null=True
+        max_digits=65, decimal_places=2, default=0, blank=True, null=True
     )
 
     remaining_payment = models.DecimalField(
-        max_digits=8, decimal_places=2, default=0, blank=True, null=True
+        max_digits=65, decimal_places=2, default=0, blank=True, null=True
     )
 
     discount = models.DecimalField(
-        max_digits=8, decimal_places=2, default=0, blank=True, null=True
+        max_digits=65, decimal_places=2, default=0, blank=True, null=True
     )
 
     shipping = models.DecimalField(
-        max_digits=8, decimal_places=2, default=0, blank=True, null=True
+        max_digits=65, decimal_places=2, default=0, blank=True, null=True
     )
 
     grand_total = models.DecimalField(
-        max_digits=8, decimal_places=2, default=0, blank=True, null=True
+        max_digits=65, decimal_places=2, default=0, blank=True, null=True
     )
 
     def __unicode__(self):

@@ -12,7 +12,7 @@ class Ledger(DatedModel):
     )
     person=models.CharField(max_length=200, default='customer', blank=True, null=True)
     amount = models.DecimalField(
-        max_digits=8, decimal_places=2, default=0, blank=True, null=True
+        max_digits=65, decimal_places=2, default=0, blank=True, null=True
     )
     description = models.CharField(max_length=200, blank=True, null=True)
 
@@ -27,7 +27,7 @@ class PaymentLedger(DatedModel):
         'pis_com.Customer', related_name='customer_ledger_payment'
     )
     amount = models.DecimalField(
-        max_digits=8, decimal_places=2, default=0, blank=True, null=True
+        max_digits=65, decimal_places=2, default=0, blank=True, null=True
     )
     payment_type = models.CharField(max_length=200, blank=True, null=True)
     description = models.TextField(max_length=200, blank=True, null=True)

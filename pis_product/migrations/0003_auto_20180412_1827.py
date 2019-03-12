@@ -19,16 +19,16 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='purchasedproduct',
             name='discount_percentage',
-            field=models.DecimalField(blank=True, decimal_places=2, default=0, max_digits=8, null=True),
+            field=models.DecimalField(blank=True, decimal_places=2, default=0, max_digits=65, null=True),
         ),
         migrations.AlterField(
             model_name='purchasedproduct',
             name='purchase_amount',
-            field=models.DecimalField(blank=True, decimal_places=2, default=0, max_digits=8, null=True),
+            field=models.DecimalField(blank=True, decimal_places=2, default=0, max_digits=65, null=True),
         ),
         migrations.AlterField(
             model_name='purchasedproduct',
             name='quantity',
-            field=models.DecimalField(blank=True, decimal_places=2, default=1, max_digits=8, null=True),
+            field=models.DecimalField(blank=True, decimal_places=2, default=1, max_digits=65, null=True),
         ),
     ]
