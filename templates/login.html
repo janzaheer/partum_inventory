@@ -5,8 +5,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
-{#    <meta name="author" content="Dashboard">#}
-{#    <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">#}
+    {#    <meta name="author" content="Dashboard">#}
+    {#    <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">#}
 
     <title>Inventory System | Partum Solutions | Business Software Solution Providers</title>
 
@@ -31,144 +31,125 @@
             font-size: xx-large;
             color: red;
         }
-		.heading-text{
-				margin: 0px;
-			    padding: 20px;
-			    background: #295D84;
-			    border-top-left-radius: 5px;
-			    border-top-right-radius: 5px;
-			    text-align: center;
-			    color: #fff;
-			    font-weight: 100;
-			}
+        .heading-text{
+            margin: 0px;
+            padding: 20px;
+            background: #295D84;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            text-align: center;
+            color: #fff;
+            font-weight: 100;
+        }
     </style>
 </head>
 
-<body style="background-image:url('{{ STATIC_URL }}img/bg-img.png')">
+<body>
 <div id="login-page">
     <div class="container">
-	<div class="row">
-	      			<!--1st div -->
-	      			<div class="col-md-5" style="background: #fff; margin-top:100px; border-radius: 5px;padding: 0px">
-	      				<form class="">
-	      					<h2 class="heading-text">REGISTER NOW</h2>
-	      					<div class="login-wrap">
-
-	      						<table class="table table-advance table-hover table-bordered">
-
-                    <thead>
-                        <tr>
-                            <th colspan="4" style="text-align: center; font-size: 22px;color: #000">Our Packages</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    	<tr>
-{#                            <th style="color:#000;text-align:center; ">3 Month</th>#}
-                            <th style="color:#000;text-align:center;">6 Month</th>
-                            <th style="color:#000;text-align:center;">Yearly</th>
-                            <th style="color:#000;text-align:center;">Trial Version</th>
-                        </tr>
-                        <tr>
-{#                            <td style="color:#000;text-align:center;">$60</td>#}
-                            <td style="color:#000;text-align:center;">AED 300</td>
-                            <td style="color:#000;text-align:center;">AED 500</td>
-                            <td style="color:#000;text-align:center;">15 Days</td>
-                        </tr>
-                    </tbody>
-                </table>
-                                <h4 style="color: #000; margin-top: 0px;text-align:center">For Registration Email us Your Details</h4>
-	      						<h4 style="text-align:center; color:#000;line-height: 6px;text-decoration: underline;">sales@partumsolutions.com</h4>
-	      						<h6 style="text-align:center">e.g (Company Name, Phone No, Package, Transaction ID and Bank Statement)</h6>
-	      					</div>
-	      				<!-- Modal -->
-	      				<!-- modal -->
-	      			</form>
-	      		</div>
-	      		<!-- 2nd div-->
-	      		<div class="col-md-7">
-        <form class="form-login" method="post" action="{% url 'login' %}">
-            <h2 class="form-login-heading">sign in now</h2>
-            <div class="login-wrap">
-                {% if form.errors or form.non_field_errors %}
-                    <div class="error-alert">
-                        <i class="fa fa-warning pull-center"></i>
-                    </div>
-                {% endif %}
-                {% csrf_token %}
-                {% if form.non_field_errors %}
-                    <div>
-                        {{ form.non_field_errors }}
-                    </div>
-                {% endif %}
-                <input type="text" class="form-control" placeholder="Username" name="username" autofocus>
-                {% if form.errors %}
-                    {{ form.errors.username }}
-                {% endif %}
-                <br>
-                <input type="password" class="form-control" name="password" placeholder="Password">
-                {% if form.errors %}
-                    {{ form.errors.password  }}
-                {% endif %}
-{#                <label class="checkbox">#}
-{#                    <span class="pull-right">#}
-{#                        <a data-toggle="modal" href="login.html#myModal"> Forgot Password?</a>#}
-{#                    </span>#}
-{#                </label>#}
-                {% if not config.demo %}
-                    <label class="checkbox">
+{#        <div class="row">#}
+            <!--1st div -->
+{#            <div class="col-md-5" style="background: #fff; margin-top:100px; border-radius: 5px;padding: 0px">#}
+{#                <form class="">#}
+{#                    <h2 class="heading-text">REGISTER NOW</h2>#}
+{#                    <div class="login-wrap">#}
+{##}
+{#                        <table class="table table-advance table-hover table-bordered">#}
+{##}
+{#                            <thead>#}
+{#                            <tr>#}
+{#                                <th colspan="4" style="text-align: center; font-size: 22px;color: #000">Our Packages</th>#}
+{#                            </tr>#}
+{#                            </thead>#}
+{#                            <tbody>#}
+{#                            <tr>#}
+                                {#                            <th style="color:#000;text-align:center; ">3 Month</th>#}
+{#                                <th style="color:#000;text-align:center;">6 Month</th>#}
+{#                                <th style="color:#000;text-align:center;">Yearly</th>#}
+{#                                <th style="color:#000;text-align:center;">Trial Version</th>#}
+{#                            </tr>#}
+{#                            <tr>#}
+                                {#                            <td style="color:#000;text-align:center;">$60</td>#}
+{#                                <td style="color:#000;text-align:center;">AED 300</td>#}
+{#                                <td style="color:#000;text-align:center;">AED 500</td>#}
+{#                                <td style="color:#000;text-align:center;">15 Days</td>#}
+{#                            </tr>#}
+{#                            </tbody>#}
+{#                        </table>#}
+{#                        <h4 style="color: #000; margin-top: 0px;text-align:center">For Registration Email us Your Details</h4>#}
+{#                        <h4 style="text-align:center; color:#000;line-height: 6px;text-decoration: underline;">sales@partumsolutions.com</h4>#}
+{#                        <h6 style="text-align:center">e.g (Company Name, Phone No, Package, Transaction ID and Bank Statement)</h6>#}
+{#                    </div>#}
+{#                    <!-- Modal -->#}
+{#                    <!-- modal -->#}
+{#                </form>#}
+{#            </div>#}
+            <!-- 2nd div-->
+{#            <div class="col-md-7">#}
+                <form class="form-login" method="post" action="{% url 'login' %}">
+                    <h2 class="form-login-heading">sign in now</h2>
+                    <div class="login-wrap">
+                        {% if form.errors or form.non_field_errors %}
+                            <div class="error-alert">
+                                <i class="fa fa-warning pull-center"></i>
+                            </div>
+                        {% endif %}
+                        {% csrf_token %}
+                        {% if form.non_field_errors %}
+                            <div>
+                                {{ form.non_field_errors }}
+                            </div>
+                        {% endif %}
+                        <input type="text" class="form-control" placeholder="Username" name="username" autofocus>
+                        {% if form.errors %}
+                            {{ form.errors.username }}
+                        {% endif %}
+                        <br>
+                        <input type="password" class="form-control" name="password" placeholder="Password">
+                        {% if form.errors %}
+                            {{ form.errors.password  }}
+                        {% endif %}
+                        {#                <label class="checkbox">#}
+                        {#                    <span class="pull-right">#}
+                        {#                        <a data-toggle="modal" href="login.html#myModal"> Forgot Password?</a>#}
+                        {#                    </span>#}
+                        {#                </label>#}
+                        {% if not config.demo %}
+                            <label class="checkbox">
                         <span class="pull-right">
                            Not registered? <a data-toggle="modal" href="{% url 'register' %}"> Join now</a>
                         </span>
-                    </label>
-                {% else %}
-                    <br>
-                {% endif %}
+                            </label>
+                        {% else %}
+                            <br>
+                        {% endif %}
 
-                <button class="btn btn-primary btn-block" type="submit"><i class="fa fa-lock"></i> SIGN IN</button>
-            </div>
-{#            <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade">#}
-{#                <div class="modal-dialog">#}
-{#                    <div class="modal-content">#}
-{#                        <div class="modal-header">#}
-{#                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>#}
-{#                            <h4 class="modal-title">Forgot Password ?</h4>#}
-{#                        </div>#}
-{#                        <div class="modal-body">#}
-{#                            <p>Enter your e-mail address below to reset your password.</p>#}
-{#                            <input type="text" name="email" placeholder="Email" autocomplete="off" class="form-control placeholder-no-fix">#}
-{##}
-{#                        </div>#}
-{#                        <div class="modal-footer">#}
-{#                            <button data-dismiss="modal" class="btn btn-default" type="button">Cancel</button>#}
-{#                            <button class="btn btn-primary" type="button" >Submit</button>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </div>#}
+                        <button class="btn btn-primary btn-block" type="submit"><i class="fa fa-lock"></i> SIGN IN</button>
+                    </div>
+    `                {% if config.demo %}
+                        <hr>
+                        <table class="table table-striped table-advance table-hover table-bordered">
+                            <h3 style="text-align: center">Test Accounts</h3>
+                            <thead>
+                            <tr>
+                                <th>User Type</th>
+                                <th>Username</th>
+                                <th>Password</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>Owner</td>
+                                <td>admin</td>
+                                <td>partum123</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <br>
+                    {% endif %}
+                </form>
 {#            </div>#}
-            {% if config.demo %}
-                <hr>
-                <table class="table table-striped table-advance table-hover table-bordered">
-                    <h3 style="text-align: center">Test Accounts</h3>
-                    <thead>
-                        <tr>
-                            <th>User Type</th>
-                            <th>Username</th>
-                            <th>Password</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Owner</td>
-                            <td>admin</td>
-                            <td>partum123</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <br>
-            {% endif %}
-        </form>
-		</div>
-		</div>
+{#        </div>#}
     </div>
 </div>
 
