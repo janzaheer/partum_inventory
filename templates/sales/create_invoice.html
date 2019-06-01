@@ -30,10 +30,10 @@
 		}
 	</style>
 
-	<div class="col-lg-10 col-md-10 col-sm-10">
+	<div class="col-lg-12 col-md-12 col-sm-12">
 		<br>
 		<div class="content-panel" style="padding: 5px">
-			<div class="row">
+			<div class="row" style="font-size: large">
 				<div class="col-xs-12 col-md-12">
 					<div>
 						<h2 class="text-center">Invoice</h2>
@@ -61,70 +61,76 @@
                                 <input type="number" class="form-control customer_phone" name="customer_phone" placeholder="Customer Phone"><br>
                                 <a class="added-customer" style="cursor: pointer;">Existing Customer</a><br><br>
                             </div>
+
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                    <tbody>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="text-right"><strong>Sub Total</strong></td>
+                                        <td><span id="subtotal">0.00</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Total Qty: </strong><span id="totalQty" style="color: red; font-weight: bold">0</span></td>
+                                        <td></td>
+                                        <td class="text-right"><strong>Discount</strong></td>
+                                        <td><input class="form-control" id="discount" value="0" type="text"></td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="text-right"><strong>Shipping</strong></td>
+                                        <td><input class="form-control" id="shipping" value="0" type="text"></td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="text-right"><strong>Grand Total</strong></td>
+                                        <td><span id="grandTotal" style="color:red">0</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="text-right"><strong>Received Amount</strong></td>
+                                        <td><input class="form-control" id="paidAmount" value="0" type="text"></td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="text-right"><strong>Remaining Amount</strong></td>
+                                        <td><span id="remainingAmount">0</span></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-md-12">
+                                <a style="width: 100%; font-size: large" id="create-invoice" href="javascript:;" title="Create Invoice" class="btn btn-primary pull-right" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing Order">Create Invoice</a>
+                            </div>
 						</div>
-					</div>
-				</div>
-			</div>
-
-			<div class="row">
-				<div class="col-md-12">
-					<div class="table-responsive">
-						<table class="table table-bordered">
-							<thead>
-							<tr class="item-row">
-								<th>Item</th>
-								<th>Price</th>
-								<th>Quantity</th>
-								<th>Total</th>
-							</tr>
-							</thead>
-							<tbody>
-							<tr id="hiderow">
-								<td colspan="4">
-
-									<a id="addRow" href="javascript:;" title="Add Item" class="btn btn-primary">Add Item</a> <span class="item-error" style="color: red; display: none">please add Item</span>
-								</td>
-							</tr>
-							<tr>
-								<td></td>
-								<td></td>
-								<td class="text-right"><strong>Sub Total</strong></td>
-								<td><span id="subtotal">0.00</span></td>
-							</tr>
-							<tr>
-								<td><strong>Total Quantity: </strong><span id="totalQty" style="color: red; font-weight: bold">0</span> Units</td>
-								<td></td>
-								<td class="text-right"><strong>Discount</strong></td>
-								<td><input class="form-control" id="discount" value="0" type="text"></td>
-							</tr>
-							<tr>
-								<td></td>
-								<td></td>
-								<td class="text-right"><strong>Shipping</strong></td>
-								<td><input class="form-control" id="shipping" value="0" type="text"></td>
-							</tr>
-							<tr>
-								<td></td>
-								<td></td>
-								<td class="text-right"><strong>Grand Total</strong></td>
-								<td><span id="grandTotal" style="color:red">0</span></td>
-							</tr>
-                            <tr>
-								<td></td>
-								<td></td>
-								<td class="text-right"><strong>Received Amount</strong></td>
-								<td><input class="form-control" id="paidAmount" value="0" type="text"></td>
-							</tr>
-                            <tr>
-								<td></td>
-								<td></td>
-								<td class="text-right"><strong>Remaining Amount</strong></td>
-								<td><span id="remainingAmount">0</span></td>
-							</tr>
-							</tbody>
-						</table>
-					</div>
-					<a id="create-invoice" href="javascript:;" title="Create Invoice" class="btn btn-primary pull-right" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing Order">Create Invoice</a>
+                        <div class="col-xs-6 col-md-6">
+                            <div id="item-data-sc" class="table-responsive item-data-sc" style="height: 500px; overflow: scroll;">
+                                <table class="table table-bordered">
+                                    <thead>
+                                    <tr class="item-row">
+                                        <th>Item</th>
+                                        <th>Price</th>
+                                        <th>Quantity</th>
+                                        <th>Total</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr id="hiderow">
+                                        <td colspan="4">
+                                            <a id="addRow" href="javascript:;" title="Add Item" class="btn btn-primary">Add Item</a> <span class="item-error" style="color: red; display: none">please add Item</span>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
 				</div>
 			</div>
 		</div>
@@ -169,8 +175,14 @@
                     $.post("{% url 'sales:product_details_api' %}", {
                         code: barcode
                     }, function (result, status) {
+                        {# Create Item list by scanning the bar code #}
                         $(".item-row:last").after('<tr class="item-row"><td id="item-name" class="item-name"><div class="delete-btn"><input type="text" class="form-control invoice-item" id="invoice-item" name="all-items" list="all-items" placeholder="Select Item" type="text" value="' + result.product_name + '"><a class=' + $.opt.delete.substring(1) + ' href="javascript:;" title="Remove row">X</a></div></td><td><input class="form-control price" placeholder="Price" type="text" value="' + result.product_price + '"> </td><td><input class="form-control qty" placeholder="Quantity" value="1" type="text"></td><td><span class="total">' + result.product_price + '</span></td></tr>');
                         $('.item-row:last').click();
+
+                        {# Auto Scoll at the bottom of item list #}
+                        var elem = document.getElementById('item-data-sc');
+                        elem.scrollTop = elem.scrollHeight;
+
                         return 1;
 
                     }).fail(function (xhr, status, errors) {
@@ -179,6 +191,7 @@
                     });
                 }
             });
+
 
             $('.invoice-item').live('focusout', function(){
                 var item_price = $(this).parent().parent().find("option[value='" + $(this).val() + "']").data('price');

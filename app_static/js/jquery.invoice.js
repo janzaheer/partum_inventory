@@ -41,6 +41,7 @@ Invoice.prototype = {
         this.calcTotalQty();
         this.calcSubtotal();
         this.calcGrandTotal();
+        this.calcPaidAmount();
         this.calcRemainingAmount();
     },
 
@@ -116,7 +117,15 @@ Invoice.prototype = {
         grandTotal = self.roundNumber(grandTotal, 2);
 
         jQuery($.opt.grandTotal).html(grandTotal);
+        return 1;
+    },
 
+    calcPaidAmount: function () {
+        var grandTotal = Number(jQuery($.opt.subtotal).html())
+                       + Number(jQuery($.opt.shipping).val())
+                       - Number(jQuery($.opt.discount).val());
+        grandTotal = self.roundNumber(grandTotal, 2);
+        jQuery($.opt.paidAmount).val(grandTotal);
         return 1;
     },
 
