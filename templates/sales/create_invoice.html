@@ -132,31 +132,53 @@
 {% endblock %}
 
 {% block scripts %}
-{{ block.super }}
-	<script src="{% static 'js/jquery.invoice.js' %}"></script>
-	<script>
-		jQuery(document).ready(function(){
-			jQuery().invoice({
-				addRow : "#addRow",
-				delete : ".delete",
-				parentClass : ".item-row",
+    {{ block.super }}
+    <script src="{% static 'js/jquery.invoice.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.scannerdetection.js' %}"></script>
+    <script>
 
-				price : ".price",
-				qty : ".qty",
-				total : ".total",
-				totalQty: "#totalQty",
+        jQuery(document).ready(function(){
+            jQuery().invoice({
+                addRow : "#addRow",
+                delete : ".delete",
+                parentClass : ".item-row",
 
-				subtotal : "#subtotal",
-				discount: "#discount",
-				shipping : "#shipping",
-				grandTotal : "#grandTotal",
+                price : ".price",
+                qty : ".qty",
+                total : ".total",
+                totalQty: "#totalQty",
+
+                subtotal : "#subtotal",
+                discount: "#discount",
+                shipping : "#shipping",
+                grandTotal : "#grandTotal",
 
                 remainingAmount: '#remainingAmount',
                 paidAmount: '#paidAmount'
-			});
+            });
 
-		});
+        });
         $(function () {
+
+            $(document).scannerDetection({
+
+                timeBeforeScanTest: 200, // wait for the next character for upto 200ms
+                avgTimeByChar: 40, // it's not a barcode if a character takes longer than 100ms
+                endChar: [13],
+                onComplete: function(barcode, qty){
+                    $.post("{% url 'sales:product_details_api' %}", {
+                        code: barcode
+                    }, function (result, status) {
+                        $(".item-row:last").after('<tr class="item-row"><td id="item-name" class="item-name"><div class="delete-btn"><input type="text" class="form-control invoice-item" id="invoice-item" name="all-items" list="all-items" placeholder="Select Item" type="text" value="' + result.product_name + '"><a class=' + $.opt.delete.substring(1) + ' href="javascript:;" title="Remove row">X</a></div></td><td><input class="form-control price" placeholder="Price" type="text" value="' + result.product_price + '"> </td><td><input class="form-control qty" placeholder="Quantity" value="1" type="text"></td><td><span class="total">' + result.product_price + '</span></td></tr>');
+                        $('.item-row:last').click();
+                        return 1;
+
+                    }).fail(function (xhr, status, errors) {
+                        alert('Something is wrong! please check all fields and try again');
+
+                    });
+                }
+            });
 
             $('.invoice-item').live('focusout', function(){
                 var item_price = $(this).parent().parent().find("option[value='" + $(this).val() + "']").data('price');
@@ -302,28 +324,28 @@
             $('.item-error').hide();
         });
 
-	</script>
-<script>
-$('#create-invoice').on('click', function() {
-    var $this = $(this);
-  $this.button('loading');
-    setTimeout(function() {
-       $this.button('reset');
-   }, 1000);
-});
+    </script>
+    <script>
+        $('#create-invoice').on('click', function() {
+            var $this = $(this);
+            $this.button('loading');
+            setTimeout(function() {
+                $this.button('reset');
+            }, 1000);
+        });
 
-$('.form-control').click (function () {
-    $('.list-error').hide();
-    checkDec(this);
+        $('.form-control').click (function () {
+            $('.list-error').hide();
+            checkDec(this);
 
-});
+        });
 
-function checkDec(el){
-	 var ex = /^[0-9]+\.?[0-9]*$/;
-	 if(ex.test(el.value)==false){
-		 el.value = el.value.substring(0,el.value.length - 1);
-	 }
- }
+        function checkDec(el){
+            var ex = /^[0-9]+\.?[0-9]*$/;
+            if(ex.test(el.value)==false){
+                el.value = el.value.substring(0,el.value.length - 1);
+            }
+        }
     </script>
 
 {% endblock %}
