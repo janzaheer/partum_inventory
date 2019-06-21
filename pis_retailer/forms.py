@@ -1,6 +1,6 @@
 from django import forms
 
-from models import Retailer, RetailerUser
+from .models import Retailer, RetailerUser
 
 
 class RetailerForm(forms.ModelForm):
