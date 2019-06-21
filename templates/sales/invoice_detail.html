@@ -17,16 +17,16 @@
             <div class="row">
                 <div class="col-xs-12 col-md-12">
                     <div class="text-center">
-                        <h1><strong>{{ request.user.retailer_user.retailer.name }}</strong></h1>
+                        <h1 style="font-size:18px"><strong>{{ request.user.retailer_user.retailer.name }}</strong></h1>
                         {% if request.user.user_profile.address %}<span><strong>{{ request.user.user_profile.address }}</strong></span><br>{% endif %}
                         {% if request.user.user_profile.phone_no %}<small><strong>Phone No:</strong> {{ request.user.user_profile.phone_no }} </small>{% endif %} {% if request.user.user_profile.mobile_no %}<small><strong>Mobile No: </strong>{{ request.user.user_profile.mobile_no }} </small>{% endif %}
-                        <h3>Invoice</h3>
+                        <h3 style="font-size:16px">Invoice</h3>
                     </div>
                     <hr>
                 </div>
                 <div class="col-xs-12 col-md-12" style="margin-top: 15px">
                     <div class="row">
-                        <div class="col-xs-6 col-md-6">
+                        <div class="col-xs-12 col-md-6">
                             <label><strong>Customer Name:</strong></label> <span style="margin: 15px;">{{ invoice.customer.customer_name }}</span><br>
                             <label><strong>Customer Phone:</strong></label> <span style="margin: 15px;">{{ invoice.customer.customer_phone }}</span><br>
                             {% if invoice.customer.shop %}
@@ -45,7 +45,7 @@
 
             <div class="row">
                 <div class="col-md-12">
-                    <span style="float: right; font-size: large">Receipt No. <span style="color:red">{{ invoice.receipt_no }}</span></span>
+                    <span style="float: right; font-size:18px">Receipt No. <span style="color:red">{{ invoice.receipt_no }}</span></span>
                     <div class="table-responsive">
                         <table class="table table-bordered">
                             <thead>
@@ -83,35 +83,35 @@
                                     </td>
                                 </tr>
                             {% endfor %}
-                            <tr><td colspan="4" style="color:white">Need to change this properly</td></tr>
+                            <tr><td colspan="4" style="color:white"></td></tr>
                             <tr style="border-top: 3px solid">
                                 <td></td>
-                                <td class="text-right"><strong>Sub Total</strong></td>
+                                <td class="text-right"><strong style="font-size:11px">Sub Total</strong></td>
                                 <td><span id="subtotal">{{ invoice.sub_total|floatformat:-2 }}</span></td>
                             </tr>
                             <tr>
-                                <td><strong>Total Quantity: </strong><span id="totalQty" style="color: red; font-weight: bold">{{ invoice.total_quantity }}</span> Units</td>
-                                <td class="text-right"><strong>Discount</strong></td>
+                                <td><strong style="font-size:11px">Total Quantity: </strong><span id="totalQty" style="color: red; font-weight: bold">{{ invoice.total_quantity }}</span> Units</td>
+                                <td class="text-right"><strong style="font-size:11px">Discount</strong></td>
                                 <td>{{ invoice.discount|floatformat:-2 }}</td>
                             </tr>
                             <tr>
                                 <td></td>
-                                <td class="text-right"><strong>Shipping</strong></td>
+                                <td class="text-right" ><strong style="font-size:11px">Shipping</strong></td>
                                 <td>{{ invoice.shipping|floatformat:-2 }}</td>
                             </tr>
                             <tr>
                                 <td></td>
-                                <td class="text-right"><strong>Grand Total</strong></td>
+                                <td class="text-right" ><strong style="font-size:11px">Grand Total</strong></td>
                                 <td><span id="grandTotal" style="color: red;">{{ invoice.grand_total|floatformat:-2 }}</span></td>
                             </tr>
                             <tr>
                                 <td></td>
-                                <td class="text-right"><strong>Received Amount</strong></td>
-                                <td><span id="receivedAmount">{{ invoice.paid_amount|floatformat:-2 }}</span></td>
+                                <td class="text-right"><strong style="font-size:11px">Received Amount</strong></td>
+                                <td><span id="receivedAmount" >{{ invoice.paid_amount|floatformat:-2 }}</span></td>
                             </tr>
                             <tr>
                                 <td></td>
-                                <td class="text-right"><strong>Remaining Payment</strong></td>
+                                <td class="text-right" ><strong style="font-size:11px">Remaining Payment</strong></td>
                                 <td><span id="remainingAmount">{{ invoice.remaining_payment|floatformat:-2 }}</span></td>
                             </tr>
                             </tbody>
@@ -120,16 +120,9 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-xs-3 col-md-3">
-                </div>
-                <div class="col-xs-3 col-md-3">
-                </div>
-                <div class="col-xs-3 col-md-3">
-                </div>
-                <div class="col-xs-3 col-md-3" style="text-align: center;">
+                <div class="col-xs-12 col-md-12" style="text-align: center;">
                     <br><br><br>
-                    <hr>
-                    <span>Signature</span>
+                    <span>@copyright Partum Solution</span>
                 </div>
             </div>
         </div>
