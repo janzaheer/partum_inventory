@@ -43,6 +43,7 @@ Invoice.prototype = {
         this.calcGrandTotal();
         this.calcPaidAmount();
         this.calcRemainingAmount();
+        this.calcReturnedAmount();
     },
 
     /**
@@ -133,6 +134,13 @@ Invoice.prototype = {
         var remainingAmount = Number(jQuery($.opt.grandTotal).html())
                        - Number(jQuery($.opt.paidAmount).val());
         jQuery($.opt.remainingAmount).html(remainingAmount);
+        return 1;
+    },
+
+    calcReturnedAmount: function () {
+        var returnedAmount = Number(jQuery($.opt.cashPayment).val())
+            - Number(jQuery($.opt.grandTotal).html());
+        jQuery($.opt.returnedCash).html(returnedAmount);
         return 1;
     },
 
@@ -262,5 +270,8 @@ jQuery.fn.invoice.defaults = {
     grandTotal: "#grandTotal",
 
     remainingAmount: '#remainingAmount',
-    paidAmount: '#paidAmount'
+    paidAmount: '#paidAmount',
+
+    cashPayment: '#cash_payment',
+    returnedCash: '#returned_cash',
 };

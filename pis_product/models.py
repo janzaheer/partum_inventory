@@ -147,6 +147,7 @@ class StockIn(models.Model):
     def __unicode__(self):
         return self.product.name
 
+
 class StockOut(models.Model):
     product = models.ForeignKey(
         Product, related_name='stockout_product'
@@ -156,8 +157,6 @@ class StockOut(models.Model):
 
     def __unicode__(self):
         return self.product.name
-
-
 
 
 class ProductDetail(DatedModel):

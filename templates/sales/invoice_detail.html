@@ -27,15 +27,17 @@
                 <div class="col-xs-12 col-md-12" style="margin-top: 15px">
                     <div class="row">
                         <div class="col-xs-12 col-md-6">
-                            <label><strong>Customer Name:</strong></label> <span style="margin: 15px;">{{ invoice.customer.customer_name }}</span><br>
-                            <label><strong>Customer Phone:</strong></label> <span style="margin: 15px;">{{ invoice.customer.customer_phone }}</span><br>
+                            {% if invoice.customer %}
+                                <label><strong>Customer Name:</strong></label> <span style="margin: 15px;">{{ invoice.customer.customer_name }}</span><br>
+                                <label><strong>Customer Phone:</strong></label> <span style="margin: 15px;">{{ invoice.customer.customer_phone }}</span><br>
+                            {% endif %}
                             {% if invoice.customer.shop %}
                                 <label><strong>Shop Name:</strong></label> <span style="margin: 15px;">{{ invoice.customer.shop }}</span><br>
                             {% endif %}
                             {% if invoice.customer.address %}
                                 <label><strong>Address:</strong></label> <span style="margin: 15px;">{{ invoice.customer.address }}</span><br>
                             {% endif %}
-                            <label><strong>Billed To:</strong></label><span style="margin: 15px;">{{ invoice.created_at.date }}</span><br>
+                            <label><strong>Billed Date:</strong></label><span style="margin: 15px;">{{ invoice.created_at.date }}</span><br>
                             <br>
                         </div>
                     </div>
@@ -84,36 +86,46 @@
                                 </tr>
                             {% endfor %}
                             <tr><td colspan="4" style="color:white"></td></tr>
-                            <tr style="border-top: 3px solid">
-                                <td></td>
-                                <td class="text-right"><strong style="font-size:11px">Sub Total</strong></td>
-                                <td><span id="subtotal">{{ invoice.sub_total|floatformat:-2 }}</span></td>
-                            </tr>
+{#                            <tr style="border-top: 3px solid">#}
+{#                                <td></td>#}
+{#                                <td class="text-right"><strong style="font-size:11px">Sub Total</strong></td>#}
+{#                                <td><span id="subtotal">{{ invoice.sub_total|floatformat:-2 }}</span></td>#}
+{#                            </tr>#}
+{#                            <tr>#}
+{#                                <td><strong style="font-size:11px">Total Quantity: </strong><span id="totalQty" style="color: red; font-weight: bold">{{ invoice.total_quantity }}</span> Units</td>#}
+{#                                <td class="text-right"><strong style="font-size:11px">Discount</strong></td>#}
+{#                                <td>{{ invoice.discount|floatformat:-2 }}</td>#}
+{#                            </tr>#}
+{#                            <tr>#}
+{#                                <td></td>#}
+{#                                <td class="text-right" ><strong style="font-size:11px">Shipping</strong></td>#}
+{#                                <td>{{ invoice.shipping|floatformat:-2 }}</td>#}
+{#                            </tr>#}
                             <tr>
                                 <td><strong style="font-size:11px">Total Quantity: </strong><span id="totalQty" style="color: red; font-weight: bold">{{ invoice.total_quantity }}</span> Units</td>
-                                <td class="text-right"><strong style="font-size:11px">Discount</strong></td>
-                                <td>{{ invoice.discount|floatformat:-2 }}</td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td class="text-right" ><strong style="font-size:11px">Shipping</strong></td>
-                                <td>{{ invoice.shipping|floatformat:-2 }}</td>
-                            </tr>
-                            <tr>
-                                <td></td>
                                 <td class="text-right" ><strong style="font-size:11px">Grand Total</strong></td>
                                 <td><span id="grandTotal" style="color: red;">{{ invoice.grand_total|floatformat:-2 }}</span></td>
                             </tr>
                             <tr>
                                 <td></td>
-                                <td class="text-right"><strong style="font-size:11px">Received Amount</strong></td>
-                                <td><span id="receivedAmount" >{{ invoice.paid_amount|floatformat:-2 }}</span></td>
+                                <td class="text-right"><strong style="font-size:11px">Cash Payment</strong></td>
+                                <td><span id="cash_payment" >{{ invoice.cash_payment|floatformat:-2 }}</span></td>
                             </tr>
                             <tr>
                                 <td></td>
-                                <td class="text-right" ><strong style="font-size:11px">Remaining Payment</strong></td>
-                                <td><span id="remainingAmount">{{ invoice.remaining_payment|floatformat:-2 }}</span></td>
+                                <td class="text-right"><strong style="font-size:11px">Returned Cash</strong></td>
+                                <td><span id="returned_cash" >{{ invoice.returned_payment|floatformat:-2 }}</span></td>
                             </tr>
+{#                            <tr>#}
+{#                                <td></td>#}
+{#                                <td class="text-right"><strong style="font-size:11px">Received Amount</strong></td>#}
+{#                                <td><span id="receivedAmount" >{{ invoice.paid_amount|floatformat:-2 }}</span></td>#}
+{#                            </tr>#}
+{#                            <tr>#}
+{#                                <td></td>#}
+{#                                <td class="text-right" ><strong style="font-size:11px">Remaining Payment</strong></td>#}
+{#                                <td><span id="remainingAmount">{{ invoice.remaining_payment|floatformat:-2 }}</span></td>#}
+{#                            </tr>#}
                             </tbody>
                         </table>
                     </div>

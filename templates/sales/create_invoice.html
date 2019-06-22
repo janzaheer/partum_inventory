@@ -66,41 +66,56 @@
                                 <table class="table table-bordered">
                                     <thead>
                                     <tbody>
-                                    <tr>
+                                    <tr hidden>
                                         <td></td>
                                         <td></td>
                                         <td class="text-right"><strong>Sub Total</strong></td>
                                         <td><span id="subtotal">0.00</span></td>
                                     </tr>
-                                    <tr>
-                                        <td><strong>Total Qty: </strong><span id="totalQty" style="color: red; font-weight: bold">0</span></td>
+                                    <tr hidden>
+                                        <td></td>
                                         <td></td>
                                         <td class="text-right"><strong>Discount</strong></td>
                                         <td><input class="form-control" id="discount" value="0" type="text"></td>
                                     </tr>
-                                    <tr>
+                                    <tr hidden>
                                         <td></td>
                                         <td></td>
                                         <td class="text-right"><strong>Shipping</strong></td>
                                         <td><input class="form-control" id="shipping" value="0" type="text"></td>
                                     </tr>
                                     <tr>
-                                        <td></td>
+                                        <td><strong>Total Qty: </strong><span id="totalQty" style="color: red; font-weight: bold">0</span></td>
                                         <td></td>
                                         <td class="text-right"><strong>Grand Total</strong></td>
                                         <td><span id="grandTotal" style="color:red">0</span></td>
                                     </tr>
-                                    <tr>
+                                    <tr hidden>
                                         <td></td>
                                         <td></td>
                                         <td class="text-right"><strong>Received Amount</strong></td>
                                         <td><input class="form-control" id="paidAmount" value="0" type="text"></td>
                                     </tr>
-                                    <tr>
+                                    <tr hidden>
                                         <td></td>
                                         <td></td>
                                         <td class="text-right"><strong>Remaining Amount</strong></td>
                                         <td><span id="remainingAmount">0</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4"></td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="text-right"><strong>Cash Payment</strong></td>
+                                        <td><input class="form-control" id="cash_payment" value="0" type="text"></td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="text-right"><strong>Returned Cash</strong></td>
+                                        <td><span id="returned_cash">0</span></td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -160,7 +175,10 @@
                 grandTotal : "#grandTotal",
 
                 remainingAmount: '#remainingAmount',
-                paidAmount: '#paidAmount'
+                paidAmount: '#paidAmount',
+
+                cashPayment: '#cash_payment',
+                returnedCash: '#returned_cash'
             });
 
         });
@@ -293,6 +311,8 @@
                 var grand_total = $('#grandTotal').text();
                 var remaining_amount = $('#remainingAmount').text();
                 var paid_amount = $('#paidAmount').val();
+                var cash_payment = $('#cash_payment').val();
+                var returned_cash = $('#returned_cash').text();
                 var totalQty = total_quantity;
 
                 var customer_value = $('.customer').val();
@@ -309,6 +329,8 @@
                         totalQty: totalQty,
                         remaining_amount: remaining_amount,
                         paid_amount: paid_amount,
+                        cash_payment: cash_payment,
+                        returned_cash: returned_cash,
                         items: JSON.stringify(items)
                     }, function (result, status) {
                         window.location.href = '/sales/invoice/'+ result.invoice_id +/detail/;

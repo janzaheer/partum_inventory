@@ -63,6 +63,14 @@ class SalesHistory(DatedModel):
         max_digits=65, decimal_places=2, default=0, blank=True, null=True
     )
 
+    cash_payment = models.DecimalField(
+        max_digits=65, decimal_places=2, default=0, blank=True, null=True
+    )
+
+    returned_payment = models.DecimalField(
+        max_digits=65, decimal_places=2, default=0, blank=True, null=True
+    )
+
     def __unicode__(self):
         return self.retailer.name
 

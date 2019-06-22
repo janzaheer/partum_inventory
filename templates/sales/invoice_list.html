@@ -20,8 +20,8 @@
                     <thead>
                     <tr>
                         <th><i class=" fa fa-bookmark"></i> Receipt No.</th>
-                        <th><i class="fa fa-bullhorn"></i> Customer Name</th>
-                        <th><i class="fa fa-question-circle"></i> Customer Phone</th>
+{#                        <th><i class="fa fa-bullhorn"></i> Customer Name</th>#}
+                        <th><i class="fa fa-question-circle"></i> Customer</th>
                         <th><i class=" fa fa-edit"></i> Quantity</th>
                         <th><i class=" fa fa-try"></i> Grand Total</th>
                         <th><i class=" fa fa-calendar"></i> Date</th>
@@ -32,8 +32,7 @@
                     {% for invoice in invoices %}
                         <tr>
                             <td><a href="{% url 'sales:invoice_detail' invoice_id=invoice.id %}">{{ invoice.receipt_no }}</a></td>
-                            <td>{{ invoice.customer.customer_name}}</td>
-                            <td>{{ invoice.customer.customer_phone }}</td>
+                            <td>{% if invoice.customer %}{{ invoice.customer.customer_name|title}}{% else %}-{% endif %}</td>
                             <td>{{ invoice.total_quantity }}</td>
                             <td>{{ invoice.grand_total }}</td>
                             <td>{{ invoice.created_at|date }}</td>

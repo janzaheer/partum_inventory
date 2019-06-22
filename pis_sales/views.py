@@ -117,6 +117,8 @@ class GenerateInvoiceAPIView(View):
         totalQty = self.request.POST.get('totalQty')
         remaining_payment = self.request.POST.get('remaining_amount')
         paid_amount = self.request.POST.get('paid_amount')
+        cash_payment = self.request.POST.get('cash_payment')
+        returned_cash = self.request.POST.get('returned_cash')
         items = json.loads(self.request.POST.get('items'))
         purchased_items_id = []
         extra_items_id = []
@@ -174,6 +176,8 @@ class GenerateInvoiceAPIView(View):
             'extra_items': extra_items_id,
             'paid_amount': paid_amount,
             'remaining_payment': remaining_payment,
+            'cash_payment': cash_payment,
+            'returned_payment': returned_cash,
             'retailer': self.request.user.retailer_user.retailer.id,
         }
 
