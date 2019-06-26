@@ -309,6 +309,7 @@ class AddStockItems(FormView):
         })
         return context
 
+
 class StockOutItems(FormView):
     form_class = StockOutForm
     template_name = 'products/stock_out.html'
@@ -341,6 +342,7 @@ class StockOutItems(FormView):
             'product': product
         })
         return context
+
 
 class StockDetailView(TemplateView):
     template_name = 'products/stock_detail.html'

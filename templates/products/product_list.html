@@ -25,7 +25,6 @@
                         <th><i class=" fa fa-bookmark"></i> Unit</th>
                         <th><i class=" fa fa-bookmark"></i> Available Items</th>
                         <th><i class=" fa fa-edit"></i> Purchased Items</th>
-                        <th><i class=" fa fa-edit"></i> Claimed Items</th>
                         <th><i class=" fa fa-edit"></i> Bar Code</th>
                         <th>Actions</th>
                     </tr>
@@ -36,9 +35,8 @@
                             <td><a href="{% url 'product:item_details' pk=item.id %}">{{ item.name}}</a></td>
                             <td class="#">{{ item.brand_name }}</td>
                             <td class="#">{{ item.unit_type }}</td>
-                            <td>{{ item.product_available_items }}</td>
-                            <td>{{ item.product_purchased_items }}</td>
-                            <td>{{ item.total_num_of_claimed_items }}</td>
+                            <td>{{ item.product_available_items|floatformat:-2 }}</td>
+                            <td>{{ item.product_purchased_items|floatformat:-2 }}</td>
                             <td>{{ item.bar_code}}</td>
                             <td>
                                 <a href="{% url 'product:add_product_items' product_id=item.id %}"><button class="btn btn-primary btn-xs"><i class="fa fa-plus"></i></button></a>

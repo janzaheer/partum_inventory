@@ -142,16 +142,20 @@ class GenerateInvoiceAPIView(View):
                     purchased_item = form.save()
                     purchased_items_id.append(purchased_item.id)
 
+                    latest_stock_in = (
+                        product.stockin_product.all().latest('id'))
+
                     stock_out_form_kwargs = {
                         'product': product.id,
                         'stock_out_quantity': item.get('qty'),
+                        'buying_price': latest_stock_in.buying_price_item,
+                        'selling_price': item.get('price'),
                         'dated': timezone.now().date()
                     }
 
                     stock_out_form = StockOutForm(stock_out_form_kwargs)
                     if stock_out_form.is_valid():
                         stock_out_form.save()
-
 
             except Product.DoesNotExist:
                 extra_item_kwargs = {

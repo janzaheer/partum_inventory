@@ -23,8 +23,8 @@ class Product(models.Model):
         choices=UNIT_TYPES, default=UNIT_TYPE_QUANTITY,
         blank=True, null=True, max_length=200
     )
-    name = models.CharField(max_length=100)
-    brand_name = models.CharField(max_length=200)
+    name = models.CharField(max_length=100, unique=True)
+    brand_name = models.CharField(max_length=200, blank=True, null=True)
     retailer = models.ForeignKey(
         'pis_retailer.Retailer',
         related_name='retailer_product'
@@ -132,17 +132,26 @@ class StockIn(models.Model):
     product = models.ForeignKey(
         Product, related_name='stockin_product'
     )
-    quantity=models.CharField(
+    quantity = models.CharField(
         max_length=100, blank=True, null=True
     )
-    price_per_item=models.DecimalField(
+    price_per_item = models.DecimalField(
+        max_digits=65, decimal_places=2, default=0, blank=True, null=True,
+        help_text="Selling Price for a Single Item"
+    )
+    total_amount = models.DecimalField(
         max_digits=65, decimal_places=2, default=0, blank=True, null=True
     )
-    total_amount=models.DecimalField(
+    buying_price_item = models.DecimalField(
+        max_digits=65, decimal_places=2, default=0, blank=True, null=True,
+        help_text='Buying Price for a Single Item'
+    )
+    total_buying_amount = models.DecimalField(
         max_digits=65, decimal_places=2, default=0, blank=True, null=True
     )
-    dated_order=models.DateField(blank=True, null=True)
-    stock_expiry=models.DateField(blank=True, null=True)
+
+    dated_order = models.DateField(blank=True, null=True)
+    stock_expiry = models.DateField(blank=True, null=True)
 
     def __unicode__(self):
         return self.product.name
@@ -153,6 +162,12 @@ class StockOut(models.Model):
         Product, related_name='stockout_product'
     )
     stock_out_quantity=models.CharField(max_length=100, blank=True, null=True)
+    selling_price = models.DecimalField(
+        max_digits=65, decimal_places=2, default=0, blank=True, null=True
+    )
+    buying_price = models.DecimalField(
+        max_digits=65, decimal_places=2, default=0, blank=True, null=True
+    )
     dated=models.DateField(blank=True, null=True)
 
     def __unicode__(self):

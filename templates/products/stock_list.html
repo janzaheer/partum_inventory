@@ -20,14 +20,13 @@
                     <hr>
                     <thead>
                     <tr>
-                        <th><i class="fa fa-bullhorn"></i> Item Name</th>
-                        <th><i class="fa fa-question-circle"></i> Brand Name</th>
-                        <th><i class="fa fa-question-circle"></i> Unit Type</th>
-                        <th><i class="fa fa-question-circle"></i> Total Items</th>
-                        <th><i class=" fa fa-bookmark"></i> Available Items</th>
-                        <th><i class=" fa fa-edit"></i> Purchased Items</th>
-                        <th><i class=" fa fa-edit"></i> Claimed Items</th>
-                        <th><i class=" fa fa-edit"></i> Bar Code</th>
+                        <th>Item Name</th>
+                        <th>Brand Name</th>
+                        <th>Unit Type</th>
+                        <th>Total Items</th>
+                        <th>Available Items</th>
+                        <th>Purchased Items</th>
+                        <th>Bar Code</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
@@ -37,10 +36,9 @@
                             <td><a href="{% url 'product:item_details' pk=item.id %}">{{ item.name}}</a></td>
                             <td class="#">{{ item.brand_name }}</td>
                             <td class="#">{{ item.unit_type }}</td>
-                            <td>{{ item.total_items }}</td>
-                            <td>{{ item.product_available_items }}</td>
-                            <td>{{ item.product_purchased_items }}</td>
-                            <td>{{ item.total_num_of_claimed_items }}</td>
+                            <td>{{ item.total_items|floatformat:-2 }}</td>
+                            <td>{{ item.product_available_items|floatformat:-2 }}</td>
+                            <td>{{ item.product_purchased_items|floatformat:-2 }}</td>
                             <td>{{ item.bar_code }}</td>
                             <td>
                                 <a href="{% url 'product:add_stock_items' product_id=item.id %}"><button class="btn btn-primary btn-xs"><i class="fa fa-plus"></i></button></a>
