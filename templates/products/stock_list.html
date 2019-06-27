@@ -41,6 +41,7 @@
                             <td>{{ item.product_purchased_items|floatformat:-2 }}</td>
                             <td>{{ item.bar_code }}</td>
                             <td>
+                                <a href="{% url 'product:update_product' pk=item.id %}"><button class="btn btn-success btn-xs"><i class="fa fa-edit"></i></button></a>
                                 <a href="{% url 'product:stockin_list' product_id=item.id %}"><button class="btn btn-primary btn-xs"><i class="fa fa-plus"></i></button></a>
                                 <a href="{% url 'product:stockout_list' product_id=item.id %}"><button class="btn btn-danger btn-xs" title="Stock Out"><i class="fa fa-minus"></i></button></a>
                             </td>

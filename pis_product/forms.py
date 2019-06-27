@@ -35,10 +35,12 @@ class ClaimedProductForm(forms.ModelForm):
         model = ClaimedProduct
         fields = "__all__"
 
+
 class StockDetailsForm(forms.ModelForm):
     class Meta:
         model = StockIn
         fields = "__all__"
+
 
 class StockOutForm(forms.ModelForm):
     class Meta:

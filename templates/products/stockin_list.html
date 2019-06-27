@@ -33,7 +33,7 @@
                         <td>{{ stockin.dated_order }}</td>
                         <td>{{ stockin.stock_expiry }}</td>
                         <td>
-                            <a href="#"><button class="btn btn-primary btn-xs"><i class="fa fa-edit"></i></button></a>
+                            <a href="{% url 'product:update_stockin' pk=stockin.id %}"><button class="btn btn-primary btn-xs"><i class="fa fa-edit"></i></button></a>
                         </td>
                     </tr>
                 {% endfor %}

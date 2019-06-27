@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 from django.shortcuts import render
 
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, UpdateView
 from django.views.generic import FormView, ListView
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse, reverse_lazy
@@ -254,6 +254,7 @@ class ClaimedItemsListView(TemplateView):
         })
         return context
 
+
 class StockItemList(TemplateView):
     template_name = 'products/stock_list.html'
 
@@ -273,6 +274,7 @@ class StockItemList(TemplateView):
             'products': products
         })
         return context
+
 
 class AddStockItems(FormView):
     template_name = 'products/add_stock_item.html'
@@ -409,3 +411,26 @@ class StockOutListView(ListView):
             'product': Product.objects.get(id=self.kwargs.get('product_id'))
         })
         return context
+
+
+class ProductUpdateView(UpdateView):
+    template_name = 'products/update_product.html'
+    model = Product
+    form_class = ProductForm
+    success_url = reverse_lazy('product:stock_items_list')
+
+
+class StockInUpdateView(UpdateView):
+    template_name = 'products/update_stockin.html'
+    model = StockIn
+    form_class = StockDetailsForm
+
+    def form_valid(self, form):
+        obj = form.save()
+        return HttpResponseRedirect(
+            reverse('product:stockin_list',
+                    kwargs={'product_id': obj.product.id})
+        )
+    
+    def form_invalid(self, form):
+        return super(StockInUpdateView, self).form_invalid(form)

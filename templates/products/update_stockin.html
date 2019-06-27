@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="col-md-12">
+        <br>
+        <a href="#"><button type="button"  class="btn btn-primary" >Home</button></a>
+        <a href=""><button type="button"  class="btn btn-primary" >Products</button></a>
+        <a href="{% url 'product:stockin_list' product_id=object.product.id %}"><button type="button"  class="btn btn-primary" >Stock Details</button></a>
+        <br><br><br>
+        <div class="content-panel">
+            <h3 class="text-center">{{ object.product.name|title }} ({{ object.product.brand_name|title }}) | <small>Stock Update Form</small> </h3>
+            <div class="panel-body">
+                <form class="form-horizontal product_item_form" action="#" method="post" >
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <label><strong>Stock Quantity</strong></label>
+                            <input type="text"  class="form-control quantity"  name="quantity" id="quantity" value="{{ object.quantity }}"><br>
+                        </div>
+                        <div class="col-md-6">
+                            {% csrf_token %}
+                            <label><strong>Buying Price / Item</strong></label>
+                            <input type="text"  class="form-control buying_price_item"  name="buying_price_item" id="buying_price_item" value="{{ object.buying_price_item|floatformat:-2 }}"><br>
+                            <label><strong>Selling Price / Item</strong></label>
+                            <input type="text"  class="form-control price_per_item"  name="price_per_item" id="price_per_item"  onkeyup="sum();" value="{{ object.price_per_item|floatformat:-2 }}"><br>
+                            <label><strong>Date Stock In</strong></label>
+                            <input type="date"  class="form-control dated_order" name="dated_order" value="{{ object.dated_order|date:"Y-m-d" }}"><br>
+                            <input type="hidden" name="purchased_item" value="0">
+                            <input type="hidden" name="product" value="{{ object.product.id }}">
+                            <input type="hidden" name="retail_price" value="0">
+                        </div>
+                        <div class="col-md-6">
+                            <label><strong>Total Buying Amount</strong></label>
+                            <input type="text"  class="form-control total_buying_amount"  name="total_buying_amount"  id="total_buying_amount" value="{{ object.total_buying_amount|floatformat:-2 }}" readonly><br>
+                            <label><strong>Total Selling Amount</strong></label>
+                            <input type="text"  class="form-control total_amount"  name="total_amount"  id="total_amount" value="{{ object.total_amount|floatformat:-2 }}" readonly><br>
+                            <label><strong>Expiry Date</strong></label>
+                            <input type="date"  class="form-control stock_expiry"  name="stock_expiry" value="{{ object.stock_expiry|date:"Y-m-d" }}"><br>
+                        </div>
+                        <div class="col-md-12">
+                            <button type="submit"  class="btn btn-primary product-sub-btn" style="width: 100%" >Save Stock</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function(){
+
+            $('.buying_price_item').on('change', function(){
+                $('.total_buying_amount').val(Number($(this).val()) * Number($('.quantity').val()));
+            });
+
+            $('.quantity').on('change', function(){
+                if ($('.buying_price_item').val()) {
+                    $('.total_buying_amount').val(Number($('.buying_price_item').val()) * Number($(this).val()));
+                }
+                if ($('.price_per_item').val()) {
+                    $('.total_amount').val(Number($('.price_per_item').val()) * Number($(this).val()));
+                }
+            });
+
+        });
+        function sum() {
+            var txtFirstNumberValue = document.getElementById('quantity').value;
+            var txtSecondNumberValue = document.getElementById('price_per_item').value;
+            var result = parseInt(txtFirstNumberValue) * parseInt(txtSecondNumberValue);
+            if (!isNaN(result)) {
+                document.getElementById('total_amount').value = result;
+            }
+        }
+    </script>
+{% endblock %}
