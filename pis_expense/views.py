@@ -55,3 +55,6 @@ class ExpenseDelete(DeleteView):
 
     def get(self, request, *args, **kwargs):
         return self.post(request, *args, **kwargs)
+
+class dashboard(TemplateView):
+    template_name = 'expense/dashboard.html'

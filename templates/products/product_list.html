@@ -4,6 +4,7 @@
 {% block content %}
     <div class="col-md-12">
             <br>
+            <a href="{% url 'index' %}"><button type="button" id="home_btn" class="btn btn-primary" style="float: left;margin-right:5px" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>">Home</button></a>
             <a href="{% url 'product:add_product' retailer_id=request.user.retailer_user.retailer.id %}"><button type="button" id="add-product" class="btn btn-primary" style="float: left" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing Order">Add Product </button></a>
             <br><br><br>
             <div class="content-panel table-responsive">

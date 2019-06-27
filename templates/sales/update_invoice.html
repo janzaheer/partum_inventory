@@ -32,6 +32,8 @@
 
 	<div class="col-lg-10 col-md-10 col-sm-10">
 		<br>
+		<a href="{% url 'index' %}"><button type="button" id="home_btn" class="btn btn-primary" style="float: left;margin-right:5px" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>">Home</button></a>
+		<br><br>
 		<div class="content-panel" style="padding: 5px">
 			<div class="row">
 				<div class="col-xs-12 col-md-12">
@@ -95,7 +97,9 @@
                                         <td><input class="form-control qty" placeholder="Quantity" value="{{ item.quantity }}" type="text"></td>
                                         <td><span class="total">{{ item.total_quantity }}</span></td>
                                         <td style="display: none"><input type="hidden" value="{{ item.id }}" class="item-id" id="item-id"></td>
+									</tr>
                                 {% endfor %}
+									</thead>
 							<tbody>
 							<tr id="hiderow">
 								<td colspan="4">
@@ -344,6 +348,17 @@ function checkDec(el){
 		 el.value = el.value.substring(0,el.value.length - 1);
 	 }
  }
+    </script>
+<script>
+
+$('#home_btn').on('click', function() {
+    var $this = $(this);
+  $this.button('loading');
+    setTimeout(function() {
+       $this.button('reset');
+   }, 5000);
+});
+
     </script>
 
 {% endblock %}
