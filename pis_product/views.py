@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 from django.shortcuts import render
 
 from django.views.generic import TemplateView
-from django.views.generic import FormView
+from django.views.generic import FormView, ListView
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.core.exceptions import ObjectDoesNotExist
@@ -13,7 +13,6 @@ from pis_product.forms import (
     ProductForm, ProductDetailsForm, ClaimedProductForm,StockDetailsForm,StockOutForm)
 from pis_ledger.forms import PaymentForm
 from django.utils import timezone
-
 
 
 class ProductItemList(TemplateView):
@@ -368,5 +367,45 @@ class StockDetailView(TemplateView):
         return context
 
 
+class StockInListView(ListView):
+    template_name = 'products/stockin_list.html'
+    paginate_by = 100
+    model = StockIn
+    ordering = '-id'
+
+    def get_queryset(self):
+        queryset = self.queryset
+        if not queryset:
+            queryset = StockIn.objects.all()
+
+        queryset = queryset.filter(product=self.kwargs.get('product_id'))
+        return queryset.order_by('-id')
+
+    def get_context_data(self, **kwargs):
+        context = super(StockInListView, self).get_context_data(**kwargs)
+        context.update({
+            'product': Product.objects.get(id=self.kwargs.get('product_id'))
+        })
+        return context
 
 
+class StockOutListView(ListView):
+    template_name = 'products/stockout_list.html'
+    paginate_by = 100
+    model = StockOut
+    ordering = '-id'
+
+    def get_queryset(self, **kwargs):
+        queryset = self.queryset
+        if not queryset:
+            queryset = StockOut.objects.all()
+
+        queryset = queryset.filter(product=self.kwargs.get('product_id'))
+        return queryset.order_by('-id')
+
+    def get_context_data(self, **kwargs):
+        context = super(StockOutListView, self).get_context_data(**kwargs)
+        context.update({
+            'product': Product.objects.get(id=self.kwargs.get('product_id'))
+        })
+        return context
