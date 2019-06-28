@@ -60,12 +60,13 @@
 
         <div class="col-md-4 col-sm-4 mb">
             <div class="content-panel" style="height:400px; overflow: auto;">
-
-                <table class="table table-striped table-advance table-hover daily-sales-table">
+                <h4 class="text-center"><strong>Daily Reports</strong></h4><br>
+                <table class="table table-striped table-advance table-hover daily-sales-table table-bordered">
                     <thead>
                     <tr>
                         <th><i class=""></i>Date</th>
                         <th><i class=""></i>Sales</th>
+                        <th><i class=""></i>Profit</th>
                     </tr>
                     </thead>
                     <tbody class="daily-sales-tbody">
@@ -83,11 +84,13 @@
         </div>
         <div class="col-md-4 col-sm-4 mb">
             <div class="content-panel" style="height:400px; overflow: auto;">
-                <table class="table table-striped table-advance table-hover item-table">
+                <h4 class="text-center"><strong>Weekly Reports</strong></h4><br>
+                <table class="table table-striped table-advance table-hover item-table table-bordered">
                     <thead>
                     <tr>
                         <th><i class=""></i>Date</th>
                         <th><i class=""></i>Sales</th>
+                        <th><i class=""></i>Profit</th>
                     </tr>
                     </thead>
                     <tbody class="weekly-sales-tbody">
@@ -98,27 +101,29 @@
     </div>
     </div>
 
-{#    <div class="row mt">#}
-{#        <div class="col-md-8 col-sm-8 mb">#}
-{#            <div id="monthly-graph" style="min-width: 310px; height: 400px; margin: 0 auto"></div>#}
-{#        </div>#}
-{##}
-{#        <div class="col-md-4 col-sm-4 mb">#}
-{##}
-{#            <div class="content-panel" style="height:400px; overflow: auto;">#}
-{#                <table class="table table-striped table-advance table-hover item-table">#}
-{#                    <thead>#}
-{#                    <tr>#}
-{#                        <th><i class=""></i>Date</th>#}
-{#                        <th><i class=""></i>Sales</th>#}
-{#                    </tr>#}
-{#                    </thead>#}
-{#                    <tbody class="monthly-sales-tbody">#}
-{##}
-{#                    </tbody>#}
-{#                </table>#}
-{#            </div>#}
-{#        </div><!-- /col-lg-9 END SECTION MIDDLE -->#}
+    <div class="row mt">
+        <div class="col-md-8 col-sm-8 mb">
+            <div id="monthly-graph" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+        </div>
+
+        <div class="col-md-4 col-sm-4 mb">
+
+            <div class="content-panel" style="height:400px; overflow: auto;">
+                <h4 class="text-center"><strong>Monthly Reports</strong></h4><br>
+                <table class="table table-striped table-advance table-hover item-table table-bordered">
+                    <thead>
+                    <tr>
+                        <th><i class=""></i>Date</th>
+                        <th><i class=""></i>Sales</th>
+                        <th><i class=""></i>Profit</th>
+                    </tr>
+                    </thead>
+                    <tbody class="monthly-sales-tbody">
+
+                    </tbody>
+                </table>
+            </div>
+        </div><!-- /col-lg-9 END SECTION MIDDLE -->
 {#    </div>#}
 
     <script src="{% static 'js/index.js' %}"></script>

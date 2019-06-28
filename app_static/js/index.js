@@ -6,7 +6,7 @@ $.get('/api/sales/daily/', function(result, status){
 
     $.each(result.sales_data, function(index, value){
 
-        $('.daily-sales-tbody').append('<tr><td>'+ value.date + '</td><td>' + value.sales + '</td></tr>');
+        $('.daily-sales-tbody').append('<tr><td>'+ value.date + '</td><td>' + value.sales + '</td><td>' + value.profit + '</td></tr>');
 
         sales.push(value.sales);
         profit.push(value.profit);
@@ -18,7 +18,7 @@ $.get('/api/sales/daily/', function(result, status){
             type: 'area'
         },
         title: {
-            text: 'Sales Graph Weekly Bases'
+            text: 'Daily Sales Weekly'
         },
         subtitle: {
             text: 'Inventory'
@@ -72,7 +72,7 @@ $.get('/api/sales/weekly/', function(result, status){
 
     $.each(result.sales_data, function (index, value) {
 
-        $('.weekly-sales-tbody').append('<tr><td>'+ value.date + '</td><td>' + value.sales + '</td></tr>');
+        $('.weekly-sales-tbody').append('<tr><td>'+ value.date + '</td><td>' + value.sales + '</td><td>' + value.profit + '</td></tr>');
         sales.push(value.sales);
         profit.push(value.profit);
         sales_date.push(value.date);
@@ -84,7 +84,7 @@ $.get('/api/sales/weekly/', function(result, status){
             type: 'area'
         },
         title: {
-            text: 'Sales Graph Weekly Bases'
+            text: 'Sales Graph Weekly'
         },
         subtitle: {
             text: 'Inventory'
@@ -129,41 +129,31 @@ $.get('/api/sales/weekly/', function(result, status){
 
 });
 
-
-//graph 3 js file is here
-
- // Create the chart
-
-
 $.get('/api/sales/monthly/', function (result, status) {
     var sales = [];
     var profit = [];
-    var sales_date =[];
-    console.log('coming here 11111');
+    var day = [];
     $.each(result.sales_data , function (index, value) {
-        $('.monthly-sales-tbody').append('<tr><td>'+ value.date + '</td><td>' + value.sales + '</td></tr>');
+        $('.monthly-sales-tbody').append('<tr><td>'+ value.day + '</td><td>' + value.sales + '</td><td>' + value.profit + '</td></tr>');
 
 
         sales.push(value.sales);
         profit.push(value.profit);
-        sales_date.push(value.sales_date);
+        day.push(value.day);
     });
-
-    console.log('coming here');
-
 
     Highcharts.chart('monthly-graph', {
         chart: {
             type: 'area'
         },
         title: {
-            text: 'Historic and Estimated Worldwide Population Growth by Region'
+            text: 'Monthly Sales Graph'
         },
         subtitle: {
-            text: 'Source: Wikipedia.org'
+            text: 'Inventory'
         },
         xAxis: {
-            categories: sales_date,
+            categories: day.reverse(),
             tickmarkPlacement: 'on',
             title: {
                 enabled: false

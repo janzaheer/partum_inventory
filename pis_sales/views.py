@@ -147,9 +147,12 @@ class GenerateInvoiceAPIView(View):
 
                     stock_out_form_kwargs = {
                         'product': product.id,
-                        'stock_out_quantity': item.get('qty'),
-                        'buying_price': latest_stock_in.buying_price_item,
-                        'selling_price': item.get('price'),
+                        'stock_out_quantity': float(item.get('qty')),
+                        'buying_price': (
+                            float(latest_stock_in.buying_price_item) *
+                            float(item.get('qty'))),
+                        'selling_price': (
+                            float(item.get('price')) * float(item.get('qty'))),
                         'dated': timezone.now().date()
                     }
 
