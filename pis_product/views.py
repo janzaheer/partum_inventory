@@ -1,8 +1,8 @@
 from __future__ import unicode_literals
 from django.shortcuts import render
 
-from django.views.generic import TemplateView
-from django.views.generic import FormView
+from django.views.generic import TemplateView, UpdateView
+from django.views.generic import FormView, ListView
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.core.exceptions import ObjectDoesNotExist
@@ -13,7 +13,6 @@ from pis_product.forms import (
     ProductForm, ProductDetailsForm, ClaimedProductForm,StockDetailsForm,StockOutForm)
 from pis_ledger.forms import PaymentForm
 from django.utils import timezone
-
 
 
 class ProductItemList(TemplateView):
@@ -255,8 +254,12 @@ class ClaimedItemsListView(TemplateView):
         })
         return context
 
-class StockItemList(TemplateView):
+
+class StockItemList(ListView):
     template_name = 'products/stock_list.html'
+    model = Product
+    paginate_by = 150
+    ordering = 'name'
 
     def dispatch(self, request, *args, **kwargs):
         if not self.request.user.is_authenticated():
@@ -265,15 +268,27 @@ class StockItemList(TemplateView):
         return super(
             StockItemList, self).dispatch(request, *args, **kwargs)
 
+    def get_queryset(self):
+        queryset = self.queryset
+        if not queryset:
+            queryset = (
+                self.request.user.retailer_user.retailer
+                    .retailer_product.all()
+            )
+
+        if self.request.GET.get('name'):
+            queryset = queryset.filter(
+                name__icontains=self.request.GET.get('name'))
+
+        return queryset.order_by('name')
+
     def get_context_data(self, **kwargs):
         context = super(StockItemList, self).get_context_data(**kwargs)
-        products = (
-            self.request.user.retailer_user.retailer.retailer_product.all()
-        )
         context.update({
-            'products': products
+            'search_value_name': self.request.GET.get('name')
         })
         return context
+
 
 class AddStockItems(FormView):
     template_name = 'products/add_stock_item.html'
@@ -368,5 +383,68 @@ class StockDetailView(TemplateView):
         return context
 
 
+class StockInListView(ListView):
+    template_name = 'products/stockin_list.html'
+    paginate_by = 100
+    model = StockIn
+    ordering = '-id'
+
+    def get_queryset(self):
+        queryset = self.queryset
+        if not queryset:
+            queryset = StockIn.objects.all()
+
+        queryset = queryset.filter(product=self.kwargs.get('product_id'))
+        return queryset.order_by('-id')
+
+    def get_context_data(self, **kwargs):
+        context = super(StockInListView, self).get_context_data(**kwargs)
+        context.update({
+            'product': Product.objects.get(id=self.kwargs.get('product_id'))
+        })
+        return context
 
 
+class StockOutListView(ListView):
+    template_name = 'products/stockout_list.html'
+    paginate_by = 100
+    model = StockOut
+    ordering = '-id'
+
+    def get_queryset(self, **kwargs):
+        queryset = self.queryset
+        if not queryset:
+            queryset = StockOut.objects.all()
+
+        queryset = queryset.filter(product=self.kwargs.get('product_id'))
+        return queryset.order_by('-id')
+
+    def get_context_data(self, **kwargs):
+        context = super(StockOutListView, self).get_context_data(**kwargs)
+        context.update({
+            'product': Product.objects.get(id=self.kwargs.get('product_id'))
+        })
+        return context
+
+
+class ProductUpdateView(UpdateView):
+    template_name = 'products/update_product.html'
+    model = Product
+    form_class = ProductForm
+    success_url = reverse_lazy('product:stock_items_list')
+
+
+class StockInUpdateView(UpdateView):
+    template_name = 'products/update_stockin.html'
+    model = StockIn
+    form_class = StockDetailsForm
+
+    def form_valid(self, form):
+        obj = form.save()
+        return HttpResponseRedirect(
+            reverse('product:stockin_list',
+                    kwargs={'product_id': obj.product.id})
+        )
+    
+    def form_invalid(self, form):
+        return super(StockInUpdateView, self).form_invalid(form)

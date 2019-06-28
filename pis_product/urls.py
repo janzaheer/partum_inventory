@@ -12,6 +12,10 @@ from pis_product.views import StockItemList
 from pis_product.views import AddStockItems
 from pis_product.views import StockOutItems
 from pis_product.views import StockDetailView
+from pis_product.views import StockInListView
+from pis_product.views import StockOutListView
+from pis_product.views import ProductUpdateView
+from pis_product.views import StockInUpdateView
 
 
 urlpatterns = [
@@ -67,5 +71,25 @@ urlpatterns = [
         r'^stock/item/(?P<product_id>\d+)/detail/$',
         StockDetailView.as_view(),
         name='stock_detail'
+    ),
+    url(
+        r'^(?P<product_id>\d+)/stock/in/$',
+        StockInListView.as_view(),
+        name='stockin_list'
+    ),
+    url(
+        r'^(?P<product_id>\d+)/stock/out/$',
+        StockOutListView.as_view(),
+        name='stockout_list'
+    ),
+    url(
+        r'^(?P<pk>\d+)/update/$',
+        ProductUpdateView.as_view(),
+        name='update_product'
+    ),
+    url(
+        r'^(?P<pk>\d+)/stockin/update/$',
+        StockInUpdateView.as_view(),
+        name='update_stockin'
     ),
 ]

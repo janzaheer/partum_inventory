@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="col-md-6">
+        <br>
+        <a href="#"><button type="button" class="btn btn-primary" >Home</button></a>
+        <a href="{% url 'product:items_list' %}"><button type="button" id="back-product" class="btn btn-primary" >Product List</button></a>
+        <br><br><br>
+        <div class="content-panel">
+            <h3 class="text-center">{{ request.user.retailer_user.retailer.name }} <small>Product Update Form</small></h3>
+             <span class="item_list_error text-center" style="color:red; display:none">item is already exist</span>
+            <div class="panel-body">
+                <form class="form-horizontal add-product-form" action="{% url 'product:update_product' pk=object.id %}" method="post" >
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            {% csrf_token %}
+                            <label><strong>Item Name</strong></label>
+                            <input type="text" class="form-control product_name" name="name"   placeholder="Product Name" value="{{ object.name|title }}"><br>
+                            <label><strong>Item Brand Name</strong></label>
+                            <input type="text" class="form-control brand_name" name="brand_name" placeholder="Brand Name" value="{{ object.brand_name|title }}"><br>
+                            <label><strong>Item Unit Type</strong></label>
+                             <input type="text" class="form-control unit_type" name="unit_type" placeholder="Unit Type" list="unit-list" value="{{ object.unit_type }}">
+                                    <datalist id="unit-list">
+                                        <option value="Kilogram"></option>
+                                        <option value="Gram"></option>
+                                        <option value="Litre"></option>
+                                        <option value="Quantity"></option>
+                                    </datalist>
+                                    <br>
+                            <label><strong>Item Barcode</strong></label>
+                            <input type="number" class="form-control bar_code" name="bar_code" value="{{ object.bar_code }}">
+                            <span style="color: lightseagreen">Note: For empty value system will generate barcode automatically</span><br>
+                            <input type="hidden" name="retailer" value="{{ request.user.retailer_user.retailer.id }}">
+                            <button type="submit" id="save" class="btn btn-primary product-submit-btn" style="float: right" >Update Item</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
