@@ -17,6 +17,8 @@ from pis_product.views import StockOutListView
 from pis_product.views import ProductUpdateView
 from pis_product.views import StockInUpdateView
 
+from pis_product.logs_view import DailyStockLogs
+
 
 urlpatterns = [
     url(r'^items/list/$', ProductItemList.as_view(), name='items_list'),
@@ -91,5 +93,11 @@ urlpatterns = [
         r'^(?P<pk>\d+)/stockin/update/$',
         StockInUpdateView.as_view(),
         name='update_stockin'
+    ),
+
+    # Logs
+    url(
+        r'^stock/logs/daily/$', DailyStockLogs.as_view(),
+        name='daily_stock_logs'
     ),
 ]
