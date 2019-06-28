@@ -5,7 +5,9 @@
 {% block content %}
     <div class="col-md-6">
         <br>
-        <a href="{% url 'product:items_list' %}"><button type="button" id="back-product" class="btn btn-primary" style="float: left" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing Order">Back to Product Item List</button></a>
+        <a href="{% url 'index' %}"><button type="button" id="home_btn" class="btn btn-primary" style="float: left;margin-right:5px" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>">Home</button></a>
+        <a href="{% url 'product:add_product' retailer_id=request.user.retailer_user.retailer.id %}"><button type="button" id="add-product" class="btn btn-primary" style="float: left;margin-right:5px" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing Order">Add Product </button></a>
+        <a href="{% url 'product:stock_items_list' %}"><button type="button" id="back-product" class="btn btn-primary" style="float: left" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing Order">Product List</button></a>
         <br><br><br>
         <div class="content-panel">
             <h3 class="text-center">Claimed items</h3>

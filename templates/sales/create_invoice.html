@@ -32,6 +32,9 @@
 
 	<div class="col-lg-12 col-md-12 col-sm-12">
 		<br>
+        <a href="{% url 'index' %}" style="float:left;margin-right:8px;"><i class="fa fa-home fa-3x" aria-hidden="true"></i></a>
+        <a href="{% url 'sales:invoice_list' %}"><button type="button" id="#" class="btn btn-primary" style="float: left;margin-right:5px" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>">Invoice List</button></a>
+        <br><br><br>
 		<div class="content-panel" style="padding: 5px">
 			<div class="row" style="font-size: large">
 				<div class="col-xs-12 col-md-12">
@@ -382,5 +385,15 @@
             }
         }
     </script>
+<script>
 
+$('#home_btn').on('click', function() {
+    var $this = $(this);
+  $this.button('loading');
+    setTimeout(function() {
+       $this.button('reset');
+   }, 5000);
+});
+
+    </script>
 {% endblock %}

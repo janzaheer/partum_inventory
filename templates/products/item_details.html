@@ -4,6 +4,7 @@
 {% block content %}
     <div class="col-md-12">
             <br>
+            <a href="{% url 'index' %}"><button type="button" id="home_btn" class="btn btn-primary" style="float: left;margin-right:5px" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>">Home</button></a>
             <a href="{% url 'product:add_product_items' product_id=product.id %}"><button type="button" class="btn btn-primary" style="float: left">Add New Items</button></a>
             <br><br><br>
             <div class="content-panel table-responsive">

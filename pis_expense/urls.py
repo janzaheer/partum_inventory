@@ -1,7 +1,7 @@
 from django.conf.urls import url
 
 from pis_expense.views import (
-    AddNewExpense,ExpenseListView,ExpenseDelete
+    AddNewExpense,ExpenseListView,ExpenseDelete,dashboard
 )
 
 urlpatterns = [
@@ -11,6 +11,10 @@ urlpatterns = [
     url(
         r'^list/$', ExpenseListView.as_view(),
         name='expense_list'
+    ),
+url(
+        r'^dashboard/$', dashboard.as_view(),
+        name='dashboard'
     ),
     url(
         r'delete/(?P<pk>\d+)/$',

@@ -4,6 +4,7 @@
 {% block content %}
     <div class="col-md-6">
         <br>
+        <a href="{% url 'index' %}" style="float: left;margin-right:8px"><i class="fa fa-home fa-3x" aria-hidden="true"></i></a>
         <a href="{% url 'expense:expense_list' %}"><button type="button"   class="btn btn-primary" style="float: left" >Back to Expense List</button></a>
         <br><br><br>
         <div class="content-panel">
@@ -104,6 +105,16 @@
         });
 
     </script>
+<script>
 
+$('#home_btn').on('click', function() {
+    var $this = $(this);
+  $this.button('loading');
+    setTimeout(function() {
+       $this.button('reset');
+   }, 5000);
+});
+
+    </script>
 
 {% endblock %}
