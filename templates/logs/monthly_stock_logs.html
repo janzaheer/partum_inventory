@@ -1,17 +1,16 @@
 {% extends 'base.html' %}
-
 {% block content %}
 
-{#    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />#}
+    {#    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />#}
     <div class="container">
         <div class="row">
             <div class="col-lg-10 col-lg-offset-1">
                 <br>
                 <a href="#"><button type="button" class="btn btn-primary">Home</button></a>
-                <a href="{% url 'product:monthly_stock_logs' %}"><button type="button" class="btn btn-primary">Monthly Logs</button></a>
+                <a href="{% url 'product:daily_stock_logs' %}"><button type="button" class="btn btn-primary">Daily Logs</button></a>
                 <br><br>
                 <div class="content-panel table-responsive">
-                    <h2 class="text-center">Daily Stock Logs</h2>
+                    <h2 class="text-center">Monthly Stock Logs | <small>{{ month }} {{ year }}</small></h2>
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="custom-search-form col-md-4">
@@ -19,11 +18,24 @@
                                 <input type="text" class="form-control search-logs" placeholder="Search...">
                             </div>
                             <div class="col-md-4">
-                                <label>Filter By Date</label>
-                                <input type="date" class="form-control date" placeholder="Filter by Date" value="{% if today_date %}{{ today_date }}{% else %}{{ logs_date }}{% endif %}">
+                                <label>Filter By Month</label>
+                                <select class="form-control month" id="month">
+                                    <option value="January">January</option>
+                                    <option value="February">February</option>
+                                    <option value="March">March</option>
+                                    <option value="April">April</option>
+                                    <option value="May">May</option>
+                                    <option value="June">June</option>
+                                    <option value="July">July</option>
+                                    <option value="August">August</option>
+                                    <option value="September">September</option>
+                                    <option value="October">October</option>
+                                    <option value="November">November</option>
+                                    <option value="December">December</option>
+                                </select>
                             </div>
                             <div class="col-md-4" style="padding-top: 30px">
-                                <span><strong>Logs Date: </strong> {% if today_date %}{{ today_date }}{% endif %}{% if logs_date %}{{ logs_date }}{% endif %} |  <strong>Total Price:</strong> Rs. {{ total|floatformat:'-2' }}</span>
+                                <span><strong>Logs Date: </strong>  {{ month }} {{ year }} |  <strong>Total Price:</strong> Rs. {{ total|floatformat:'-2' }}</span>
                             </div>
                         </div>
                     </div>
@@ -52,8 +64,8 @@
                     {% if paginator.page_range|length > 1 %}
                         <div class="text-center">
                             <ul class="pagination">
-                                <li><a  style="background-color: #3070A8; color: white" class="page_previous" href="{% if page_obj.has_previous %}{% url 'product:daily_stock_logs' %}?page={{ page_obj.previous_page_number }}{% else %}#{% endif %}" title="Previous"><<</a></li>
-                                <li><a style="background-color: #3070A8; color: white" class="page_next" href="{% if page_obj.has_next %}{% url 'product:daily_stock_logs' %}?page={{ page_obj.next_page_number }}{% else %}#{% endif %}" title="Next">>></a></li>
+                                <li><a  style="background-color: #3070A8; color: white" class="page_previous" href="{% if page_obj.has_previous %}{% url 'product:monthly_stock_logs' %}?page={{ page_obj.previous_page_number }}{% else %}#{% endif %}" title="Previous"><<</a></li>
+                                <li><a style="background-color: #3070A8; color: white" class="page_next" href="{% if page_obj.has_next %}{% url 'product:monthly_stock_logs' %}?page={{ page_obj.next_page_number }}{% else %}#{% endif %}" title="Next">>></a></li>
                             </ul>
                         </div>
                     {% endif %}
@@ -63,6 +75,9 @@
     </div>
     <script>
         $(document).ready(function(){
+
+            $('#month option:contains("{{ month }}")').prop('selected',true);
+
             $(".search-logs").on("keyup", function() {
                 var value = $(this).val().toLowerCase();
                 $(".logs-table-body tr").filter(function() {
@@ -70,14 +85,13 @@
                 });
             });
 
-            $('.date').on('change', function () {
+            $('.month').on('change', function () {
                 if ($(this).val() == '') {
-                    window.location.href = '{% url "product:daily_stock_logs" %}'
+                    window.location.href = '{% url "product:monthly_stock_logs" %}'
                 } else {
-                    window.location.href = '{% url "product:daily_stock_logs" %}' + '?date=' + $(this).val();
+                    window.location.href = '{% url "product:monthly_stock_logs" %}' + '?month=' + $(this).val();
                 }
             })
-
         });
     </script>
 
