@@ -31,22 +31,29 @@
                     </tr>
                     </thead>
                     <tbody class="invoice-table-body text-center">
-                    {% for invoice in invoices %}
+                    {% for invoice in object_list %}
                         <tr>
                             <td><a href="{% url 'sales:invoice_detail' invoice_id=invoice.id %}">{{ invoice.receipt_no }}</a></td>
                             <td>{% if invoice.customer %}{{ invoice.customer.customer_name|title}}{% else %}-{% endif %}</td>
                             <td>{{ invoice.total_quantity }}</td>
-                            <td>{{ invoice.grand_total }}</td>
+                            <td>{{ invoice.grand_total|floatformat:-2 }}</td>
                             <td>{{ invoice.created_at|date }}</td>
                             <td>
                                 <a href="{% url 'sales:invoice_detail' invoice_id=invoice.id %}"><button class="btn btn-success btn-xs"><i class="fa fa-eye" title="Invoice list"></i></button></a>
-{#                                <a href="{% url 'sales:invoice_update' id=invoice.id %}"><button class="btn btn-success btn-xs"><i class="fa fa-edit" title="Invoice edit"></i></button></a>#}
 
                             </td>
                         </tr>
                     {% endfor %}
                     </tbody>
                 </table>
+                {% if paginator.page_range|length > 1 %}
+                    <div class="text-center">
+                        <ul class="pagination">
+                            <li><a  style="background-color: #3070A8; color: white" class="page_previous" href="{% if page_obj.has_previous %}{% url 'sales:invoice_list' %}?page={{ page_obj.previous_page_number }}{% else %}#{% endif %}" title="Previous"><<</a></li>
+                            <li><a style="background-color: #3070A8; color: white" class="page_next" href="{% if page_obj.has_next %}{% url 'sales:invoice_list' %}?page={{ page_obj.next_page_number }}{% else %}#{% endif %}" title="Next">>></a></li>
+                        </ul>
+                    </div>
+                {% endif %}
             </div>
         </div>
         <script>
