@@ -3,34 +3,37 @@
 {% block submenu_list_customer %}active{% endblock %}
 
 {% block content %}
-    <div class="col-md-6">
-        <br>
-        <a href="{% url 'index' %}" style="float:left;margin-right:8px;"><i class="fa fa-home fa-3x" aria-hidden="true"></i></a>
-        <a href="{% url 'customers' %}"><button type="button" class="btn btn-primary" style="float: left">Back to Customers</button></a>
-        <br><br><br>
-        <div class="content-panel">
-            <h3 class="text-center">Edit Customer</h3>
-            <div class="panel-body">
-                <form class="form-horizontal" action="{% url 'update_customer' pk=object.id %}" method="post" >
-                    <div class="form-group">
-                        <div class="col-sm-12">
-                            {% csrf_token %}
-                            <input type="text" class="form-control customer_name" name="customer_name" placeholder="Customer Name" value="{{ object.customer_name }}"><br>
-                            <input type="text" class="form-control customer_phone" name="customer_phone" onkeyup="checkDec(this);" placeholder="Customer Phone" value="{{ object.customer_phone }}"><br>
-                            <input type="text" class=" form-control shop" name="shop" placeholder="Customer Shop Name (Optional)" value="{% if object.shop %}{{ object.shop }}{% endif %}"><br>
-                            <textarea name="address" class="form-control address" placeholder="Customer Address (Optional)">{% if object.address %}{{ object.address }}{% endif %}</textarea><br>
-                            <input type="hidden" name="retailer" value="{{ request.user.retailer_user.retailer.id }}">
-                            <button type="submit" class="btn btn-primary product-sub-btn" style="float: right">Update Customer</button>
-                        </div>
+<div class="col-md-6">
+    <br>
+    <a href="{% url 'customers' %}"><button type="button" id="back-customer" class="btn btn-primary" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing"> Customer List</button></a>
+    <br><br><br>
+    <div class="content-panel">
+        <h3 class="text-center">Edit Customer</h3>
+        <div class="panel-body">
+            <form class="form-horizontal" action="{% url 'update_customer' pk=object.id %}" method="post" >
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        {% csrf_token %}
+                        <label><strong>Cutomer Name</strong></label>
+                        <input type="text" class="form-control customer_name" name="customer_name" placeholder="Customer Name" value="{{ object.customer_name }}"><br>
+                        <label><strong>Cutomer Phone</strong></label>
+                        <input type="text" class="form-control customer_phone" name="customer_phone" onkeyup="checkDec(this);" placeholder="Customer Phone" value="{{ object.customer_phone }}"><br>
+                        <label><strong>shop Name</strong></label>
+                        <input type="text" class=" form-control shop" name="shop" placeholder="Customer Shop Name (Optional)" value="{% if object.shop %}{{ object.shop }}{% endif %}"><br>
+                        <label><strong>Address</strong></label>
+                        <textarea name="address" class="form-control address" placeholder="Customer Address (Optional)">{% if object.address %}{{ object.address }}{% endif %}</textarea><br>
+                        <input type="hidden" name="retailer" value="{{ request.user.retailer_user.retailer.id }}">
+                        <button type="submit" class="btn btn-primary product-sub-btn" style="float: right">Update Customer</button>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
     </div>
+</div>
 
 <script>
 
-$('#home_btn').on('click', function() {
+$('#back-customer').on('click', function() {
     var $this = $(this);
   $this.button('loading');
     setTimeout(function() {

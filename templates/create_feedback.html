@@ -2,28 +2,27 @@
 {% block menu_feedback %}active{% endblock %}
 {#{% block menu_feedback %}active{% endblock %}#}
 {% block content %}
-    <div class="col-md-6">
-        <br>
-        <a href="{% url 'index' %}"><button type="button" id="home_btn" class="btn btn-primary" style="float: left;margin-right:5px" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>">Home</button></a>
-        <br><br><br>
-        <div class="content-panel">
-            <h3 class="text-center">{{ request.user.retailer_user.retailer.name }} FeedBack</h3>
-            <div class="panel-body">
-                <form class="form-horizontal add-ledger-form" action="{% url 'create_feedback' %}" method="post" >
-                    <div class="form-group">
-                        <div class="col-sm-12">
-                            {% csrf_token %}
-                            <span class="description-error" style="color: red; display: none" >this field is requried</span>
-                            <textarea class="form-control description" name="description" placeholder="FeedBack" rows="10"></textarea><br>
-                            <input type="hidden" name="retailer" value="{{ request.user.retailer_user.retailer.id }}">
-                            <button type="button"  id="save" class="btn btn-primary ledger-submit-btn" style="float: right" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing Order">Done</button>
-                        </div>
+<div class="col-md-6">
+    <br><br>
+    <div class="content-panel">
+        <h3 class="text-center">{{ request.user.retailer_user.retailer.name }} FeedBack</h3>
+        <div class="panel-body">
+            <form class="form-horizontal add-ledger-form" action="{% url 'create_feedback' %}" method="post" >
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        {% csrf_token %}
+                        <span class="description-error" style="color: red; display: none" >this field is requried</span>
+                        <label><strong>Feedback</strong></label>
+                        <textarea class="form-control description" name="description" placeholder="FeedBack" rows="10"></textarea><br>
+                        <input type="hidden" name="retailer" value="{{ request.user.retailer_user.retailer.id }}">
+                        <button type="button"  id="save" class="btn btn-primary ledger-submit-btn" style="float: right" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing Order">Done</button>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
     </div>
-    <script>
+</div>
+<script>
         $('document').ready(function () {
 
             $('.ledger-submit-btn').on ('click', function () {
@@ -56,16 +55,6 @@
         });
 
     </script>
-<script>
 
-$('#home_btn').on('click', function() {
-    var $this = $(this);
-  $this.button('loading');
-    setTimeout(function() {
-       $this.button('reset');
-   }, 5000);
-});
-
-    </script>
 
 {% endblock %}

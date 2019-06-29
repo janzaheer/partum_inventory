@@ -11,9 +11,8 @@
 
     <div class="col-lg-10 col-md-10 col-sm-10">
         <br>
-        <a href="{% url 'index' %}" style="float:left;margin-right:8px;"><i class="fa fa-home fa-3x" aria-hidden="true"></i></a>
-        <a href="{% url 'sales:create_invoice' %}"><button type="button" id="#" class="btn btn-primary" style="float: left;margin-right:5px" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>">Create Invoice</button></a>
-        <button type="button" class="btn btn-primary print-invoice-btn" onclick="PrintInvoice('print-invoice')" style="float: left">Print Invoice</button>
+        <a href="{% url 'sales:create_invoice' %}"><button type="button" id="invoice" class="btn btn-primary"  id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing">Create Invoice</button></a>
+        <button type="button" class="btn btn-primary print-invoice-btn" onclick="PrintInvoice('print-invoice')" >Print Invoice</button>
         <br><br><br>
         <div class="content-panel print-invoice" id="print-invoice" style="padding: 5px">
             <div class="row">
@@ -164,7 +163,7 @@
     </script>
 <script>
 
-$('#home_btn').on('click', function() {
+$('#invoice').on('click', function() {
     var $this = $(this);
   $this.button('loading');
     setTimeout(function() {

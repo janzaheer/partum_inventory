@@ -5,12 +5,11 @@
 {% block content %}
     <div class="col-md-12">
         <br>
-        <a href="{% url 'index' %}"><button type="button" id="home_btn" class="btn btn-primary" style="float: left;margin-right:5px" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>">Home</button></a>
-        <a href="{% url 'product:add_product' retailer_id=request.user.retailer_user.retailer.id %}"><button type="button" id="add-product" class="btn btn-primary" style="float: left;margin-right:5px" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing Order">Add Product </button></a>
-        <a href="{% url 'product:stock_items_list' %}"><button type="button" id="back-product" class="btn btn-primary" style="float: left" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing Order">Product List</button></a>
+        <a href="{% url 'product:add_product' retailer_id=request.user.retailer_user.retailer.id %}"><button type="button" id="add-product" class="btn btn-primary"  id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing">Add Product </button></a>
+        <a href="{% url 'product:stock_items_list' %}"><button type="button" id="back-product" class="btn btn-primary" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing">Product List</button></a>
         <br><br><br>
         <div class="content-panel table-responsive">
-            <table class="table table-striped table-advance table-hover purchased-table">
+            <table class="table table-striped table-advance table-hover purchased-table table-bordered">
                 <h2 class="text-center">Extra Items</h2>
                 <div class="input-group custom-search-form col-md-4" style="left: 5px">
                     <input type="text" class="form-control extra-items" placeholder="Search...">
@@ -24,14 +23,14 @@
                 <thead>
                 <thead>
                     <tr>
-                        <th><i class="fa fa-bullhorn"></i> Item Name</th>
-                        <th><i class=" fa fa-bookmark"></i> Quantity</th>
-                        <th><i class=" fa fa-edit"></i> Price</th>
-                        <th><i class=" fa fa-edit"></i> Purchased Amount</th>
-                        <th><i class=" fa fa-bookmark"></i> Date</th>
+                        <th class="text-center"><i class="fa fa-bullhorn"></i> Item Name</th>
+                        <th class="text-center"><i class=" fa fa-bookmark"></i> Quantity</th>
+                        <th class="text-center"><i class=" fa fa-edit"></i> Price</th>
+                        <th class="text-center"><i class=" fa fa-edit"></i> Purchased Amount</th>
+                        <th class="text-center"><i class=" fa fa-bookmark"></i> Date</th>
                     </tr>
                     </thead>
-                    <tbody class="purchsaed-table-body">
+                    <tbody class="purchsaed-table-body text-center">
                     {% for extra_items in purchased_extra_items %}
                         <tr>
                             <td><a href="#">{{ extra_items.item_name}}</a></td>
