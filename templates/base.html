@@ -16,9 +16,9 @@
     <!--external css-->
     <style>
     .msg{
-        color: #68dff0 !important;
+        color: #fff !important;
         border:none !important;
-        border: 1px solid #68dff0 !important;
+        border: 1px solid #fff !important;
     }
     .right_div{
         float:right;
@@ -36,12 +36,20 @@
         left:88% !important;
     }
     .panel_bg_color{
-        background:#D2691E;
+        background:#6180c1;
     }
     .panel_txt{
         color:#fff;
         font-size:22px;
         font-weight:bold;
+    }
+    .home_icon{
+        float:left;
+        color:#fff;
+        margin-right:8px;
+    }
+    .home_icon:hover{
+        color:#fff;
     }
     </style>
     <link href="{% static 'font-awesome/css/font-awesome.css' %}" rel="stylesheet" />
@@ -65,9 +73,11 @@
 <section id="container" >
 
     <header class="header black-bg">
-        <div class="sidebar-toggle-box">
-            <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
-        </div>
+<!--        <div class="sidebar-toggle-box">-->
+<!--            <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>-->
+<!--        </div>-->
+        <a href="{% url 'index' %}" class="home_icon" style="float:left"><i class="fa fa-home fa-4x" aria-hidden="true"></i></a>
+
         <a href="{% url 'index' %}" class="logo"><b>{{ request.user.retailer_user.retailer.name }}</b></a>
         <div class="right_div">
         <div class="nav notify-row" id="top_menu">
@@ -117,7 +127,7 @@
             <ul class="nav pull-right top-menu">
                 <li>
                     <div class="dropdown" style="margin: 15px;">
-                        <button style="background: #68dff0; color: white; border-color: #68dff0" class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"><span class="hidden-phone">{% if request.user.first_name %}{{ request.user.first_name }} {{ request.user.last_name }}{% else %}{{ request.user.username }}{% endif %}</span>
+                        <button style="background: #6180c1; color: white; border-color: #6180c1" class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"><span class="hidden-phone">{% if request.user.first_name %}{{ request.user.first_name }} {{ request.user.last_name }}{% else %}{{ request.user.username }}{% endif %}</span>
                             <span class="caret"></span></button>
                         <ul class="dropdown-menu">
                             <li><a tabindex="logout" href="{% url 'logout' %}">Logout</a></li>
@@ -130,130 +140,130 @@
         </div>
     </header>
 
-    <aside>
-        <div id="sidebar"  class="nav-collapse ">
-            <!-- sidebar menu start-->
-            <ul class="sidebar-menu" id="nav-accordion">
-                <div class="hidden-phone">
-                    {% if request.user.retailer_user.retailer.logo %}
-                        <p class="centered"><a href="{% url 'index' %}"><img src="{{ request.user.retailer_user.retailer.logo.url }}" class="img-circle" width="60"></a></p>
-                    {% else %}
-                        <div id="profileImage"></div>
-                    {% endif %}
-                    <h5 class="centered profile_name">{{ request.user.retailer_user.retailer.name|title }}</h5>
-                </div>
-                {% if request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_OWNER or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_VIEW_ACCOUNT %}
-                    <li class="mt">
-                        <a class="{% block menu_dashboard %}{% endblock %}" href="{% url 'index' %}">
-                            <i class="fa fa-dashboard"></i>
-                            <span>Dashboard</span>
-                        </a>
-                    </li>
-                {% endif %}
-                <li class="sub-menu">
-                    <a class="{% block menu_customer %}{% endblock %}" href="javascript:;" >
-                        <i class="fa fa-clipboard"></i>
-                        <span>Customers</span>
-                    </a>
-                    <ul class="sub">
-                        <li class="{% block submenu_create_customer %}{% endblock %}"><a  href="{% url 'create_customer' %}">Create Customer</a></li>
-                        <li class="{% block submenu_list_customer %}{% endblock %}"><a  href="{% url 'customers' %}">Customers</a></li>
-                    </ul>
-                </li>
-                {% if request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_LEDGER_VIEW or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_OWNER or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_VIEW_ACCOUNT %}
-                    <li class="sub-menu">
-                        <a class="{% block menu_ledger %}{% endblock %}" href="javascript:;" >
-                            <i class="fa fa-life-ring"></i>
-                            <span>Ledgers</span>
-                        </a>
-                        <ul class="sub">
-                            <li class="{% block submenu_customer_ledger %}{% endblock %}"><a  href="{% url 'ledger:customer_ledger_list' %}">Ledger List</a></li>
-                            <li class="{% block submenu_add_new_ledger %}{% endblock %}"><a  href="{% url 'ledger:add_new_ledger' %}">Add Ledger</a></li>
+<!--    <aside>-->
+<!--        <div id="sidebar"  class="nav-collapse ">-->
+<!--            &lt;!&ndash; sidebar menu start&ndash;&gt;-->
+<!--            <ul class="sidebar-menu" id="nav-accordion">-->
+<!--                <div class="hidden-phone">-->
+<!--                    {% if request.user.retailer_user.retailer.logo %}-->
+<!--                        <p class="centered"><a href="{% url 'index' %}"><img src="{{ request.user.retailer_user.retailer.logo.url }}" class="img-circle" width="60"></a></p>-->
+<!--                    {% else %}-->
+<!--                        <div id="profileImage"></div>-->
+<!--                    {% endif %}-->
+<!--                    <h5 class="centered profile_name">{{ request.user.retailer_user.retailer.name|title }}</h5>-->
+<!--                </div>-->
+<!--                {% if request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_OWNER or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_VIEW_ACCOUNT %}-->
+<!--                    <li class="mt">-->
+<!--                        <a class="{% block menu_dashboard %}{% endblock %}" href="{% url 'index' %}">-->
+<!--                            <i class="fa fa-dashboard"></i>-->
+<!--                            <span>Dashboard</span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                {% endif %}-->
+<!--                <li class="sub-menu">-->
+<!--                    <a class="{% block menu_customer %}{% endblock %}" href="javascript:;" >-->
+<!--                        <i class="fa fa-clipboard"></i>-->
+<!--                        <span>Customers</span>-->
+<!--                    </a>-->
+<!--                    <ul class="sub">-->
+<!--                        <li class="{% block submenu_create_customer %}{% endblock %}"><a  href="{% url 'create_customer' %}">Create Customer</a></li>-->
+<!--                        <li class="{% block submenu_list_customer %}{% endblock %}"><a  href="{% url 'customers' %}">Customers</a></li>-->
+<!--                    </ul>-->
+<!--                </li>-->
+<!--                {% if request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_LEDGER_VIEW or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_OWNER or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_VIEW_ACCOUNT %}-->
+<!--                    <li class="sub-menu">-->
+<!--                        <a class="{% block menu_ledger %}{% endblock %}" href="javascript:;" >-->
+<!--                            <i class="fa fa-life-ring"></i>-->
+<!--                            <span>Ledgers</span>-->
+<!--                        </a>-->
+<!--                        <ul class="sub">-->
+<!--                            <li class="{% block submenu_customer_ledger %}{% endblock %}"><a  href="{% url 'ledger:customer_ledger_list' %}">Ledger List</a></li>-->
+<!--                            <li class="{% block submenu_add_new_ledger %}{% endblock %}"><a  href="{% url 'ledger:add_new_ledger' %}">Add Ledger</a></li>-->
 
-                        </ul>
-                    </li>
-                {% endif %}
-                {% if request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_DATA_ENTRY_USER or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_OWNER or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_VIEW_ACCOUNT %}
-                    <li class="sub-menu">
-                        <a class="{% block menu_product %}{% endblock %}" href="javascript:;" >
-                            <i class="fa fa-indent"></i>
-                            <span>Products</span>
-                        </a>
-                        <ul class="sub">
-                            <li class="{% block submenu_add_product %}{% endblock %}"><a  href="{% url 'product:add_product' retailer_id=request.user.retailer_user.retailer.id %}">Add Product</a></li>
-                            <li class="{% block submenu_list_items %}{% endblock %}"><a  href="{% url 'product:stock_items_list' %}">List Products</a></li>
-                            <li class="{% block submenu_purchased_items %}{% endblock %}"><a  href="{% url 'product:purchased_items' %}">Purchased Items</a></li>
-                            <li class="{% block submenu_purchased_extraitems %}{% endblock %}"><a  href="{% url 'product:purchased_extra_items' %}">Purchased Extra Items</a></li>
-                            <li class="{% block submenu_purchased_claimeditems %}{% endblock %}"><a  href="{% url 'product:claimed_items' %}">Claimed Items</a></li>
-                            <li class="{% block submenu_claimedlist %}{% endblock %}"><a  href="{% url 'product:claimed_items_list' %}">Claimed Items List</a></li>
-                        </ul>
-                    </li>
-                {% endif %}
-                {% if request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_SALESMAN or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_OWNER or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_VIEW_ACCOUNT %}
-                    <li class="sub-menu">
-                        <a class="{% block menu_sales %}{% endblock %}" href="javascript:;" >
-                            <i class="fa fa-gavel"></i>
-                            <span>Sales</span>
-                        </a>
-                        <ul class="sub">
-                            <li class="{% block submenu_create_invoice %}{% endblock %}"><a  href="{% url 'sales:create_invoice' %}">Create Invoice</a></li>
-                            <li class="{% block submenu_list_invoice %}{% endblock %}"><a  href="{% url 'sales:invoice_list' %}">Invoices</a></li>
-                        </ul>
-                    </li>
-                {% endif %}
-                 {% if request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_SALESMAN or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_OWNER or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_VIEW_ACCOUNT %}
-                    <li class="sub-menu">
-                        <a class="{% block menu_expense %}{% endblock %}" href="javascript:;" >
-                            <i class="fa fa-gavel"></i>
-                            <span>Expense</span>
-                        </a>
-                        <ul class="sub">
-                            <li class="{% block submenu_create_expense %}{% endblock %}"><a  href="{% url 'expense:add_new_expense' %}">Create Expense</a></li>
-                            <li class="{% block submenu_list_expense %}{% endblock %}"><a  href="{% url 'expense:expense_list' %}">Expenses</a></li>
-                        </ul>
-                    </li>
-                {% endif %}
-                 {% if request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_SALESMAN or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_OWNER or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_VIEW_ACCOUNT %}
-                    <li class="sub-menu">
-                        <a class="{% block menu_employee %}{% endblock %}" href="javascript:;" >
-                            <i class="fa fa-user"></i>
-                            <span>Employee</span>
-                        </a>
-                        <ul class="sub">
-                            <li class="{% block submenu_create_employee %}{% endblock %}"><a  href="{% url 'employee:add_new_employee' %}">Create Employee</a></li>
-                            <li class="{% block submenu_list_employee %}{% endblock %}"><a  href="{% url 'employee:employee_list' %}">Employees</a></li>
-                        </ul>
-                    </li>
-                {% endif %}
-                 {% if request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_SALESMAN or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_OWNER or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_VIEW_ACCOUNT %}
-{#                    <li class="sub-menu">#}
-{#                        <a class="{% block menu_feedback %}{% endblock %}" href="javascript:;" >#}
-{#                            <i class="fa fa-comments-o"></i>#}
-{#                            <span>FeedBack</span>#}
-{#                        </a>#}
-{#                        <ul class="sub">#}
-{#                            <li class="{% block submenu_create_feedback %}{% endblock %}"><a  href="{% url 'create_feedback' %}">FeedBack</a></li>#}
-{#                        </ul>#}
-{#                    </li>#}
-                     <li class="">
-                        <a class="{% block menu_feedback %}{% endblock %}" href="{% url 'create_feedback' %}">
-                            <i class="fa fa-comments-o"></i>
-                            <span>Feedback</span>
-                        </a>
-                    </li>
-                {% endif %}
+<!--                        </ul>-->
+<!--                    </li>-->
+<!--                {% endif %}-->
+<!--                {% if request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_DATA_ENTRY_USER or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_OWNER or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_VIEW_ACCOUNT %}-->
+<!--                    <li class="sub-menu">-->
+<!--                        <a class="{% block menu_product %}{% endblock %}" href="javascript:;" >-->
+<!--                            <i class="fa fa-indent"></i>-->
+<!--                            <span>Products</span>-->
+<!--                        </a>-->
+<!--                        <ul class="sub">-->
+<!--                            <li class="{% block submenu_add_product %}{% endblock %}"><a  href="{% url 'product:add_product' retailer_id=request.user.retailer_user.retailer.id %}">Add Product</a></li>-->
+<!--                            <li class="{% block submenu_list_items %}{% endblock %}"><a  href="{% url 'product:stock_items_list' %}">List Products</a></li>-->
+<!--                            <li class="{% block submenu_purchased_items %}{% endblock %}"><a  href="{% url 'product:purchased_items' %}">Purchased Items</a></li>-->
+<!--                            <li class="{% block submenu_purchased_extraitems %}{% endblock %}"><a  href="{% url 'product:purchased_extra_items' %}">Purchased Extra Items</a></li>-->
+<!--                            <li class="{% block submenu_purchased_claimeditems %}{% endblock %}"><a  href="{% url 'product:claimed_items' %}">Claimed Items</a></li>-->
+<!--                            <li class="{% block submenu_claimedlist %}{% endblock %}"><a  href="{% url 'product:claimed_items_list' %}">Claimed Items List</a></li>-->
+<!--                        </ul>-->
+<!--                    </li>-->
+<!--                {% endif %}-->
+<!--                {% if request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_SALESMAN or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_OWNER or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_VIEW_ACCOUNT %}-->
+<!--                    <li class="sub-menu">-->
+<!--                        <a class="{% block menu_sales %}{% endblock %}" href="javascript:;" >-->
+<!--                            <i class="fa fa-gavel"></i>-->
+<!--                            <span>Sales</span>-->
+<!--                        </a>-->
+<!--                        <ul class="sub">-->
+<!--                            <li class="{% block submenu_create_invoice %}{% endblock %}"><a  href="{% url 'sales:create_invoice' %}">Create Invoice</a></li>-->
+<!--                            <li class="{% block submenu_list_invoice %}{% endblock %}"><a  href="{% url 'sales:invoice_list' %}">Invoices</a></li>-->
+<!--                        </ul>-->
+<!--                    </li>-->
+<!--                {% endif %}-->
+<!--                 {% if request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_SALESMAN or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_OWNER or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_VIEW_ACCOUNT %}-->
+<!--                    <li class="sub-menu">-->
+<!--                        <a class="{% block menu_expense %}{% endblock %}" href="javascript:;" >-->
+<!--                            <i class="fa fa-gavel"></i>-->
+<!--                            <span>Expense</span>-->
+<!--                        </a>-->
+<!--                        <ul class="sub">-->
+<!--                            <li class="{% block submenu_create_expense %}{% endblock %}"><a  href="{% url 'expense:add_new_expense' %}">Create Expense</a></li>-->
+<!--                            <li class="{% block submenu_list_expense %}{% endblock %}"><a  href="{% url 'expense:expense_list' %}">Expenses</a></li>-->
+<!--                        </ul>-->
+<!--                    </li>-->
+<!--                {% endif %}-->
+<!--                 {% if request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_SALESMAN or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_OWNER or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_VIEW_ACCOUNT %}-->
+<!--                    <li class="sub-menu">-->
+<!--                        <a class="{% block menu_employee %}{% endblock %}" href="javascript:;" >-->
+<!--                            <i class="fa fa-user"></i>-->
+<!--                            <span>Employee</span>-->
+<!--                        </a>-->
+<!--                        <ul class="sub">-->
+<!--                            <li class="{% block submenu_create_employee %}{% endblock %}"><a  href="{% url 'employee:add_new_employee' %}">Create Employee</a></li>-->
+<!--                            <li class="{% block submenu_list_employee %}{% endblock %}"><a  href="{% url 'employee:employee_list' %}">Employees</a></li>-->
+<!--                        </ul>-->
+<!--                    </li>-->
+<!--                {% endif %}-->
+<!--                 {% if request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_SALESMAN or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_OWNER or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_VIEW_ACCOUNT %}-->
+<!--{#                    <li class="sub-menu">#}-->
+<!--{#                        <a class="{% block menu_feedback %}{% endblock %}" href="javascript:;" >#}-->
+<!--{#                            <i class="fa fa-comments-o"></i>#}-->
+<!--{#                            <span>FeedBack</span>#}-->
+<!--{#                        </a>#}-->
+<!--{#                        <ul class="sub">#}-->
+<!--{#                            <li class="{% block submenu_create_feedback %}{% endblock %}"><a  href="{% url 'create_feedback' %}">FeedBack</a></li>#}-->
+<!--{#                        </ul>#}-->
+<!--{#                    </li>#}-->
+<!--                     <li class="">-->
+<!--                        <a class="{% block menu_feedback %}{% endblock %}" href="{% url 'create_feedback' %}">-->
+<!--                            <i class="fa fa-comments-o"></i>-->
+<!--                            <span>Feedback</span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                {% endif %}-->
 
 
-            </ul>
-              <!-- sidebar menu end-->
-          </div>
-      </aside>
+<!--            </ul>-->
+<!--              &lt;!&ndash; sidebar menu end&ndash;&gt;-->
+<!--          </div>-->
+<!--      </aside>-->
       <!--sidebar end-->
-      <section id="main-content">
+<!--      <section id="main-content">-->
           <section class="wrapper">
               {% block content %}{% endblock %}
           </section>
-      </section>
+<!--      </section>-->
   </section>
 
     <!-- js placed at the end of the document so the pages load faster -->

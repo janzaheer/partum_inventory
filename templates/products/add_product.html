@@ -2,42 +2,46 @@
 {% block submenu_add_product %}active{% endblock %}
 {% block menu_product %}active{% endblock %}
 {% block content %}
-    <div class="col-md-6">
-        <br>
-        <a href="{% url 'product:stock_items_list' %}"><button type="button" id="back-product" class="btn btn-primary" style="float: left" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing Order">Product List</button></a>
-        <br><br><br>
-        <div class="content-panel">
-            <h3 class="text-center">{{ request.user.retailer_user.retailer.name }} Product</h3>
-             <span class="item_list_error text-center" style="color:red; display:none">item is already exist</span>
-            <div class="panel-body">
-                <form class="form-horizontal add-product-form" action="{% url 'product:add_product' retailer_id=request.user.retailer_user.retailer.id %}" method="post" >
-                    <div class="form-group">
-                        <div class="col-sm-12">
-                            {% csrf_token %}
-                            <span class="product-name-error" style="color:red; display:none">The field is required</span>
-                            <input type="text" class="form-control product_name" name="name"   placeholder="Product Name"><br>
-                            <span class="brand-name-error" style="color:red; display:none">The field is required</span>
-                            <input type="text" class="form-control brand_name" name="brand_name" placeholder="Brand Name"><br>
-                             <input type="text" class="form-control unit_type" name="unit_type" placeholder="Unit Type" list="unit-list">
-                                    <datalist id="unit-list">
-                                        <option value="Kilogram"></option>
-                                        <option value="Gram"></option>
-                                        <option value="Litre"></option>
-                                        <option value="Quantity"></option>
-                                    </datalist>
-                                    <br>
-                            <input type="number" class="form-control bar_code" name="bar_code" placeholder="Bar Code">
-                            <span style="color: #68dff0">For example: 1234567899876 (13 digit number)</span><br><br>
-                            <input type="hidden" name="retailer" value="{{ request.user.retailer_user.retailer.id }}">
-                            <button type="button" id="save" class="btn btn-primary product-submit-btn" style="float: right" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing Order">Save Product</button>
-                        </div>
+<div class="col-md-6">
+    <br>
+    <a href="{% url 'product:stock_items_list' %}"><button type="button" id="back-product" class="btn btn-primary" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing">Product List</button></a>
+    <br><br><br>
+    <div class="content-panel">
+        <h3 class="text-center">{{ request.user.retailer_user.retailer.name }} Product</h3>
+        <span class="item_list_error text-center" style="color:red; display:none">item is already exist</span>
+        <div class="panel-body">
+            <form class="form-horizontal add-product-form" action="{% url 'product:add_product' retailer_id=request.user.retailer_user.retailer.id %}" method="post" >
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        {% csrf_token %}
+                        <span class="product-name-error" style="color:red; display:none">The field is required</span>
+                        <label><strong>Product Name</strong></label>
+                        <input type="text" class="form-control product_name" name="name"   placeholder="Product Name"><br>
+                        <span class="brand-name-error" style="color:red; display:none">The field is required</span>
+                        <label><strong>Brand Name</strong></label>
+                        <input type="text" class="form-control brand_name" name="brand_name" placeholder="Brand Name"><br>
+                        <label><strong>Unit Type</strong></label>
+                        <input type="text" class="form-control unit_type" name="unit_type" placeholder="Unit Type" list="unit-list">
+                        <datalist id="unit-list">
+                            <option value="Kilogram"></option>
+                            <option value="Gram"></option>
+                            <option value="Litre"></option>
+                            <option value="Quantity"></option>
+                        </datalist>
+                        <br>
+                        <label><strong>Bar Code</strong></label>
+                        <input type="number" class="form-control bar_code" name="bar_code" placeholder="Bar Code">
+                        <span style="color: #68dff0">For example: 1234567899876 (13 digit number)</span><br><br>
+                        <input type="hidden" name="retailer" value="{{ request.user.retailer_user.retailer.id }}">
+                        <button type="button" id="save" class="btn btn-primary product-submit-btn" style="float: right" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing Order">Save Product</button>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
     </div>
+</div>
 
-    <!--scrpit for field validation-->
+<!--scrpit for field validation-->
 
 <script>
 

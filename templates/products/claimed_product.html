@@ -5,9 +5,8 @@
 {% block content %}
     <div class="col-md-6">
         <br>
-        <a href="{% url 'index' %}"><button type="button" id="home_btn" class="btn btn-primary" style="float: left;margin-right:5px" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>">Home</button></a>
-        <a href="{% url 'product:add_product' retailer_id=request.user.retailer_user.retailer.id %}"><button type="button" id="add-product" class="btn btn-primary" style="float: left;margin-right:5px" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing Order">Add Product </button></a>
-        <a href="{% url 'product:stock_items_list' %}"><button type="button" id="back-product" class="btn btn-primary" style="float: left" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing Order">Product List</button></a>
+        <a href="{% url 'product:add_product' retailer_id=request.user.retailer_user.retailer.id %}"><button type="button" id="add-product" class="btn btn-primary" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing">Add Product </button></a>
+        <a href="{% url 'product:stock_items_list' %}"><button type="button" id="back-product" class="btn btn-primary" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing">Product List</button></a>
         <br><br><br>
         <div class="content-panel">
             <h3 class="text-center">Claimed items</h3>
@@ -15,7 +14,9 @@
                 <div class="form-group">
                     <div class="col-sm-12">
                         <span class="customer_error" style="color: red; display: none" > This Field is requreid</span>
+                        <label><strong>Customer</strong></label>
                         <input type="text" class="form-control customer" name="customer" placeholder="Customer" list="customer-list">
+                        <label><strong>Customer List</strong></label>
                         <datalist id="customer-list">
                             {% for customer in customers %}
                                 <option data-id="{{ customer.id }}" value="{{ customer.customer_name }}">{{ customer.customer_phone }}</option>
@@ -23,7 +24,9 @@
                         </datalist>
                         <br>
                         <span class="product_error"style="color: red; display: none" >This field is Required</span>
+                        <label><strong>product Name</strong></label>
                         <input type="text" class="form-control product" name="product" placeholder="Product" list="product-list">
+                        <label><strong>product list</strong></label>
                         <datalist id="product-list">
                             {% for product in products %}
                                 <option data-id="{{ product.id }}" value="{{ product.name }}">{{ product.brand_name }}</option>
@@ -31,8 +34,10 @@
                         </datalist>
                         <br>
                         <span class="claimed_item_error" style="color: red; display: none" >This field is Required</span>
+                        <label><strong>Claimed Item</strong></label>
                         <input type="number" class="form-control claimed_items" name="claimed_items" placeholder="Claimed Items"><br>
                         <span class="claimed_amount_error" style="color: red; display: none" >This field is Required</span>
+                        <label><strong>Claimed Amount</strong></label>
                         <input type="text" class="form-control claimed_amount"  name="claimed_amount"  placeholder="Claimed Amount"><br>
                         <button type="button" class="btn btn-primary claimed-btn" style="float: right">Claimed</button>
                     </div>
@@ -123,6 +128,14 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/bootstrap.min.js"></script>
 <script>
 $('#back-product').on('click', function() {
+    var $this = $(this);
+  $this.button('loading');
+    setTimeout(function() {
+       $this.button('reset');
+   }, 5000);
+});
+
+$('#add-product').on('click', function() {
     var $this = $(this);
   $this.button('loading');
     setTimeout(function() {

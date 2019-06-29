@@ -2,34 +2,35 @@
 {% block menu_ledger %}active{% endblock %}
 {% block submenu_customer_ledger %}active{% endblock %}
 {% block content %}
-    <div class="col-md-6">
-        <br>
-        <a href="{% url 'index' %}" style="float:left;margin-right:8px;"><i class="fa fa-home fa-3x" aria-hidden="true"></i></a>
-        <a href="{% url 'ledger:customer_ledger_list'%}"><button type="button"  class="btn btn-primary" style="float: left" >Back to Ledger List</button></a>
-        <br><br><br>
-        <div class="content-panel">
-            <h3 class="text-center">{{ customer.customer_name }} <small>New Ledger</small></h3>
-            <div class="panel-body">
-                <form class="form-horizontal new_ledger" action="{% url 'ledger:add_ledger' customer_id=customer.id %}" method="post" >
-                    <div class="form-group">
-                        <div class="col-sm-12">
-                            {% csrf_token %}
-                            <span class="amount-error" style="color: red; display: none" >This Field is Requried</span>
-                            <input type="text" class="form-control amount" name="amount" placeholder="Amount"><br>
-                            <span class="description-error" style="color: red; display: none" >This Field is Requried</span>
-                            <textarea maxlength="500" rows="4" name="description" class="form-control description"  placeholder ="Description"></textarea> <br>
-                            <input type="hidden" name="customer" value="{{ customer.id }}">
-                            <input type="hidden" name="retailer" value="{{ request.user.retailer_user.retailer.id }}">
-                            <button type="button" id="save" class="btn btn-primary ledger-submit-btn" style="float: right" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing Order">Save Ledger</button>
+<div class="col-md-6">
+    <br>
+    <a href="{% url 'ledger:customer_ledger_list'%}"><button type="button" id="back-customer" class="btn btn-primary" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing">Ledger List</button></a>
+    <br><br><br>
+    <div class="content-panel">
+        <h3 class="text-center">{{ customer.customer_name }} <small>New Ledger</small></h3>
+        <div class="panel-body">
+            <form class="form-horizontal new_ledger" action="{% url 'ledger:add_ledger' customer_id=customer.id %}" method="post" >
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        {% csrf_token %}
+                        <span class="amount-error" style="color: red; display: none" >This Field is Requried</span>
+                        <label><strong>Amount</strong></label>
+                        <input type="text" class="form-control amount" name="amount" placeholder="Amount"><br>
+                        <span class="description-error" style="color: red; display: none" >This Field is Requried</span>
+                        <label><strong>Description</strong></label>
+                        <textarea maxlength="500" rows="4" name="description" class="form-control description"  placeholder ="Description"></textarea> <br>
+                        <input type="hidden" name="customer" value="{{ customer.id }}">
+                        <input type="hidden" name="retailer" value="{{ request.user.retailer_user.retailer.id }}">
+                        <button type="button" id="save" class="btn btn-primary ledger-submit-btn" style="float: right" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing Order">Save Ledger</button>
 
-                        </div>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
     </div>
+</div>
 
-    <script>
+<script>
         $('.document').ready(function () {
             $('.ledger-submit-btn').on('click', function () {
                 $(this).addClass('disabled');
@@ -81,8 +82,7 @@
 
     </script>
 <script>
-
-$('#home_btn').on('click', function() {
+$('#back-customer').on('click', function() {
     var $this = $(this);
   $this.button('loading');
     setTimeout(function() {

@@ -4,10 +4,10 @@
 {% block content %}
     <div class="col-md-12">
             <br>
-            <a href="{% url 'product:add_product' retailer_id=request.user.retailer_user.retailer.id %}"><button type="button" id="add-product" class="btn btn-primary" style="float: left" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing Order">Add Product </button></a>
+            <a href="{% url 'product:add_product' retailer_id=request.user.retailer_user.retailer.id %}"><button type="button" id="add-product" class="btn btn-primary"  id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing">Add Product </button></a>
             <br><br><br>
             <div class="content-panel table-responsive">
-                <table class="table table-striped table-advance table-hover item-table">
+                <table class="table table-striped table-bordered table-advance table-hover item-table">
                     <h2 class="text-center">Stock Products</h2>
                     <div class="row" style="padding: 5px">
                         <div class="col-lg-4">
@@ -20,17 +20,17 @@
                     <hr>
                     <thead>
                     <tr>
-                        <th>Item Name</th>
-                        <th>Brand Name</th>
-                        <th>Unit Type</th>
-                        <th>Total Items</th>
-                        <th>Available Items</th>
-                        <th>Purchased Items</th>
-                        <th>Bar Code</th>
-                        <th>Actions</th>
+                        <th class="text-center">Item Name</th>
+                        <th class="text-center">Brand Name</th>
+                        <th class="text-center">Unit Type</th>
+                        <th class="text-center">Total Items</th>
+                        <th class="text-center">Available Items</th>
+                        <th class="text-center">Purchased Items</th>
+                        <th class="text-center">Bar Code</th>
+                        <th class="text-center">Actions</th>
                     </tr>
                     </thead>
-                    <tbody class="product-table-body">
+                    <tbody class="product-table-body text-center">
                     {% for item in object_list %}
                         <tr>
                             <td><a href="{% url 'product:item_details' pk=item.id %}">{{ item.name}}</a></td>
@@ -71,4 +71,13 @@
             });
         });
     </script>
+<script>
+$('#add-product').on('click', function() {
+    var $this = $(this);
+  $this.button('loading');
+    setTimeout(function() {
+       $this.button('reset');
+   }, 5000);
+});
+</script>
 {% endblock %}

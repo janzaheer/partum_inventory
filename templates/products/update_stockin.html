@@ -4,9 +4,8 @@
 
     <div class="col-md-12">
         <br>
-        <a href="#"><button type="button"  class="btn btn-primary" >Home</button></a>
-        <a href=""><button type="button"  class="btn btn-primary" >Products</button></a>
-        <a href="{% url 'product:stockin_list' product_id=object.product.id %}"><button type="button"  class="btn btn-primary" >Stock Details</button></a>
+       <a href="{% url 'product:stock_items_list' %}"><button type="button" id="back-product" class="btn btn-primary" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing">Products</button></a>
+        <a href="{% url 'product:stockin_list' product_id=object.product.id %}"><button type="button" id="stock-in" class="btn btn-primary" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing">Stock Details</button></a>
         <br><br><br>
         <div class="content-panel">
             <h3 class="text-center">{{ object.product.name|title }} ({{ object.product.brand_name|title }}) | <small>Stock Update Form</small> </h3>
@@ -70,5 +69,23 @@
                 document.getElementById('total_amount').value = result;
             }
         }
+    </script>
+<script>
+$('#stock-in').on('click', function() {
+    var $this = $(this);
+  $this.button('loading');
+    setTimeout(function() {
+       $this.button('reset');
+   }, 5000);
+});
+
+$('#back-product').on('click', function() {
+    var $this = $(this);
+  $this.button('loading');
+    setTimeout(function() {
+       $this.button('reset');
+   }, 5000);
+});
+
     </script>
 {% endblock %}

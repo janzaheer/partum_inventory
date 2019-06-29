@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block menu_dashboard %}active{% endblock %}
+{% block content %}
+
+    <div class="row mt">
+        <!-- SERVER STATUS PANELS -->
+        <div class="col-md-4 col-sm-4 mb">
+            <div class="white-panel pn donut-chart">
+                <div class="white-header">
+                    <h5 style="font-family:italic">No. of Sales Today</h5>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 col-xs-6 goleft">
+                        <p><i class="fa fa-database"></i> No. {{ today_sales_count }}</p>
+                    </div>
+                </div>
+                <canvas id="todays-sales" height="120" width="120"></canvas>
+
+            </div><! --/grey-panel -->
+        </div>
+
+        <div class="col-md-4 col-sm-4 mb">
+            <div class="white-panel pn donut-chart">
+                <div class="white-header">
+                    <h5 style="font-family: italic">Today's Sales</h5>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 col-xs-6 goleft">
+                        <p><i class="fa fa-database"></i> Rs. {{ today_sales_sum }}</p>
+                    </div>
+                </div>
+                <canvas id="todays-profit" height="120" width="120"></canvas>
+            </div><! --/grey-panel -->
+        </div>
+
+        <div class="col-md-4 col-sm-4 mb">
+            <div class="white-panel pn donut-chart">
+                <div class="white-header">
+                    <h5 style="font-family: italic">Overall Sales</h5>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 col-xs-6 goleft">
+                        <p><i class="fa fa-database"></i> Rs. {{ sales_sum }}</p>
+                    </div>
+                </div>
+                <canvas id="serverstatus002" height="120" width="120"></canvas>
+            </div><! --/grey-panel -->
+        </div>
+
+    </div>
+
+    <div class="row mt">
+
+        <div class="col-md-8 col-sm-8 mb">
+
+
+            <div id="daily_graph" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+        </div>
+
+        <div class="col-md-4 col-sm-4 mb">
+            <div class="content-panel" style="height:400px; overflow: auto;">
+                <h4 class="text-center"><strong>Daily Reports</strong></h4><br>
+                <table class="table table-striped table-advance table-hover daily-sales-table table-bordered">
+                    <thead>
+                    <tr>
+                        <th><i class=""></i>Date</th>
+                        <th><i class=""></i>Sales</th>
+                        <th><i class=""></i>Profit</th>
+                    </tr>
+                    </thead>
+                    <tbody class="daily-sales-tbody">
+                    </tbody>
+                </table>
+            </div>
+        </div><!-- /col-lg-9 END SECTION MIDDLE -->
+    </div>
+    </div>
+    </div>
+
+    <div class="row mt">
+        <div class="col-md-8 col-sm-8 mb">
+            <div id="weekly-graph" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+        </div>
+        <div class="col-md-4 col-sm-4 mb">
+            <div class="content-panel" style="height:400px; overflow: auto;">
+                <h4 class="text-center"><strong>Weekly Reports</strong></h4><br>
+                <table class="table table-striped table-advance table-hover item-table table-bordered">
+                    <thead>
+                    <tr>
+                        <th><i class=""></i>Date</th>
+                        <th><i class=""></i>Sales</th>
+                        <th><i class=""></i>Profit</th>
+                    </tr>
+                    </thead>
+                    <tbody class="weekly-sales-tbody">
+                    </tbody>
+                </table>
+            </div>
+        </div><!-- /col-lg-9 END SECTION MIDDLE -->
+    </div>
+    </div>
+
+    <div class="row mt">
+        <div class="col-md-8 col-sm-8 mb">
+            <div id="monthly-graph" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+        </div>
+
+        <div class="col-md-4 col-sm-4 mb">
+
+            <div class="content-panel" style="height:400px; overflow: auto;">
+                <h4 class="text-center"><strong>Monthly Reports</strong></h4><br>
+                <table class="table table-striped table-advance table-hover item-table table-bordered">
+                    <thead>
+                    <tr>
+                        <th><i class=""></i>Date</th>
+                        <th><i class=""></i>Sales</th>
+                        <th><i class=""></i>Profit</th>
+                    </tr>
+                    </thead>
+                    <tbody class="monthly-sales-tbody">
+
+                    </tbody>
+                </table>
+            </div>
+        </div><!-- /col-lg-9 END SECTION MIDDLE -->
+{#    </div>#}
+
+    <script src="{% static 'js/index.js' %}"></script>
+{% endblock %}

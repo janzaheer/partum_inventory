@@ -265,3 +265,65 @@ class CreateFeedBack(FormView):
 
     def form_invalid(self, form):
         return super(CreateFeedBack, self).form_invalid(form)
+
+class ReportsView(TemplateView):
+    template_name = 'reports.html'
+
+    print("____________________________")
+    print("____________________________")
+    print("____________________________")
+    print("____________________________")
+
+    def dispatch(self, request, *args, **kwargs):
+        if not self.request.user.is_authenticated():
+            return HttpResponseRedirect(reverse('login'))
+        else:
+
+            if self.request.user.retailer_user:
+                if (
+                    self.request.user.retailer_user.role_type ==
+                        self.request.user.retailer_user.ROLE_TYPE_SALESMAN
+                ):
+                    return HttpResponseRedirect(reverse('sales:invoice_list'))
+            if self.request.user.retailer_user:
+                if (
+                        self.request.user.retailer_user.role_type ==
+                        self.request.user.retailer_user.ROLE_TYPE_DATA_ENTRY_USER
+                ):
+                    return HttpResponseRedirect(reverse('product:items_list'))
+
+        return super(
+            ReportsView, self).dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(ReportsView, self).get_context_data(**kwargs)
+
+        sales = self.request.user.retailer_user.retailer.retailer_sales.all()
+        sales_sum = sales.aggregate(
+            total_sales=Sum('grand_total')
+        )
+
+        today_sales = (
+            self.request.user.retailer_user.retailer.
+            retailer_sales.filter(
+                created_at__icontains=timezone.now().date()
+            )
+        )
+        today_sales_sum = today_sales.aggregate(
+            total_sales=Sum('grand_total')
+        )
+
+        context.update({
+            'sales_count': sales.count(),
+            'sales_sum': (
+                int(sales_sum.get('total_sales')) if
+                sales_sum.get('total_sales') else 0
+            ),
+            'today_sales_count': today_sales.count(),
+            'today_sales_sum': (
+                int(today_sales_sum.get('total_sales')) if
+                today_sales_sum.get('total_sales') else 0
+            )
+        })
+
+        return context

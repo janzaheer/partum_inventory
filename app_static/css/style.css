@@ -392,13 +392,13 @@ ul.sidebar-menu li a.active i {
 }
 
 .black-bg {
-    background: #3b5998;
+    background: #3C5A99;
     border-bottom: 1px solid #2B3D4A;
 }
 
 .wrapper {
     display: inline-block;
-    margin-top: 60px;
+    margin-top: 90px;
     padding-left: 15px;
     padding-right: 15px;
     padding-bottom: 15px;

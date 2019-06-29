@@ -3,53 +3,52 @@
 {% block submenu_list_customer %}active{% endblock %}
 
 {% block content %}
-    <div class="col-md-12">
-            <br>
-        <a href="{% url 'index' %}" style="float:left;margin-right:8px;"><i class="fa fa-home fa-3x" aria-hidden="true"></i></a>
-        <a href="{% url 'create_customer' %}"><button type="button" id="new-customer" class="btn btn-primary" style="float: left" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing Order">Create New Customer</button></a>
-            <br><br><br>
-            <div class="content-panel table-responsive">
-                <table class="table table-striped table-advance table-hover customer-table">
-                    <h2 class="text-center">Customer List</h2>
-                    <div class="input-group custom-search-form col-md-4" style="left: 5px">
-                        <input type="text" class="form-control search-customer" placeholder="Search...">
-                        <span class="input-group-btn">
+<div class="col-md-12">
+    <br>
+    <a href="{% url 'create_customer' %}"><button type="button" id="new-customer" class="btn btn-primary"  id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing">Create Customer</button></a>
+    <br><br><br>
+    <div class="content-panel table-responsive">
+        <table class="table table-striped table-hover table-bordered customer-table">
+            <h2 class="text-center">Customer List</h2>
+            <div class="input-group custom-search-form col-md-4" style="left: 5px">
+                <input type="text" class="form-control search-customer" placeholder="Search...">
+                <span class="input-group-btn">
                             <button class="btn btn-default" type="button">
                                 <i class="fa fa-search"></i>
                             </button>
                         </span>
-                    </div>
-                    <hr>
-                    <thead>
-                    <tr>
-                        <th><i class="fa fa-bullhorn"></i> Name</th>
-                        <th><i class="fa fa-question-circle"></i> Phone</th>
-                        <th><i class=" fa fa-bookmark"></i> Shop</th>
-                        <th><i class=" fa fa-edit"></i> Address</th>
-                        <th>Actions</th>
-                    </tr>
-                    </thead>
-                    <tbody class="customer-table-body">
-                    {% if customers %}
-                        {% for customer in customers %}
-                            <tr>
-                                <td><a href="{% url 'update_customer' pk=customer.id %}">{{ customer.customer_name|title }}</a></td>
-                                <td>{{ customer.customer_phone }}</td>
-                                <td>{{ customer.shop }}</td>
-                                <td>{{ customer.address }}</td>
-                                <td>
-                                    <a href="{% url 'update_customer' pk=customer.id %}" title="Edit Customer"><button class="btn btn-danger btn-xs"><i class="fa fa-edit "></i></button></a>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    {% else %}
-                        <tr><td colspan="5" class="text-center">No Records Found</td></tr>
-                    {% endif %}
-                    </tbody>
-                </table>
             </div>
-        </div>
-        <script>
+            <hr>
+            <thead >
+            <tr>
+                <th class="text-center"><i class="fa fa-bullhorn"></i> Name</th>
+                <th class="text-center"><i class="fa fa-question-circle"></i> Phone</th>
+                <th class="text-center"><i class=" fa fa-bookmark"></i> Shop</th>
+                <th class="text-center"><i class=" fa fa-edit"></i> Address</th>
+                <th class="text-center">Actions</th>
+            </tr>
+            </thead>
+            <tbody class="customer-table-body text-center">
+            {% if customers %}
+            {% for customer in customers %}
+            <tr>
+                <td><a href="{% url 'update_customer' pk=customer.id %}">{{ customer.customer_name|title }}</a></td>
+                <td>{{ customer.customer_phone }}</td>
+                <td>{{ customer.shop }}</td>
+                <td>{{ customer.address }}</td>
+                <td>
+                    <a href="{% url 'update_customer' pk=customer.id %}" title="Edit Customer"><button class="btn btn-danger btn-xs"><i class="fa fa-edit "></i></button></a>
+                </td>
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr><td colspan="5" class="text-center">No Records Found</td></tr>
+            {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
             $(document).ready(function(){
               $(".search-customer").on("keyup", function() {
                 var value = $(this).val().toLowerCase();
@@ -69,13 +68,6 @@ $('#new-customer').on('click', function() {
    }, 5000);
 });
 
-$('#home_btn').on('click', function() {
-    var $this = $(this);
-  $this.button('loading');
-    setTimeout(function() {
-       $this.button('reset');
-   }, 5000);
-});
 
 $('.form-control').click (function () {
     $('.list-error').hide();
