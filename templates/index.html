@@ -28,7 +28,7 @@
         </div>
         <!--add ledger div -->
         {% if request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_LEDGER_VIEW or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_OWNER or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_VIEW_ACCOUNT %}
-       <div class="col-lg-4 col-md-6 ">
+        <div class="col-lg-4 col-md-6 ">
             <a href="{% url 'ledger:customer_ledger_list' %}">
                 <div class="panel panel_bg_color">
                     <div class="panel-heading">
@@ -51,7 +51,7 @@
         {% endif %}
         <!--add product div -->
         {% if request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_DATA_ENTRY_USER or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_OWNER or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_VIEW_ACCOUNT %}
-       <div class="col-lg-4 col-md-6 ">
+        <div class="col-lg-4 col-md-6 ">
             <a href="{% url 'product:stock_items_list' %}">
                 <div class="panel panel_bg_color">
                     <div class="panel-heading">
@@ -72,7 +72,6 @@
             </a>
         </div>
         {% endif %}
-        <!--add expense div -->
         {% if request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_SALESMAN or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_OWNER or request.user.retailer_user.role_type == request.user.retailer_user.ROLE_TYPE_VIEW_ACCOUNT %}
         <div class="col-lg-4 col-md-6">
             <a href="{% url 'expense:expense_list' %}">
@@ -187,7 +186,7 @@
         </div>
         <!--add logs div -->
         <div class="col-lg-4 col-md-6 ">
-            <a href="#">
+            <a href="{% url 'product:daily_stock_logs' %}">
                 <div class="panel panel_bg_color">
                     <div class="panel-heading">
                         <div class="row">
