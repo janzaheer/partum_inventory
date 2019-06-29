@@ -78,7 +78,7 @@ class AddNewProduct(FormView):
     def form_valid(self, form):
         product = form.save()
 
-        return HttpResponseRedirect(reverse('product:items_list'))
+        return HttpResponseRedirect(reverse('product:stock_items_list'))
 
     def form_invalid(self, form):
         return super(AddNewProduct, self).form_invalid(form)

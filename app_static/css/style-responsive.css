@@ -225,6 +225,9 @@
     .img-responsive {
         width: 100%;
     }
+     a.logo{
+        width:200px;
+    }
 
 }
 
@@ -250,6 +253,9 @@
     .navbar-inverse .navbar-toggle:hover, .navbar-inverse .navbar-toggle:focus {
         background-color: #ccc;
         border-color:#ccc ;
+    }
+     a.logo{
+        width:200px;
     }
 
 }
@@ -287,7 +293,9 @@
         display: inline-block;
         width: 75%;
     }
-
+    a.logo{
+        width:200px;
+    }
 }
 
 
