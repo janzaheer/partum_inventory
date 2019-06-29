@@ -2203,3 +2203,13 @@ label {
 .site-min-height {
     min-height: 900px;
 }
+@media (max-width: 480px) {
+a.logo{
+        width:200px;
+    }
+}
+@media (max-width:320px) {
+    a.logo{
+        width:200px;
+    }
+}

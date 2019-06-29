@@ -3,7 +3,6 @@ from django.views.generic import ListView
 from django.utils import timezone
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
-from dateutil.relativedelta import relativedelta
 
 from pis_product.models import StockOut
 
@@ -106,14 +105,14 @@ class MonthlyStockLogs(ListView):
 
         if self.logs_month:
             self.year = current_date.year
-            month = current_date.month
+            month = self.logs_month
 
             if month < months.index(self.logs_month) + 1:
                 self.year = self.year - 1
 
             queryset = StockOut.objects.filter(
                 dated__year=self.year,
-                dated__month=month,
+                dated__month=months.index(self.logs_month) + 1,
             ).values('product__name').annotate(
                 receipt_item=Count('product__name'),
                 total_qty=Sum('stock_out_quantity')

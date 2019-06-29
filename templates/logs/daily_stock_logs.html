@@ -6,8 +6,7 @@
         <div class="row">
             <div class="col-lg-10 col-lg-offset-1">
                 <br>
-                <a href="#"><button type="button" class="btn btn-primary">Home</button></a>
-                <a href="{% url 'product:monthly_stock_logs' %}"><button type="button" class="btn btn-primary">Monthly Logs</button></a>
+                <a href="{% url 'product:monthly_stock_logs' %}"><button type="button" id="stock-log" class="btn btn-primary" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing">Monthly Logs</button></a>
                 <br><br>
                 <div class="content-panel table-responsive">
                     <h2 class="text-center">Daily Stock Logs</h2>
@@ -78,6 +77,15 @@
             })
 
         });
+    </script>
+<script>
+$('#stock-log').on('click', function() {
+    var $this = $(this);
+  $this.button('loading');
+    setTimeout(function() {
+       $this.button('reset');
+   }, 5000);
+});
     </script>
 
 {% endblock %}
