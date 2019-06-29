@@ -269,11 +269,6 @@ class CreateFeedBack(FormView):
 class ReportsView(TemplateView):
     template_name = 'reports.html'
 
-    print("____________________________")
-    print("____________________________")
-    print("____________________________")
-    print("____________________________")
-
     def dispatch(self, request, *args, **kwargs):
         if not self.request.user.is_authenticated():
             return HttpResponseRedirect(reverse('login'))
