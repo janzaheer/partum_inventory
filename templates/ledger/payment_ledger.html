@@ -9,12 +9,12 @@
     <div class="content-panel">
         <h3 class="text-center">{{ customer.customer_name }} <small>Payment</small></h3>
         <div class="panel-body">
-            <form class="form-horizontal add-payment" action="{% url 'ledger:payment_ledger' customer_id=customer.id %}" method="post" >
+            <form class="form-horizontal add-payment" action="{% url 'ledger:payment_ledger' customer_id=customer.id %}" method="post" autocomplete="off">
                 <div class="form-group">
                     <div class="col-sm-12">
                         {% csrf_token %}
+                         <label><strong>Amount</strong></label>
                         <span class="amount-error" style="color: red; display: none"> This Feild is Requried</span>
-                        <label><strong>Amount</strong></label>
                         <input type="text" class="form-control amount" name="amount" placeholder="Amount"><br>
                         <label><strong>payment Type</strong></label>
                         <input type="text" class="form-control payment_type" name="payment_type" placeholder="Payment Type">

@@ -9,12 +9,12 @@
         <div class="content-panel">
             <h3 class="text-center">{{ request.user.retailer_user.retailer.name }} | Stock ({{ product.name }})</h3>
             <div class="panel-body">
-                <form class="form-horizontal product_item_form" action="{% url 'product:stock_out_items' product_id=product.id %}" method="post" >
+                <form class="form-horizontal product_item_form" action="{% url 'product:stock_out_items' product_id=product.id %}" method="post" autocomplete="off">
                     <div class="form-group">
                         <div class="col-sm-12">
                             {% csrf_token %}
-                            <span class="item-error" style="color:red; display:none">This field is required..</span>
                             <label><strong>Stock Out Quantity</strong></label>
+                            <span class="item-error" style="color:red; display:none">This field is required..</span>
                             <input type="text"  class="form-control stock_out_quantity"  name="stock_out_quantity"  onkeyup="checkDec(this);" placeholder="Stock Out Quantity"><br>
                             <label><strong>Date Stock out </strong></label>
                             <input type="text"  class="form-control dated"  name="dated"  onkeyup="checkDec(this);" placeholder="Date Stockout" onfocus="(this.type='date')" onblur="(this.type='text')"><br>

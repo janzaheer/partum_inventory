@@ -10,7 +10,7 @@
     <div class="content-panel">
         <h3 class="text-center">Edit Customer</h3>
         <div class="panel-body">
-            <form class="form-horizontal" action="{% url 'update_customer' pk=object.id %}" method="post" >
+            <form class="form-horizontal" action="{% url 'update_customer' pk=object.id %}" method="post" autocomplete="off">
                 <div class="form-group">
                     <div class="col-sm-12">
                         {% csrf_token %}

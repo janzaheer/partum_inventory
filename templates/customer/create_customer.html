@@ -10,17 +10,18 @@
     <div class="content-panel">
         <h3 class="text-center">Create New Customer</h3>
         <div class="panel-body">
-            <form class="form-horizontal add-customer-form" action="{% url 'create_customer' %}" method="post" >
+            <form class="form-horizontal add-customer-form" action="{% url 'create_customer' %}" method="post" autocomplete="off">
                 <div class="form-group">
                     <div class="col-sm-12">
                         {% csrf_token %}
-                        <span class="customer_name_error" style="color:red; display:none">This field is required..</span>
-                        <span class="customer_exisit" style="color: red; display: none">Customer With this Phone Number Already exists.</span>
                         <label><strong>Cutomer Name</strong></label>
+                        <span class="customer_name_error" style="color:red; display:none">This field is required..</span>
                         <input type="text" class="form-control customer_name" name="customer_name" placeholder="Customer Name"><br>
-                         <label><strong>Cutomer Phone</strong></label>
+                        <label><strong>Cutomer Phone</strong></label>
+                        <span class="customer_exisit" style="color: red; display: none">Customer With this Phone Number Already exists.</span>
+                        <span class="customer_phone_error" style="color:red; display:none">This field is required..</span>
                         <input type="text" class="form-control customer_phone" name="customer_phone" onkeyup="checkDec(this);" placeholder="Customer Phone"><br>
-                         <label><strong>Shop Nmae</strong></label>
+                         <label><strong>Shop Name</strong></label>
                         <input type="text" class=" form-control shop" name="shop" placeholder="Customer Shop Name (Optional)"><br>
                          <label><strong>Address</strong></label>
                         <textarea name="address" class="form-control address" placeholder="Customer Address (Optional)"></textarea><br>
@@ -46,6 +47,14 @@
                  else
                  {
                      $('.customer_name_error').hide();
+                 }
+                 if ($('.customer_phone').val()== "") {
+                     $('.customer_phone_error').show();
+                     error = true;
+                 }
+                 else
+                 {
+                     $('.customer_phone_error').hide();
                  }
                  if (error == false) {
                      {% for customer  in customers%}
@@ -83,16 +92,6 @@
              }
          }
     </script>
-<script>
 
-$('#back-customer').on('click', function() {
-    var $this = $(this);
-  $this.button('loading');
-    setTimeout(function() {
-       $this.button('reset');
-   }, 5000);
-});
-
-    </script>
 
 {% endblock %}

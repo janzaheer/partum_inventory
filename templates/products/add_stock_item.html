@@ -9,11 +9,11 @@
         <div class="content-panel">
             <h3 class="text-center">{{ request.user.retailer_user.retailer.name }} | Stock ({{ product.name }}) </h3>
             <div class="panel-body">
-                <form class="form-horizontal product_item_form" action="{% url 'product:add_stock_items' product_id=product.id %}" method="post" >
+                <form class="form-horizontal product_item_form" action="{% url 'product:add_stock_items' product_id=product.id %}" method="post" autocomplete="off">
                     <div class="form-group">
                         <div class="col-md-12">
-                            <span class="item-error" style="color:red; display:none">This field is required..</span>
                             <label><strong>Stock Quantity</strong></label>
+                            <span class="item-error" style="color:red; display:none">This field is required..</span>
                             <input type="text"  class="form-control quantity"  name="quantity" id="quantity"  placeholder="Stock Quantity"><br>
                         </div>
                         <div class="col-md-6">
@@ -36,7 +36,7 @@
                             <label><strong>Expiry Date</strong></label>
                             <input type="text"  class="form-control stock_expiry"  name="stock_expiry"  onkeyup="checkDec(this);" placeholder="Stock Expiry Date" onfocus="(this.type='date')" onblur="(this.type='text')"><br>
                         </div>
-                        <div class="col-md-12">
+                        <div class="col-md-3">
                             <button type="button"  class="btn btn-primary product-sub-btn" style="width: 100%"  data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing Order">Save Stock</button>
                         </div>
                     </div>

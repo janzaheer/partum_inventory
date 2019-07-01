@@ -9,15 +9,15 @@
     <div class="content-panel">
         <h3 class="text-center">{{ customer.customer_name }} <small>New Ledger</small></h3>
         <div class="panel-body">
-            <form class="form-horizontal new_ledger" action="{% url 'ledger:add_ledger' customer_id=customer.id %}" method="post" >
+            <form class="form-horizontal new_ledger" action="{% url 'ledger:add_ledger' customer_id=customer.id %}" method="post" autocomplete="off">
                 <div class="form-group">
                     <div class="col-sm-12">
                         {% csrf_token %}
-                        <span class="amount-error" style="color: red; display: none" >This Field is Requried</span>
                         <label><strong>Amount</strong></label>
+                        <span class="amount-error" style="color: red; display: none" >This Field is Requried</span>
                         <input type="text" class="form-control amount" name="amount" placeholder="Amount"><br>
-                        <span class="description-error" style="color: red; display: none" >This Field is Requried</span>
                         <label><strong>Description</strong></label>
+                        <span class="description-error" style="color: red; display: none" >This Field is Requried</span>
                         <textarea maxlength="500" rows="4" name="description" class="form-control description"  placeholder ="Description"></textarea> <br>
                         <input type="hidden" name="customer" value="{{ customer.id }}">
                         <input type="hidden" name="retailer" value="{{ request.user.retailer_user.retailer.id }}">
@@ -58,7 +58,7 @@
                  else
                  {
                      $(this).removeClass('disabled');
-                     $(this).html('Save');
+                     $(this).html('Save Ledger');
                      return;
                  }
 

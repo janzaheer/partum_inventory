@@ -9,15 +9,15 @@
     <div class="content-panel">
         <h3 class="text-center">{{ request.user.retailer_user.retailer.name }} | Product ({{ product.name }})</h3>
         <div class="panel-body">
-            <form class="form-horizontal product_item_form" action="{% url 'product:add_product_items' product_id=product.id %}" method="post" >
+            <form class="form-horizontal product_item_form" action="{% url 'product:add_product_items' product_id=product.id %}" method="post" autocomplete="off">
                 <div class="form-group">
                     <div class="col-sm-12">
                         {% csrf_token %}
-                        <span class="consumer-error" style="color:red; display:none">This field is required..</span>
                         <label><strong>Consumer Price</strong></label>
+                        <span class="consumer-error" style="color:red; display:none">This field is required..</span>
                         <input type="text" class="form-control consumer_price" name="consumer_price" onkeyup="checkDec(this);" placeholder="Consumer Price"><br>
-                        <span class="item-error" style="color:red; display:none">This field is required..</span>
                         <label><strong>Quantity Item</strong></label>
+                        <span class="item-error" style="color:red; display:none">This field is required..</span>
                         <input type="text"  class="form-control Quantity_item"  name="available_item"  onkeyup="checkDec(this);" placeholder="Item Quantity"><br>
                         <input type="hidden" name="purchased_item" value="0">
                         <input type="hidden" name="product" value="{{ product.id }}">
