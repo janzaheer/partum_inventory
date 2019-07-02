@@ -36,8 +36,8 @@
 <script>
          $(document).ready (function () {
              $('.product-sub-btn').on ('click', function () {
-                $(this).addClass('disabled');
-               $(this).html('<i class="fa fa-circle-o-notch fa-spin"></i> Loading...');
+                 $(this).addClass('disabled');
+                 $(this).html('<i class="fa fa-circle-o-notch fa-spin"></i> Loading...');
                  var error= false;
 
                  if ($('.customer_name').val()== "") {
@@ -60,6 +60,8 @@
                      {% for customer  in customers%}
                          if ($('.customer_phone').val() == '{{ customer.customer_phone }}') {
                              $('.customer_exisit').show();
+                             $('.product-sub-btn').removeClass('disabled');
+                             $('.product-sub-btn').html('Save Customer');
                              return;
                          }
                      {% endfor %}
