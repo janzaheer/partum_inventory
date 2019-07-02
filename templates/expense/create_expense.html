@@ -9,18 +9,18 @@
         <div class="content-panel">
             <h3 class="text-center">{{ request.user.retailer_user.retailer.name }} Expense</h3>
             <div class="panel-body">
-                <form class="form-horizontal add-ledger-form" action="{% url 'expense:add_new_expense' %}" method="post" >
+                <form class="form-horizontal add-ledger-form" action="{% url 'expense:add_new_expense' %}" method="post" autocomplete="off">
                     <div class="form-group">
                         <div class="col-sm-12">
                             {% csrf_token %}
-                            <span class="amount-error" style="color: red; display: none" >this field is requried</span>
                             <label><strong>Amount</strong></label>
+                            <span class="amount-error" style="color: red; display: none" >this field is requried</span>
                             <input type="text" class="form-control amount" name="amount" placeholder="Amount"><br>
-                            <span class="description-error" style="color: red; display: none" >this field is requried</span>
                             <label><strong>Description</strong></label>
+                            <span class="description-error" style="color: red; display: none" >this field is requried</span>
                             <textarea class="form-control description" name="description" placeholder="Description"></textarea><br>
-                            <span class="date-error" style="color: red; display: none" >this field is requried</span>
                             <label><strong>Date</strong></label>
+                            <span class="date-error" style="color: red; display: none" >this field is requried</span>
                             <input type="text" class="form-control date" name="date" placeholder=" Date" onfocus="(this.type='date')" onblur="(this.type='text')"><br>
                             <input type="hidden" name="retailer" value="{{ request.user.retailer_user.retailer.id }}">
                             <button type="button" id="save" class="btn btn-primary ledger-submit-btn" style="float: right" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing Order">Save Expense</button>

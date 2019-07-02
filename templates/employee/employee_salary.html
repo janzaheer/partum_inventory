@@ -8,18 +8,18 @@
         <div class="content-panel">
             <h3 class="text-center">{{ request.user.retailer_user.retailer.name }} Add Employee</h3>
             <div class="panel-body">
-                <form class="form-horizontal add-ledger-form" action="{% url 'employee:employee_salary' pk=employee.pk %}" method="post" >
+                <form class="form-horizontal add-ledger-form" action="{% url 'employee:employee_salary' pk=employee.pk %}" method="post" autocomplete="off">
                     <div class="form-group">
                         <div class="col-sm-12">
                             {% csrf_token %}
-                            <span class="name-error" style="color: red; display: none" >this field is requried</span>
                             <label><strong>Name</strong></label>
+                            <span class="name-error" style="color: red; display: none" >this field is requried</span>
                             <input type="text" class="form-control customer-name" name="employee_name"  value="{{employee.name}}" readonly> <br>
-                            <span class="salary_amount-error" style="color: red; display: none" >this field is requried</span>
                             <label><strong>Salary</strong></label>
+                            <span class="salary_amount-error" style="color: red; display: none" >this field is requried</span>
                             <input type="text" class="form-control salary_amount" name="salary_amount" placeholder="Salary Amount"><br>
-                            <span class="date-error" style="color: red; display: none" >this field is requried</span>
                             <label><strong>Date</strong></label>
+                            <span class="date-error" style="color: red; display: none" >this field is requried</span>
                             <input type="text" class="form-control date" name="date" placeholder=" Date" onfocus="(this.type='date')" onblur="(this.type='text')"><br>
                             <input type="hidden" name="retailer" value="{{ request.user.retailer_user.retailer.id }}">
                             <button type="button" id="save" class="btn btn-primary ledger-submit-btn" style="float: right" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing Order">Save Salary</button>
@@ -50,6 +50,13 @@
                 }
                 else {
                     $('.salary_amount-error').hide();
+                }
+                if ($('.date').val() ==""){
+                    $('.date-error').show();
+                    error= true;
+                }
+                else {
+                    $('.date-error').hide();
                 }
                 if (error == true ) {
                     $(this).removeClass('disabled');
@@ -82,8 +89,8 @@
                 el.value = el.value.substring(0,el.value.length - 1);
             }
         }
-            $('.amount').keyup(function () {
-               $('.amount-error').hide();
+            $('.salary_amount').keyup(function () {
+               $('.salary_amount-error').hide();
                 checkDec(this);
             });
             function checkDec(el){
@@ -92,8 +99,8 @@
                 el.value = el.value.substring(0,el.value.length - 1);
             }
         }
-            $('.description').keyup(function () {
-                $('.description-error').hide();
+            $('.date').keyup(function () {
+                $('.date-error').hide();
             });
         });
 

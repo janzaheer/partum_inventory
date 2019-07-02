@@ -9,18 +9,18 @@
     <div class="content-panel">
         <h3 class="text-center">{{ request.user.retailer_user.retailer.name }} Add Employee</h3>
         <div class="panel-body">
-            <form class="form-horizontal add-ledger-form" action="{% url 'employee:add_new_employee' %}" method="post" >
+            <form class="form-horizontal add-ledger-form" action="{% url 'employee:add_new_employee' %}" method="post" autocomplete="off">
                 <div class="form-group">
                     <div class="col-sm-12">
                         {% csrf_token %}
-                        <span class="name-error" style="color: red; display: none" >this field is requried</span>
                         <label><strong>Name</strong></label>
+                        <span class="name-error" style="color: red; display: none" >this field is requried</span>
                         <input type="text" class="form-control name" name="name" placeholder="Name"><br>
-                        <span class="father_name-error" style="color: red; display: none" >this field is requried</span>
                         <label><strong>Father Name</strong></label>
+                        <span class="father_name-error" style="color: red; display: none" >this field is requried</span>
                         <input type="text" class="form-control father_name" name="father_name" placeholder="Father Name"><br>
-                        <span class="mobile-error" style="color: red; display: none" >this field is requried</span>
                         <label><strong>mobile Number</strong></label>
+                        <span class="mobile-error" style="color: red; display: none" >this field is requried</span>
                         <input type="text" class="form-control mobile" name="mobile" placeholder="Mobile"><br>
                         <label><strong>Address</strong></label>
                         <textarea class="form-control address" name="address" placeholder="Address"></textarea><br>

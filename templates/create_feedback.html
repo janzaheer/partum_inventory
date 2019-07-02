@@ -7,7 +7,7 @@
     <div class="content-panel">
         <h3 class="text-center">{{ request.user.retailer_user.retailer.name }} FeedBack</h3>
         <div class="panel-body">
-            <form class="form-horizontal add-ledger-form" action="{% url 'create_feedback' %}" method="post" >
+            <form class="form-horizontal add-ledger-form" action="{% url 'create_feedback' %}" method="post" autocomplete="off">
                 <div class="form-group">
                     <div class="col-sm-12">
                         {% csrf_token %}

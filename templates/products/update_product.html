@@ -9,7 +9,7 @@
             <h3 class="text-center">{{ request.user.retailer_user.retailer.name }} <small>Product Update Form</small></h3>
              <span class="item_list_error text-center" style="color:red; display:none">item is already exist</span>
             <div class="panel-body">
-                <form class="form-horizontal add-product-form" action="{% url 'product:update_product' pk=object.id %}" method="post" >
+                <form class="form-horizontal add-product-form" action="{% url 'product:update_product' pk=object.id %}" method="post" autocomplete="off">
                     <div class="form-group">
                         <div class="col-sm-12">
                             {% csrf_token %}
