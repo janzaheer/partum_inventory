@@ -7,6 +7,14 @@
         .item-row th {
             background: #eee;
         }
+        @media print {
+           .table>tbody>tr>td{
+            font-size: 8px;
+            }
+            .table{
+                border: 2px solid #000;
+            }
+        }
     </style>
 
     <div class="col-lg-10 col-md-10 col-sm-10">
@@ -18,56 +26,63 @@
             <div class="row">
                 <div class="col-xs-12 col-md-12">
                     <div class="text-center">
-                        <h1 style="font-size:18px"><strong>{{ request.user.retailer_user.retailer.name }}</strong></h1>
-                        {% if request.user.user_profile.address %}<span><strong>{{ request.user.user_profile.address }}</strong></span><br>{% endif %}
-                        {% if request.user.user_profile.phone_no %}<small><strong>Phone No:</strong> {{ request.user.user_profile.phone_no }} </small>{% endif %} {% if request.user.user_profile.mobile_no %}<small><strong>Mobile No: </strong>{{ request.user.user_profile.mobile_no }} </small>{% endif %}
-                        <h3 style="font-size:16px">Invoice</h3>
+                        <h1 style="font-size:15px"><strong>{{ request.user.retailer_user.retailer.name }}</strong></h1>
+                        {% if request.user.user_profile.address %}<span class="f-size"><strong>{{ request.user.user_profile.address }}</strong></span><br>{% endif %}
+                        {% if request.user.user_profile.phone_no %}<small class="f-size"><strong>Phone No:</strong> {{ request.user.user_profile.phone_no }} </small>{% endif %} {% if request.user.user_profile.mobile_no %}<small class="f-size"><strong>Mobile No: </strong>{{ request.user.user_profile.mobile_no }} </small>{% endif %}
+                        <h6 style="font-size:14px;border-bottom: 1px solid #000">Invoice</h6>
                     </div>
-                    <hr>
                 </div>
-                <div class="col-xs-12 col-md-12" style="margin-top: 15px">
+                <div class="col-xs-12 col-md-12">
                     <div class="row">
                         <div class="col-xs-12 col-md-6">
+                            <div class="col-md-12 ">
                             {% if invoice.customer %}
-                                <label><strong>Customer Name:</strong></label> <span style="margin: 15px;">{{ invoice.customer.customer_name }}</span><br>
-                                <label><strong>Customer Phone:</strong></label> <span style="margin: 15px;">{{ invoice.customer.customer_phone }}</span><br>
+                            <div class="pull-left">
+                                <label><strong class="f-size">Customer Name:</strong></label> <span class="f-size">{{ invoice.customer.customer_name }}</span>
+                            </div>
+                            <div class="pull-right">
+                                <label><strong class="f-size">Customer Phone:</strong></label> <span class="f-size">{{ invoice.customer.customer_phone }}</span>
+                            </div>
                             {% endif %}
-                            {% if invoice.customer.shop %}
-                                <label><strong>Shop Name:</strong></label> <span style="margin: 15px;">{{ invoice.customer.shop }}</span><br>
-                            {% endif %}
+                        </div>
+                            <!-- {% if invoice.customer.shop %}
+                                <label><strong class="f-size">Shop Name:</strong></label> <span class="f-size">{{ invoice.customer.shop }}</span><br>
+                            {% endif %} -->
+                            <div class="col-md-12 pull-left">
                             {% if invoice.customer.address %}
-                                <label><strong>Address:</strong></label> <span style="margin: 15px;">{{ invoice.customer.address }}</span><br>
+                                <label><strong class="f-size">Address:</strong></label> <span class="f-size">{{ invoice.customer.address }}</span>
                             {% endif %}
-                            <label><strong>Billed Date:</strong></label><span style="margin: 15px;">{{ invoice.created_at.date }}</span><br>
-                            <br>
+                        </div>
+                            <div class="col-md-12 pull-left">
+                            <label><strong class="f-size">Billed Date:</strong></label><span class="f-size" style="margin: 15px;">{{ invoice.created_at.date }}</span>
+                        </div>
                         </div>
                     </div>
                 </div>
-
             </div>
 
             <div class="row">
                 <div class="col-md-12">
-                    <span style="float: right; font-size:18px">Receipt No. <span style="color:red">{{ invoice.receipt_no }}</span></span>
+                    <span class="f-size" style="float: right;">Receipt No. <span style="color:red">{{ invoice.receipt_no }}</span></span>
                     <div class="table-responsive">
                         <table class="table table-bordered">
                             <thead>
                             <tr class="item-row">
-                                <th>Item</th>
-                                <th>Quantity</th>
-                                <th>Total</th>
+                                <th >Item</th>
+                                <th >Quantity</th>
+                                <th >Total</th>
                             </tr>
                             </thead>
                             <tbody>
                             {% for item in  invoice.purchased_items.all %}
                                 <tr id="hiderow">
-                                    <td>
+                                    <td >
                                         {{ item.product.name}}
                                     </td>
-                                    <td>
+                                    <td >
                                         {{ item.quantity|floatformat:-2}}
                                     </td>
-                                    <td>
+                                    <td >
                                         {{ item.purchase_amount|floatformat:-2 }}
                                     </td>
                                 </tr>
@@ -89,42 +104,42 @@
                             <tr><td colspan="4" style="color:white"></td></tr>
 {#                            <tr style="border-top: 3px solid">#}
 {#                                <td></td>#}
-{#                                <td class="text-right"><strong style="font-size:11px">Sub Total</strong></td>#}
+{#                                <td class="text-right"><strong >Sub Total</strong></td>#}
 {#                                <td><span id="subtotal">{{ invoice.sub_total|floatformat:-2 }}</span></td>#}
 {#                            </tr>#}
 {#                            <tr>#}
-{#                                <td><strong style="font-size:11px">Total Quantity: </strong><span id="totalQty" style="color: red; font-weight: bold">{{ invoice.total_quantity }}</span> Units</td>#}
-{#                                <td class="text-right"><strong style="font-size:11px">Discount</strong></td>#}
+{#                                <td><strong >Total Quantity: </strong><span id="totalQty" style="color: red; font-weight: bold; font-size: 8px">{{ invoice.total_quantity }}</span> </td>#}
+{#                                <td class="text-right"><strong >Discount</strong></td>#}
 {#                                <td>{{ invoice.discount|floatformat:-2 }}</td>#}
 {#                            </tr>#}
 {#                            <tr>#}
 {#                                <td></td>#}
-{#                                <td class="text-right" ><strong style="font-size:11px">Shipping</strong></td>#}
+{#                                <td class="text-right" ><strong >Shipping</strong></td>#}
 {#                                <td>{{ invoice.shipping|floatformat:-2 }}</td>#}
 {#                            </tr>#}
                             <tr>
-                                <td><strong style="font-size:11px">Total Quantity: </strong><span id="totalQty" style="color: red; font-weight: bold">{{ invoice.total_quantity }}</span> Units</td>
-                                <td class="text-right" ><strong style="font-size:11px">Grand Total</strong></td>
+                                <td><strong >Total Quantity: </strong><span id="totalQty" style="color: red; font-weight: bold;">{{ invoice.total_quantity }} </span> </td>
+                                <td class="text-right" ><strong >Grand Total</strong></td>
                                 <td><span id="grandTotal" style="color: red;">{{ invoice.grand_total|floatformat:-2 }}</span></td>
                             </tr>
                             <tr>
                                 <td></td>
-                                <td class="text-right"><strong style="font-size:11px">Cash Payment</strong></td>
+                                <td class="text-right"><strong >Cash Payment</strong></td>
                                 <td><span id="cash_payment" >{{ invoice.cash_payment|floatformat:-2 }}</span></td>
                             </tr>
                             <tr>
                                 <td></td>
-                                <td class="text-right"><strong style="font-size:11px">Returned Cash</strong></td>
-                                <td><span id="returned_cash" >{{ invoice.returned_payment|floatformat:-2 }}</span></td>
+                                <td class="text-right"><strong >Returned Cash</strong></td>
+                                <td><span id="returned_cash"  >{{invoice.returned_payment|floatformat:-2 }}</span></td>
                             </tr>
 {#                            <tr>#}
 {#                                <td></td>#}
-{#                                <td class="text-right"><strong style="font-size:11px">Received Amount</strong></td>#}
+{#                                <td class="text-right"><strong >Received Amount</strong></td>#}
 {#                                <td><span id="receivedAmount" >{{ invoice.paid_amount|floatformat:-2 }}</span></td>#}
 {#                            </tr>#}
 {#                            <tr>#}
 {#                                <td></td>#}
-{#                                <td class="text-right" ><strong style="font-size:11px">Remaining Payment</strong></td>#}
+{#                                <td class="text-right" ><strong >Remaining Payment</strong></td>#}
 {#                                <td><span id="remainingAmount">{{ invoice.remaining_payment|floatformat:-2 }}</span></td>#}
 {#                            </tr>#}
                             </tbody>
@@ -134,20 +149,17 @@
             </div>
             <div class="row">
                 <div class="col-xs-12 col-md-12" style="text-align: center;">
-                    <br><br><br>
-                    <strong style="font-size:18px;color:#000">Thank You</strong>
+                    <strong style="font-size:12px;color:#000">Thank You</strong>
                 </div>
                 <div class="col-xs-12 col-md-12" style="text-align: center;">
-                    <strong style="font-size:12px">
+                    <strong class="f-size">
                         Software Developed By Partum Solutions</strong>
                 </div>
-                <div class="col-lg-6 col-xs-6 text-center">
-                    <br>
-                    <h6 style="font-size: 12px">www.partumsolutions.com</h6>
+                <div class="col-lg-6 col-xs-12 text-center">
+                    <span class="f-size">www.partumsolutions.com</span>
                 </div>
-                <div class="col-lg-6 col-xs-6 text-center">
-                    <br>
-                    <h6 style="font-size: 12px">ph:+92-332-8364441</h6>
+                <div class="col-lg-6 col-xs-12 text-center">
+                    <span class="f-size">ph:+92-332-8364441</span>
                 </div>
             </div>
         </div>
@@ -157,6 +169,14 @@
              var printContents = document.getElementById(divName).innerHTML;
              var originalContents = document.body.innerHTML;
              document.body.innerHTML = printContents;
+             $('table').removeClass('table-bordered');
+             $('tr').css('border', '1px solid #000');
+             $('td').css('border', '1px solid #000');
+             $('th').css('border', '1px solid #000');
+             $('th').css('font-size', '8px');
+             $('tr').css('font-size', '8px');
+             $('td').css('font-size', '8px');
+             $('.f-size').css('font-size', '8px');
              window.print();
              document.body.innerHTML = originalContents;
         }
