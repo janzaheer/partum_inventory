@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block submenu_create_supplier %}active{% endblock %}
+{% block menu_supplier %}active{% endblock %}
+{% block content %}
+<div class="col-md-6">
+    <br>
+    <a href="#"><button type="button" id="empolyee" class="btn btn-primary" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing">Supplier List</button></a>
+    <br><br><br>
+    <div class="content-panel">
+        <h3 class="text-center"> Add Supplier</h3>
+        <div class="panel-body">
+            <form class="form-horizontal add-ledger-form" action="{% url 'supplier:add_supplier' %}" method="post" autocomplete="off">
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        {% csrf_token %}
+                        <label><strong>Name</strong></label>
+                        <span class="name-error" style="color: red; display: none" >this field is requried</span>
+                        <input type="text" class="form-control name" name="name" placeholder="Name"><br>
+                        <label><strong>Address</strong></label>
+                        <span class="father_name-error" style="color: red; display: none" >this field is requried</span>
+                        <input type="text" class="form-control father_name" name="address" placeholder="Addreess"><br>
+                        <label><strong>Phone Number</strong></label>
+                        <span class="mobile-error" style="color: red; display: none" >this field is requried</span>
+                        <input type="text" class="form-control mobile" name="phone" placeholder="Phone"><br>
+                        <label><strong>Mobile no</strong></label>
+                        <input type="text" class="form-control mobile" name="mobile_no" placeholder="Mobile"><br>
+
+                        <button type="submit" id="save" class="btn btn-primary ledger-submit-btn" style="float: right" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing Order">Save Supplier</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
