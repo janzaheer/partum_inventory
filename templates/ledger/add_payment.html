@@ -9,13 +9,13 @@
     <div class="content-panel">
         <h3 class="text-center">{{ customer.customer_name }} <small>New Ledger</small></h3>
         <div class="panel-body">
-            <form class="form-horizontal new_ledger" action="{% url 'ledger:add_ledger' customer_id=customer.id %}" method="post" autocomplete="off">
+            <form class="form-horizontal new_ledger" action="{% url 'ledger:add_payment' customer_id=customer.id %}" method="post" autocomplete="off">
                 <div class="form-group">
                     <div class="col-sm-12">
                         {% csrf_token %}
-                        <label><strong>Amount</strong></label>
+                        <label><strong>Payment Amount</strong></label>
                         <span class="amount-error" style="color: red; display: none" >This Field is Requried</span>
-                        <input type="text" class="form-control amount" name="amount" placeholder="Amount"><br>
+                        <input type="text" class="form-control amount" name="payment" placeholder="Payment Amount"><br>
                         <label><strong>Date</strong></label>
                         <span class="date-error" style="color: red; display: none" >This Field is Requried</span>
                         <input type="date" class="form-control date" name="dated"><br>

@@ -1,5 +1,7 @@
 from django.conf.urls import url
-from pis_supplier.views import AddSupplier, SupplierList, SupplierStatementList, AddSupplierStatement, SupplierStatementUpdate
+from pis_supplier.views import(
+    AddSupplier, SupplierList, SupplierStatementList, AddSupplierStatement,
+    SupplierStatementUpdate,StatementPayment)
 
 
 urlpatterns = [
@@ -15,6 +17,11 @@ urlpatterns = [
         r'^statements/list/(?P<pk>\d+)/$',
         SupplierStatementList.as_view(),
         name='list_supplier_statement'
+    ),
+    url(
+        r'^statement/payment/(?P<pk>\d+)/$',
+        StatementPayment.as_view(),
+        name='payment'
     ),
 
     url(

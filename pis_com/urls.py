@@ -38,7 +38,7 @@ urlpatterns = [
     url(
         r'^feedback/create/$',
         CreateFeedBack.as_view(),
-        name='create_feedback'
+            name='create_feedback'
     ),
 ]
 

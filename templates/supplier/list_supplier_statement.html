@@ -8,6 +8,7 @@
             <br>
             <a href="{% url 'supplier:list_supplier' %}"><button type="button" id="statement" class="btn btn-primary" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing"> Supplier List</button></a>
             <a href="{% url 'supplier:add_supplier_statement' pk=supplier.id %}"><button type="button" id="statement" class="btn btn-primary" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing">Create Statement</button></a>
+            <a href="{% url 'supplier:payment' pk=supplier.id %}"><button type="button" id="statement" class="btn btn-primary" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing">Payment</button></a>
 
             <br><br>
         <div class="col-md-4">

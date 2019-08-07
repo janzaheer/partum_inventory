@@ -27,14 +27,15 @@ class AddSupplier(FormView):
         obj.save()
 
         return HttpResponseRedirect(reverse('supplier:list_supplier'))
+
     def form_invalid(self, form):
         return super(AddSupplier, self).form_invalid(form)
+
 
 class SupplierList(ListView):
     template_name = 'supplier/list_supplier.html'
     model = Supplier
     paginate_by = 100
-
 
     def dispatch(self, request, *args, **kwargs):
         if not self.request.user.is_authenticated():
@@ -81,8 +82,6 @@ class SupplierStatementList(ListView):
             )
         return query_set
 
-
-
     def get_context_data(self, **kwargs):
         context = super(SupplierStatementList, self).get_context_data(**kwargs)
         supplier_statements = SupplierStatement.objects.filter(supplier__id=self.kwargs.get('pk'))
@@ -100,10 +99,8 @@ class SupplierStatementList(ListView):
 
         supplier_total_remaining_amount = supplier_amounts - payment_amounts
 
-
-
         context.update({
-            'supplier':supplier,
+            'supplier': supplier,
             'supplier_total_remaining_amount':supplier_total_remaining_amount
         })
         return context
@@ -123,7 +120,9 @@ class AddSupplierStatement(FormView):
         obj = form.save()
         obj.supplier = Supplier.objects.get(name=self.request.POST.get('supplier_name'))
         obj.save()
-        return HttpResponseRedirect(reverse('supplier:list_supplier_statement', kwargs={'pk':obj.supplier.id}))
+        return HttpResponseRedirect(reverse(
+            'supplier:list_supplier_statement',kwargs={
+                'pk':obj.supplier.id}))
 
     def form_invalid(self, form):
         print form.errors
@@ -153,3 +152,33 @@ class SupplierStatementUpdate(UpdateView):
 
     def form_invalid(self, form):
         return super(SupplierStatementUpdate, self).form_invalid(form)
+
+
+class StatementPayment(FormView):
+    form_class = SupplierStatementForm
+    template_name = 'supplier/payment.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if not self.request.user.is_authenticated():
+            return HttpResponseRedirect(reverse('login'))
+        return super(
+            StatementPayment, self).dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        obj = form.save()
+        return HttpResponseRedirect(reverse(
+            'supplier:list_supplier_statement', kwargs={
+                'pk': self.kwargs.get('pk')}))
+
+    def form_invalid(self, form):
+        return super(StatementPayment, self).form_invalid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super(StatementPayment, self).get_context_data(**kwargs)
+        supplier = (
+            Supplier.objects.get(id=self.kwargs.get('pk'))
+        )
+        context.update({
+            'supplier': supplier
+        })
+        return context
