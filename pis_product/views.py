@@ -11,7 +11,6 @@ from django.db.models import Sum
 from pis_product.models import PurchasedProduct, ExtraItems, ClaimedProduct,StockOut, StockIn, Product
 from pis_product.forms import (
     ProductForm, ProductDetailsForm, ClaimedProductForm,StockDetailsForm,StockOutForm)
-from pis_ledger.forms import PaymentForm
 from django.utils import timezone
 
 
@@ -184,17 +183,17 @@ class ClaimedProductFormView(FormView):
         )
         product.save()
 
-    def claimed_items_payment(self, claimed_item, amount):
-        payment_form_kwargs = {
-            'customer': claimed_item.customer.id,
-            'retailer': self.request.user.retailer_user.retailer.id,
-            'amount': amount,
-            'description': 'Amount Refunded from Claimed'
-                           ' Item ID (%s)' % claimed_item.id
-        }
-        payment_form = PaymentForm(payment_form_kwargs)
-        if payment_form.is_valid():
-            payment_form.save()
+    # def claimed_items_payment(self, claimed_item, amount):
+    #     payment_form_kwargs = {
+    #         'customer': claimed_item.customer.id,
+    #         'retailer': self.request.user.retailer_user.retailer.id,
+    #         'amount': amount,
+    #         'description': 'Amount Refunded from Claimed'
+    #                        ' Item ID (%s)' % claimed_item.id
+    #     }
+    #     payment_form = PaymentForm(payment_form_kwargs)
+    #     if payment_form.is_valid():
+    #         payment_form.save()
 
     def form_valid(self, form):
         claimed_item = form.save()
@@ -206,10 +205,10 @@ class ClaimedProductFormView(FormView):
         )
 
         # Doing a payment of claimed amount
-        self.claimed_items_payment(
-            claimed_item=claimed_item,
-            amount=form.cleaned_data.get('claimed_amount')
-        )
+        # self.claimed_items_payment(
+        #     claimed_item=claimed_item,
+        #     amount=form.cleaned_data.get('claimed_amount')
+        # )
 
         return HttpResponseRedirect(reverse('product:items_list'))
     

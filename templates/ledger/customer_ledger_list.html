@@ -5,7 +5,7 @@
 {% block content %}
 <div class="col-md-12">
     <br>
-    <a href="{% url 'ledger:add_new_ledger' %}"><button type="button" id="back-customer" class="btn btn-primary" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing">Add Ledger</button></a>
+    <a href="{% url 'ledger:add_new_ledger' %}"><button type="button" id="back-customer" class="btn btn-primary" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing">Add New</button></a>
     <br><br><br>
     <div class="content-panel table-responsive">
         <table class="table table-striped table-advance table-hover table-bordered purchased-table">
@@ -41,9 +41,7 @@
                 <td>{{ customer_ledger.payment_amount|floatformat:-2 }}</td>
                 <td>{{ customer_ledger.remaining_ledger|floatformat:-2 }}</td>
                 <td>
-                    <a href="{% url 'ledger:add_ledger' customer_id=customer_ledger.id %}"><button class="btn btn-primary btn-xs" title="Add New Ledger"><i class="fa fa-plus"></i></button></a>
                     <a href="{% url 'ledger:customer_ledger_detail' customer_id=customer_ledger.id %}"><button class="btn btn-success btn-xs" title="Customer Ledger Detail"><i class="fa fa-eye"></i></button></a>
-                    <a href="{% url 'ledger:payment_ledger' customer_id=customer_ledger.id %}"><button class="btn btn-danger btn-xs" title="Payment"><i class="fa fa-credit-card"></i></button></a></td>
             </tr>
             {% endfor %}
             {% else %}

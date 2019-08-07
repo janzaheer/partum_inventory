@@ -10,7 +10,6 @@ from django.http import Http404
 from pis_com.models import Customer
 from pis_com.forms import CustomerForm
 from pis_ledger.forms import LedgerForm
-from pis_ledger.forms import PaymentForm
 
 
 class AddNewLedger(FormView):
@@ -30,6 +29,8 @@ class AddNewLedger(FormView):
             'customer': customer.id,
             'person':self.request.POST.get('customer_type'),
             'amount': self.request.POST.get('amount'),
+            'payment_amount': self.request.POST.get('payment_amount'),
+            'payment_type': self.request.POST.get('payment_type'),
             'description': self.request.POST.get('description'),
         }
 
@@ -64,6 +65,10 @@ class AddLedger(FormView):
         return super(AddLedger, self).dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
+        print self.request.POST.get('dated')
+        print '+++++++++++++++++++++++++++++++++'
+        print '+++++++++++++++++++++++++++++++++'
+        print '+++++++++++++++++++++++++++++++++'
         ledger = form.save()
         return HttpResponseRedirect(
             reverse('ledger:customer_ledger_detail', kwargs={
@@ -111,7 +116,7 @@ class CustomerLedgerView(TemplateView):
             customer_data = {}
             ledger = customer.customer_ledger.all().aggregate(Sum('amount'))
             payment_ledger = (
-                customer.customer_ledger_payment.all()
+                customer.customer_ledger.all()
                 .aggregate(Sum('amount'))
             )
 
@@ -169,7 +174,15 @@ class CustomerLedgerDetailsView(TemplateView):
             raise Http404
 
         ledgers = customer.customer_ledger.all()
-        payments = customer.customer_ledger_payment.all()
+        print ledgers
+        print '_________________ledgers_____________'
+        print '_________________ledgers_____________'
+        print '_________________ledgers_____________'
+        payments = customer.customer_ledger.all()
+        print payments
+        print "_____________________pay______________"
+        print "_____________________pay______________"
+        print "_____________________pay______________"
         if ledgers:
             ledger_total = ledgers.aggregate(Sum('amount'))
             ledger_total = float(ledger_total.get('amount__sum'))
@@ -200,28 +213,37 @@ class CustomerLedgerDetailsView(TemplateView):
         return context
 
 
-class PaymentLedgerView(FormView):
-    template_name = 'ledger/payment_ledger.html'
-    form_class = PaymentForm
+class AddPayment(FormView):
+    template_name = 'ledger/add_payment.html'
+    form_class = LedgerForm
 
     def dispatch(self, request, *args, **kwargs):
         if not self.request.user.is_authenticated():
             return HttpResponseRedirect(reverse('login'))
-        return super(
-            PaymentLedgerView, self).dispatch(request, *args, **kwargs)
+        return super(AddPayment, self).dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
-        form.save()
+        ledger = form.save()
         return HttpResponseRedirect(
             reverse('ledger:customer_ledger_detail', kwargs={
                 'customer_id': self.kwargs.get('customer_id')
             })
         )
 
+    def form_invalid(self, form):
+        return super(AddPayment, self).form_invalid(form)
+
     def get_context_data(self, **kwargs):
-        context = super(PaymentLedgerView, self).get_context_data(**kwargs)
+        context = super(AddPayment, self).get_context_data(**kwargs)
+        try:
+            customer = (
+                self.request.user.retailer_user.retailer.
+                retailer_customer.get(id=self.kwargs.get('customer_id'))
+            )
+        except ObjectDoesNotExist:
+            raise Http404('Customer not found with concerned User')
+
         context.update({
-            'customer': Customer.objects.get(
-                id=self.kwargs.get('customer_id'))
+            'customer': customer
         })
         return context

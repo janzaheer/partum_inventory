@@ -14,6 +14,7 @@ from pis_employees.models import EmployeeSalary, Employee
 class AddNewEmployee(FormView):
     form_class = EmployeeForm
     template_name = "employee/create.html"
+
     def dispatch(self, request, *args, **kwargs):
         if not self.request.user.is_authenticated():
             return HttpResponseRedirect(reverse('login'))
@@ -22,6 +23,7 @@ class AddNewEmployee(FormView):
 
     def form_valid(self, form):
      form.save()
+
      return HttpResponseRedirect(reverse('employee:employee_list'))
 
     def form_invalid(self, form):

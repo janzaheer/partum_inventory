@@ -14,23 +14,13 @@ class Ledger(DatedModel):
     amount = models.DecimalField(
         max_digits=65, decimal_places=2, default=0, blank=True, null=True
     )
-    description = models.CharField(max_length=200, blank=True, null=True)
-
-    def __unicode__(self):
-        return self.customer.customer_name
-
-
-class PaymentLedger(DatedModel):
-    retailer = models.ForeignKey(
-        'pis_retailer.Retailer', related_name='retailer_ledger_payment', blank=True, null=True)
-    customer = models.ForeignKey(
-        'pis_com.Customer', related_name='customer_ledger_payment'
-    )
-    amount = models.DecimalField(
+    payment = models.DecimalField(
         max_digits=65, decimal_places=2, default=0, blank=True, null=True
     )
     payment_type = models.CharField(max_length=200, blank=True, null=True)
     description = models.TextField(max_length=200, blank=True, null=True)
+    dated = models.DateField(null=True, blank=True)
 
     def __unicode__(self):
         return self.customer.customer_name
+
