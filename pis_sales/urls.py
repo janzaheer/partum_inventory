@@ -3,7 +3,7 @@ from django.conf.urls import url, include
 from pis_sales.views import (
     GenerateInvoiceAPIView, ProductItemAPIView, CreateInvoiceView,
     UpdateInvoiceView, InvoiceDetailView, UpdateInvoiceAPIView, InvoicesList,
-    ProductDetailsAPIView
+    ProductDetailsAPIView, SalesDeleteView
 )
 
 urlpatterns = [
@@ -46,5 +46,10 @@ urlpatterns = [
         r'^api/product/details/$',
         ProductDetailsAPIView.as_view(),
         name='product_details_api'
+    ),
+    url(
+        r'^invoice/(?P<pk>\d+)/delete/$',
+        SalesDeleteView.as_view(),
+        name='delete'
     ),
 ]

@@ -2,15 +2,13 @@
 from __future__ import unicode_literals
 import ast
 import json
-
 from django.db.models import Sum
 from django.http import JsonResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.utils.decorators import method_decorator
-from django.views.generic import FormView, View, TemplateView, ListView
+from django.views.generic import FormView, DeleteView, View, TemplateView, ListView
 from django.utils import timezone
-from django.core.urlresolvers import reverse
-
+from django.core.urlresolvers import reverse, reverse_lazy
 from pis_product.models import Product
 from pis_sales.models import SalesHistory
 from pis_product.forms import PurchasedProductForm
@@ -19,7 +17,6 @@ from pis_product.forms import ExtraItemForm, StockOutForm
 from pis_com.forms import CustomerForm
 from pis_ledger.models import Ledger
 from pis_ledger.forms import LedgerForm
-
 from django.db import transaction
 
 
@@ -492,3 +489,10 @@ class ProductDetailsAPIView(View):
             'product_price': '%g' % latest_stock.price_per_item
         })
 
+
+class SalesDeleteView(DeleteView):
+    model = SalesHistory
+    success_url = reverse_lazy('sales:invoice_list')
+
+    def get(self, request, *args, **kwargs):
+        return self.delete(request, *args, **kwargs)

@@ -40,6 +40,7 @@
                             <td>{{ invoice.created_at|date }}</td>
                             <td>
                                 <a href="{% url 'sales:invoice_detail' invoice_id=invoice.id %}"><button class="btn btn-success btn-xs"><i class="fa fa-eye" title="Invoice list"></i></button></a>
+                                <a href="{% url 'sales:delete' pk=invoice.id %}"><button class="btn btn-danger btn-xs delete" onClick="deleteFunction()"><i class="fa fa-minus"></i></button></td>
 
                             </td>
                         </tr>
@@ -75,6 +76,15 @@ $('#invoice').on('click', function() {
    }, 5000);
 });
 
-    </script>
+</script>
+<script>
+    function deleteFunction(e) {
+            if(!confirm("Are you sure you want to delete?")){
+                e.preventDefault();
+            }else{
+             $('.delete').submit();
+            }
+        }
+</script>
 
 {% endblock %}

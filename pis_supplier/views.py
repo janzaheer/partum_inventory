@@ -147,7 +147,7 @@ class SupplierStatementUpdate(UpdateView):
     def form_valid(self, form):
         obj = form.save()
         return HttpResponseRedirect(
-            reverse('supplier:list_supplier_statement', kwargs={'pk':obj.supplier.id})
+            reverse('supplier:list_supplier_statement', kwargs={'pk':obj.id})
         )
 
     def form_invalid(self, form):
