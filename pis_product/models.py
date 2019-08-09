@@ -157,23 +157,6 @@ class StockIn(models.Model):
         return self.product.name
 
 
-class StockOut(models.Model):
-    product = models.ForeignKey(
-        Product, related_name='stockout_product'
-    )
-    stock_out_quantity=models.CharField(max_length=100, blank=True, null=True)
-    selling_price = models.DecimalField(
-        max_digits=65, decimal_places=2, default=0, blank=True, null=True
-    )
-    buying_price = models.DecimalField(
-        max_digits=65, decimal_places=2, default=0, blank=True, null=True
-    )
-    dated=models.DateField(blank=True, null=True)
-
-    def __unicode__(self):
-        return self.product.name
-
-
 class ProductDetail(DatedModel):
     product = models.ForeignKey(
         Product, related_name='product_detail'
@@ -194,6 +177,10 @@ class ProductDetail(DatedModel):
 class PurchasedProduct(DatedModel):
     product = models.ForeignKey(
         Product, related_name='purchased_product'
+    )
+    invoice = models.ForeignKey(
+        'pis_sales.SalesHistory', related_name='purchased_invoice',
+        blank=True, null=True
     )
     quantity = models.DecimalField(
         max_digits=65, decimal_places=2, default=1, blank=True, null=True
@@ -241,6 +228,31 @@ class ClaimedProduct(DatedModel):
         default=1, verbose_name='No. of Claimed Items')
     claimed_amount = models.DecimalField(
         max_digits=65, decimal_places=2, default=0, blank=True, null=True)
+
+    def __unicode__(self):
+        return self.product.name
+
+
+class StockOut(models.Model):
+    product = models.ForeignKey(
+        Product, related_name='stockout_product'
+    )
+    invoice = models.ForeignKey(
+        'pis_sales.SalesHistory', related_name='out_invoice',
+        blank=True, null=True
+    )
+    purchased_item = models.ForeignKey(
+        PurchasedProduct, related_name='out_purchased',
+        blank=True, null=True
+    )
+    stock_out_quantity=models.CharField(max_length=100, blank=True, null=True)
+    selling_price = models.DecimalField(
+        max_digits=65, decimal_places=2, default=0, blank=True, null=True
+    )
+    buying_price = models.DecimalField(
+        max_digits=65, decimal_places=2, default=0, blank=True, null=True
+    )
+    dated=models.DateField(blank=True, null=True)
 
     def __unicode__(self):
         return self.product.name

@@ -147,11 +147,21 @@ class SupplierStatementUpdate(UpdateView):
     def form_valid(self, form):
         obj = form.save()
         return HttpResponseRedirect(
-            reverse('supplier:list_supplier_statement', kwargs={'pk':obj.id})
+            reverse('supplier:list_supplier_statement', kwargs={'pk':obj.supplier.id})
         )
 
     def form_invalid(self, form):
         return super(SupplierStatementUpdate, self).form_invalid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super(SupplierStatementUpdate, self).get_context_data(**kwargs)
+        supplier = (
+            Supplier.objects.get(supplier__id=self.kwargs.get('pk'))
+        )
+        context.update({
+            'supplier': supplier
+        })
+        return context
 
 
 class StatementPayment(FormView):

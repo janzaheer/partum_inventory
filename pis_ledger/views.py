@@ -10,6 +10,7 @@ from django.http import Http404
 from pis_com.models import Customer
 from pis_com.forms import CustomerForm
 from pis_ledger.forms import LedgerForm
+from  pis_ledger.forms import Ledger
 
 
 class AddNewLedger(FormView):
@@ -109,7 +110,7 @@ class CustomerLedgerView(TemplateView):
         customers = (
             self.request.user.retailer_user.retailer.
             retailer_customer.all().order_by('customer_name')
-        )
+        ).order_by('customer_name')
         customer_ledger = []
 
         for customer in customers:
@@ -117,11 +118,11 @@ class CustomerLedgerView(TemplateView):
             ledger = customer.customer_ledger.all().aggregate(Sum('amount'))
             payment_ledger = (
                 customer.customer_ledger.all()
-                .aggregate(Sum('amount'))
+                .aggregate(Sum('payment'))
             )
 
-            if payment_ledger.get('amount__sum'):
-                payment_amount = float(payment_ledger.get('amount__sum'))
+            if payment_ledger.get('payment__sum'):
+                payment_amount = float(payment_ledger.get('payment__sum'))
             else:
                 payment_amount = 0
 
@@ -133,10 +134,9 @@ class CustomerLedgerView(TemplateView):
             remaining_ledger = '%g' % (
                     ledger_amount - payment_amount
             )
-
             customer_data.update({
                 'id': customer.id,
-                'ledger_amount': ledger.get('amount__sum'),
+                'ledger_amount': ledger_amount,
                 'payment_amount': payment_amount,
                 'customer_name': customer.customer_name,
                 'customer_phone': customer.customer_phone,
@@ -146,8 +146,21 @@ class CustomerLedgerView(TemplateView):
 
             customer_ledger.append(customer_data)
 
+        ledgers = Ledger.objects.all()
+        if ledgers:
+            grand_ledger = ledgers.aggregate(Sum('amount'))
+            grand_ledger = float(grand_ledger.get('amount__sum') or 0)
+
+            grand_payment = ledgers.aggregate(Sum('payment'))
+            grand_payment = float(grand_payment.get('payment__sum') or 0)
+
+            total_remaining_amount = grand_ledger - grand_payment
+        else:
+            total_remaining_amount = 0
+
         context.update({
-            'customer_ledgers': customer_ledger
+            'customer_ledgers': customer_ledger,
+            'total_remaining_amount': total_remaining_amount,
         })
 
         return context
@@ -174,15 +187,6 @@ class CustomerLedgerDetailsView(TemplateView):
             raise Http404
 
         ledgers = customer.customer_ledger.all()
-        print ledgers
-        print '_________________ledgers_____________'
-        print '_________________ledgers_____________'
-        print '_________________ledgers_____________'
-        payments = customer.customer_ledger.all()
-        print payments
-        print "_____________________pay______________"
-        print "_____________________pay______________"
-        print "_____________________pay______________"
         if ledgers:
             ledger_total = ledgers.aggregate(Sum('amount'))
             ledger_total = float(ledger_total.get('amount__sum'))
@@ -192,9 +196,9 @@ class CustomerLedgerDetailsView(TemplateView):
         else:
             ledger_total = 0
 
-        if payments:
-            payment_total = payments.aggregate(Sum('amount'))
-            payment_total = float(payment_total.get('amount__sum'))
+        if ledgers:
+            payment_total = ledgers.aggregate(Sum('payment'))
+            payment_total = float(payment_total.get('payment__sum'))
             context.update({
 
             })
@@ -203,8 +207,7 @@ class CustomerLedgerDetailsView(TemplateView):
 
         context.update({
             'customer': customer,
-            'ledgers': ledgers,
-            'payments': payments,
+            'ledgers': ledgers.order_by('-dated'),
             'ledger_total': '%g' % ledger_total,
             'payment_total': '%g' % payment_total,
             'remaining_amount': '%g' % (ledger_total - payment_total)

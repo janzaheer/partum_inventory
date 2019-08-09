@@ -72,7 +72,7 @@ class ProductDetailAdmin(admin.ModelAdmin):
 
 class PurchasedProductAdmin(admin.ModelAdmin):
     list_display = (
-        '__unicode__', 'retailer', 'discount_percentage', 'created_at'
+        '__unicode__', 'retailer', 'invoice_no', 'discount_percentage', 'created_at'
     )
 
     search_fields = ('product__name', 'product__retailer__name')
@@ -81,6 +81,10 @@ class PurchasedProductAdmin(admin.ModelAdmin):
     @staticmethod
     def retailer(obj):
         return obj.product.retailer.name
+
+    @staticmethod
+    def invoice_no(obj):
+        return obj.invoice.receipt_no if obj.invoice else ''
 
 
 class ExtraItemsAdmin(admin.ModelAdmin):
@@ -112,6 +116,7 @@ class ClaimedProductAdmin(admin.ModelAdmin):
     def customer(obj):
         return obj.customer.customer_name or None
 
+
 class StockInAdmin(admin.ModelAdmin):
     list_display = (
         '__unicode__', 'product', 'quantity', 'price_per_item',
@@ -119,11 +124,16 @@ class StockInAdmin(admin.ModelAdmin):
     )
     search_fields = ('product__name','stock_expiry','dated_order')
 
+
 class StockOutAdmin(admin.ModelAdmin):
     list_display = (
-        '__unicode__', 'product', 'stock_out_quantity', 'dated',
+        '__unicode__', 'product', 'invoice_no', 'stock_out_quantity', 'dated',
     )
     search_fields = ('product__name','stock_out_quantity','dated')
+
+    @staticmethod
+    def invoice_no(obj):
+        return obj.invoice.receipt_no if obj.invoice else ''
 
 
 admin.site.register(Product, ProductAdmin)
