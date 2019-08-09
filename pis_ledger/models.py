@@ -10,6 +10,10 @@ class Ledger(DatedModel):
     customer = models.ForeignKey(
         'pis_com.Customer', related_name='customer_ledger'
     )
+    invoice = models.ForeignKey(
+        'pis_sales.SalesHistory', related_name='ledger_invoice',
+        blank=True, null=True
+    )
     person=models.CharField(max_length=200, default='customer', blank=True, null=True)
     amount = models.DecimalField(
         max_digits=65, decimal_places=2, default=0, blank=True, null=True

@@ -2,15 +2,13 @@
 from __future__ import unicode_literals
 import ast
 import json
-
 from django.db.models import Sum
 from django.http import JsonResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.utils.decorators import method_decorator
-from django.views.generic import FormView, View, TemplateView, ListView
+from django.views.generic import FormView, DeleteView, View, TemplateView, ListView
 from django.utils import timezone
-from django.core.urlresolvers import reverse
-
+from django.core.urlresolvers import reverse, reverse_lazy
 from pis_product.models import Product
 from pis_sales.models import SalesHistory
 from pis_product.forms import PurchasedProductForm
@@ -19,8 +17,8 @@ from pis_product.forms import ExtraItemForm, StockOutForm
 from pis_com.forms import CustomerForm
 from pis_ledger.models import Ledger
 from pis_ledger.forms import LedgerForm
-
 from django.db import transaction
+from pis_product.models import PurchasedProduct, StockOut
 
 
 class CreateInvoiceView(FormView):
@@ -126,64 +124,12 @@ class GenerateInvoiceAPIView(View):
         extra_items_id = []
 
         with transaction.atomic():
-            for item in items:
-                item_name = item.get('item_name')
-                try:
-                    product = Product.objects.get(
-                        name=item_name,
-                        retailer=self.request.user.retailer_user.retailer
-                    )
-                    form_kwargs = {
-                        'product': product.id,
-                        'quantity': item.get('qty'),
-                        'price': item.get('price'),
-                        'discount_percentage': item.get('perdiscount'),
-                        'purchase_amount': item.get('total'),
-                    }
-                    form = PurchasedProductForm(form_kwargs)
-                    if form.is_valid():
-                        purchased_item = form.save()
-                        purchased_items_id.append(purchased_item.id)
-
-                        latest_stock_in = (
-                            product.stockin_product.all().latest('id'))
-
-                        stock_out_form_kwargs = {
-                            'product': product.id,
-                            'stock_out_quantity': float(item.get('qty')),
-                            'buying_price': (
-                                float(latest_stock_in.buying_price_item) *
-                                float(item.get('qty'))),
-                            'selling_price': (
-                                float(item.get('price')) * float(item.get('qty'))),
-                            'dated': timezone.now().date()
-                        }
-
-                        stock_out_form = StockOutForm(stock_out_form_kwargs)
-                        if stock_out_form.is_valid():
-                            stock_out_form.save()
-
-                except Product.DoesNotExist:
-                    extra_item_kwargs = {
-                        'retailer': self.request.user.retailer_user.retailer.id,
-                        'item_name': item.get('item_name'),
-                        'quantity': item.get('qty'),
-                        'price': item.get('price'),
-                        'discount_percentage': item.get('perdiscount'),
-                        'total': item.get('total'),
-                    }
-                    extra_item_form = ExtraItemForm(extra_item_kwargs)
-                    if extra_item_form.is_valid():
-                        extra_item = extra_item_form.save()
-                        extra_items_id.append(extra_item.id)
 
             billing_form_kwargs = {
                 'discount': discount,
                 'grand_total': grand_total,
                 'total_quantity': totalQty,
                 'shipping': shipping,
-                'purchased_items': purchased_items_id,
-                'extra_items': extra_items_id,
                 'paid_amount': paid_amount,
                 'remaining_payment': remaining_payment,
                 'cash_payment': cash_payment,
@@ -209,8 +155,65 @@ class GenerateInvoiceAPIView(View):
                     })
 
             billing_form = BillingForm(billing_form_kwargs)
-            if billing_form.is_valid():
-                self.invoice = billing_form.save()
+            self.invoice = billing_form.save()
+
+            for item in items:
+                item_name = item.get('item_name')
+                try:
+                    product = Product.objects.get(
+                        name=item_name,
+                        retailer=self.request.user.retailer_user.retailer
+                    )
+                    form_kwargs = {
+                        'product': product.id,
+                        'invoice': self.invoice.id,
+                        'quantity': item.get('qty'),
+                        'price': item.get('price'),
+                        'discount_percentage': item.get('perdiscount'),
+                        'purchase_amount': item.get('total'),
+                    }
+                    form = PurchasedProductForm(form_kwargs)
+                    if form.is_valid():
+                        purchased_item = form.save()
+                        purchased_items_id.append(purchased_item.id)
+
+                        latest_stock_in = (
+                            product.stockin_product.all().latest('id'))
+
+                        stock_out_form_kwargs = {
+                            'product': product.id,
+                            'invoice': self.invoice.id,
+                            'purchased_item': purchased_item.id,
+                            'stock_out_quantity': float(item.get('qty')),
+                            'buying_price': (
+                                float(latest_stock_in.buying_price_item) *
+                                float(item.get('qty'))),
+                            'selling_price': (
+                                float(item.get('price')) * float(item.get('qty'))),
+                            'dated': timezone.now().date()
+                        }
+
+                        stock_out_form = StockOutForm(stock_out_form_kwargs)
+                        if stock_out_form.is_valid():
+                            stock_out = stock_out_form.save()
+
+                except Product.DoesNotExist:
+                    extra_item_kwargs = {
+                        'retailer': self.request.user.retailer_user.retailer.id,
+                        'item_name': item.get('item_name'),
+                        'quantity': item.get('qty'),
+                        'price': item.get('price'),
+                        'discount_percentage': item.get('perdiscount'),
+                        'total': item.get('total'),
+                    }
+                    extra_item_form = ExtraItemForm(extra_item_kwargs)
+                    if extra_item_form.is_valid():
+                        extra_item = extra_item_form.save()
+                        extra_items_id.append(extra_item.id)
+
+            self.invoice.purchased_items = purchased_items_id
+            self.invoice.extra_items = extra_items_id
+            self.invoice.save()
 
             if self.customer or self.request.POST.get('customer_id'):
                 if float(remaining_payment):
@@ -219,15 +222,17 @@ class GenerateInvoiceAPIView(View):
                         'customer': (
                             self.request.POST.get('customer_id') or
                             self.customer.id),
+                        'invoice': self.invoice.id,
                         'amount': remaining_payment,
                         'description': (
                             'Remaining Payment for Bill/Receipt No %s '
-                            % self.invoice.receipt_no)
+                            % self.invoice.receipt_no),
+                        'dated': timezone.now()
                     }
 
-                    ledger = LedgerForm(ledger_form_kwargs)
-                    if ledger.is_valid():
-                        ledger.save()
+                    ledgerform = LedgerForm(ledger_form_kwargs)
+                    if ledgerform.is_valid():
+                        ledger = ledgerform.save()
 
             return JsonResponse({'invoice_id': self.invoice.id})
 
@@ -492,3 +497,16 @@ class ProductDetailsAPIView(View):
             'product_price': '%g' % latest_stock.price_per_item
         })
 
+
+class SalesDeleteView(DeleteView):
+    model = SalesHistory
+    success_url = reverse_lazy('sales:invoice_list')
+
+    def get(self, request, *args, **kwargs):
+        PurchasedProduct.objects.filter(
+            invoice__id=self.kwargs.get('pk')).delete()
+        StockOut.objects.filter(
+            invoice__id=self.kwargs.get('pk')).delete()
+        Ledger.objects.filter(
+            invoice__id=self.kwargs.get('pk')).delete()
+        return self.delete(request, *args, **kwargs)

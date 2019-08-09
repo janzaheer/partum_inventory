@@ -9,7 +9,7 @@
             <a href="{% url 'supplier:add_supplier' %}"><button type="button" id="empolyee" class="btn btn-primary" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing">Create Supplier</button></a>
             <br><br>
         <div class="col-md-4">
-                    <button type="button" class="btn btn-primary print-invoice-btn mt" onclick="PrintInvoice('print-invoice')">Print Details</button><br>
+<!--                    <button type="button" class="btn btn-primary print-invoice-btn mt" onclick="PrintInvoice('print-invoice')">Print Details</button><br>-->
                 </div>
             <div class="content-panel table-responsive">
                 <h2 class="text-center">Supplier List</h2>
@@ -24,7 +24,7 @@
                 <div class="print-invoice" id="print-invoice">
 
             <div class="pull-right col-md-6">
-                    <h4 class="text-right"><b>Total Remaining RS:{{ total_remaining_amount }}</b></h4>
+                <h3 class="text-right" ><b>Total Remaining:<span style="color:red">{{ total_remaining_amount|floatformat:'-2' }}</span></b></h3>
                 </div>
                 <hr>
                 <table class="table table-striped table-advance table-hover item-table table-bordered">
@@ -50,8 +50,8 @@
                         <td>{{ supplier.mobile_no }}</td>
                         <td>
 {#                            <a href="#"><button class="btn btn-danger btn-xs" title="Delete"><i class="fa  fa-trash-o"></i></button></a>#}
-                            <a href="{% url 'supplier:list_supplier_statement' pk=supplier.id %}"><button class="btn btn-primary btn-xs" title="All Statements"><i class="fa  fa-money"></i></button></a>
-{#                            <a href="#"><button class="btn btn-info btn-xs" title="Employee Salary Record"><i class="fa fa-bar-chart-o"></i></button></a>#}
+                            <a href="{% url 'supplier:list_supplier_statement' pk=supplier.id %}"><button class="btn btn-success btn-xs" title="All Statements"><i class="fa  fa-info"></i></button></a>
+{#                            <a href="#"><button class="btn btn-info btn-xs"><i class="fa fa-bar-chart-o"></i></button></a>#}
                         </td>
                     </tr>
                     {% endfor %}

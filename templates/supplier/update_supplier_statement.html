@@ -4,26 +4,24 @@
 {% block content %}
 <div class="col-md-6">
     <br>
-    <a href="#"><button type="button" id="empolyee" class="btn btn-primary" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing">Name</button></a>
     <br><br><br>
     <div class="content-panel">
-        <h3 class="text-center"> Update Statement</h3>
+        <h3 class="text-center"> Update Statement |{{supplier.name}}</h3>
         <div class="panel-body">
-            <form class="form-horizontal add-ledger-form" action="{% url 'supplier:update_supplier_statement' pk=supplier.id %}" method="post" autocomplete="off">
+            <form class="form-horizontal add-ledger-form" action="{% url 'supplier:update_supplier_statement' pk=object.id %}" method="post" autocomplete="off">
                 <div class="form-group">
                     <div class="col-sm-12">
                         {% csrf_token %}
-                        <label><strong>Name</strong></label>
                         <span class="name-error" style="color: red; display: none" >this field is requried</span>
-                        <input type="text" class="form-control name" name="supplier_name" value="{{ supplier }}" placeholder="{{ supplier }}" readonly><br>
+                        <input type="hidden" class="form-control name" name="supplier" value="{{ object.supplier.id }}" placeholder="{{ object.supplier.id }}" readonly><br>
                         <label><strong>Supplier Amount</strong></label>
                         <span class="father_name-error" style="color: red; display: none" >this field is requried</span>
-                        <input type="text" class="form-control father_name" name="supplier_amount" placeholder="Total Amount"><br>
+                        <input type="text" class="form-control father_name" name="supplier_amount" placeholder="{{object.supplier_amount}}" value="{{object.supplier_amount}}"><br>
                         <label><strong>Payment Amount</strong></label>
                         <span class="mobile-error" style="color: red; display: none" >this field is requried</span>
-                        <input type="text" class="form-control mobile" name="payment_amount" placeholder="Payable Amount"><br>
+                        <input type="text" class="form-control mobile" name="payment_amount" placeholder="{{object.payment_amount}}" value="{{object.payment_amount}}"><br>
                         <label><strong>description no</strong></label>
-                        <input type="text" class="form-control mobile" name="description" placeholder="Description"><br>
+                        <input type="text" class="form-control mobile" name="description" placeholder="{{object.description}}" value="{{object.description}}"><br>
                         <label><strong>Date</strong></label>
                         <input type="date" class="form-control mobile" name="date" placeholder="Date"><br>
 
