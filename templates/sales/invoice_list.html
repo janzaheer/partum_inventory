@@ -39,6 +39,7 @@
                             <td>{{ invoice.grand_total|floatformat:-2 }}</td>
                             <td>{{ invoice.created_at|date }}</td>
                             <td>
+                                <a href="{% url 'sales:invoice_update' id=invoice.id %}"><button class="btn btn-primary btn-xs"><i class="fa fa-edit" title="Invoice list"></i></button></a>
                                 <a href="{% url 'sales:invoice_detail' invoice_id=invoice.id %}"><button class="btn btn-success btn-xs"><i class="fa fa-eye" title="Invoice list"></i></button></a>
                                 <a href="{% url 'sales:delete' pk=invoice.id %}"><button class="btn btn-danger btn-xs delete" onClick="deleteFunction()"><i class="fa fa-minus"></i></button></td>
 
