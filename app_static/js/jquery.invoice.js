@@ -156,14 +156,14 @@ Invoice.prototype = {
         var item_list = '<datalist id="all-items">';
         $.get('/sales/product/items/details/', function (data, status) {
             $.each(data.products, function(key, result){
-                item_list += '<option data-value="' + result.id + '" data-price="' + result.consumer_price + '" value="' + result.name + '">' + result.name + '</option>'
+                item_list += '<option data-value="' + result.id + '" data-price="' + result.consumer_price + '" data-stock= "' + result.stock +'" value="' + result.name + '">' + result.name + '</option>'
             });
             item_list += '</datalist>';
 
             // Uncomment after re using that
             // jQuery(".item-row:last").after('<tr class="item-row"><td id="item-name" class="item-name"><div class="delete-btn"><input type="text" class="form-control invoice-item" id="invoice-item" name="all-items" list="all-items" placeholder="Select Item" type="text">'+ item_list +'<a class=' + $.opt.delete.substring(1) + ' href="javascript:;" title="Remove row">X</a></div></td><td><input class="form-control price" placeholder="Price" type="text"> </td><td><input class="form-control qty" placeholder="Quantity" value="1" type="text"></td>'+ percent_discount +'<td><span class="total">0.00</span></td></tr>');
 
-            jQuery(".item-row:last").after('<tr class="item-row"><td id="item-name" class="item-name"><div class="delete-btn"><input type="text" class="form-control invoice-item" id="invoice-item" name="all-items" list="all-items" placeholder="Select Item" type="text">'+ item_list +'<a class=' + $.opt.delete.substring(1) + ' href="javascript:;" title="Remove row">X</a></div></td><td><input class="form-control price" placeholder="Price" type="text"> </td><td><input class="form-control qty" placeholder="Quantity" value="1" type="text"></td><td><span class="total">0.00</span></td></tr>');
+            jQuery(".item-row:last").after('<tr class="item-row"><td id="item-name" class="item-name"><div class="delete-btn"><input type="text" class="form-control invoice-item" id="invoice-item" name="all-items" list="all-items" placeholder="Select Item" type="text">'+ item_list +'<a class=' + $.opt.delete.substring(1) + ' href="javascript:;" title="Remove row">X</a></div></td><td class="stock">0</td><td><input class="form-control price" placeholder="Price" type="text"> </td><td><input class="form-control qty" placeholder="Quantity" value="1" type="text"></td><td><span class="total">0.00</span></td></tr>');
             if (jQuery($.opt.delete).length > 0) {
                 jQuery($.opt.delete).show();
             }

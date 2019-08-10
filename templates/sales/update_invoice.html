@@ -32,7 +32,7 @@
 
 	<div class="col-lg-10 col-md-10 col-sm-10">
 		<br>
-		<a href="{% url 'index' %}"><button type="button" id="invoice" class="btn btn-primary" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing">Invoice List</button></a>
+		<a href="{% url 'sales:invoice_list' %}"><button type="button" id="invoice" class="btn btn-primary" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing">Invoice List</button></a>
 		<br><br>
 		<div class="content-panel" style="padding: 5px">
 			<div class="row">
@@ -45,16 +45,16 @@
 					<hr>
 					<div class="row">
 						<div class="col-xs-6 col-md-6">
-							<div><strong>Billed To:</strong> <span style="float: right" >29 april 2018</span></div><br>
+							<div><strong>Billed To:</strong> <span style="float: right" >{{ invoice.created_at.date }}</span></div><br>
 							<div class="existing-customer">
                                 <span class="customererror" style="color: red; display: none">Customer Doesn't exist please add Customer</span>
-                                <input class="form-control customer" id="customer-id" placeholder="Customer" list="customer-list" value="{{ invoice.customer.customer_name }}">
-                                <datalist id="customer-list">
-                                    {% for customer in customers %}
-                                        <option data-id="{{ customer.id }}" value="{{ customer.customer_name }}">{{ customer.customer_phone }}</option>
-                                    {% endfor %}
-                                </datalist><br>
-                                <a class="new-customer" style="cursor: pointer;">New Customer</a><br>
+                                <input class="form-control customer" id="customer-id" placeholder="Customer" list="customer-list" value="{{ invoice.customer.customer_name }}" disabled>
+<!--                                <datalist id="customer-list">-->
+<!--                                    {% for customer in customers %}-->
+<!--                                        <option data-id="{{ customer.id }}" value="{{ customer.customer_name }}">{{ customer.customer_phone }}</option>-->
+<!--                                    {% endfor %}-->
+<!--                                </datalist><br>-->
+<!--                                <a class="new-customer" style="cursor: pointer;">New Customer</a><br>-->
                                 <br>
                             </div>
                             <div id="new-customer-form" class="new-customer-form" style="display: none">
@@ -84,41 +84,41 @@
                                     <tr class="item-row">
                                         <td id="item-name" class="item-name">
                                             <div class="delete-btn">
-                                                <input type="text" class="form-control invoice-item" id="invoice-item" name="all-items" list="all-items" placeholder="Select Item" value="{{ item.product.name }}">
-                                                <datalist id="all-items">
-                                                    {% for product in products %}
-                                                        <option data-value="{{ product.id }}" value="{{ product.name }}">{{ product.name }}</option>
-                                                    {% endfor %}
-                                                </datalist>
-                                                <a class="delete" href="javascript:;" title="Remove row">X</a>
+                                                <input type="text" class="form-control invoice-item" id="invoice-item" name="all-items" list="all-items" placeholder="Select Item" value="{{ item.product.name }}" disabled>
+												<input type="hidden" class="item-id" id="item-id" value="{{ item.id }}">
+<!--                                                <datalist id="all-items">-->
+<!--                                                    {% for product in products %}-->
+<!--                                                        <option data-value="{{ product.id }}" value="{{ product.name }}">{{ product.name }}</option>-->
+<!--                                                    {% endfor %}-->
+<!--                                                </datalist>-->
+<!--                                                <a class="delete" href="javascript:;" title="Remove row">X</a>-->
                                             </div>
                                         </td>
-                                        <td><input class="form-control price" placeholder="Price" type="text" value="{{ item.price }}"></td>
-                                        <td><input class="form-control qty" placeholder="Quantity" value="{{ item.quantity }}" type="text"></td>
-                                        <td><span class="total">{{ item.total_quantity }}</span></td>
-                                        <td style="display: none"><input type="hidden" value="{{ item.id }}" class="item-id" id="item-id"></td>
+                                        <td><input class="form-control price" placeholder="Price" type="text" value="{{ item.price|floatformat:-2 }}" disabled></td>
+                                        <td><input class="form-control qty" placeholder="Quantity" value="{{ item.quantity|floatformat:-2 }}" type="text"></td>
+                                        <td><span class="total">{{ item.total_quantity|floatformat:-2 }}</span></td>
 									</tr>
                                 {% endfor %}
 									</thead>
 							<tbody>
-							<tr id="hiderow">
-								<td colspan="4">
-									<a id="addRow" href="javascript:;" title="Add Item" class="btn btn-primary">Add Item</a> <span class="item-error" style="color: red; display: none">please add Item</span>
-								</td>
-							</tr>
+<!--							<tr id="hiderow">-->
+<!--								<td colspan="4">-->
+<!--									<a id="addRow" href="javascript:;" title="Add Item" class="btn btn-primary">Add Item</a> <span class="item-error" style="color: red; display: none">please add Item</span>-->
+<!--								</td>-->
+<!--							</tr>-->
 							<tr>
 								<td></td>
 								<td></td>
 								<td class="text-right"><strong>Sub Total</strong></td>
 								<td><span id="subtotal">0.00</span></td>
 							</tr>
-							<tr>
-								<td><strong>Total Quantity: </strong><span id="totalQty" style="color: red; font-weight: bold">{{ invoice.qty }}</span> Units</td>
+							<tr hidden>
+								<td><strong>Total Quantity: </strong><span id="totalQty" style="color: red; font-weight: bold">{{ invoice.qty|floatformat:-2 }}</span> Units</td>
 								<td></td>
 								<td class="text-right"><strong>Discount</strong></td>
 								<td><input class="form-control" id="discount" value="0" type="text"></td>
 							</tr>
-							<tr>
+							<tr hidden>
 								<td></td>
 								<td></td>
 								<td class="text-right"><strong>Shipping</strong></td>
@@ -134,18 +134,18 @@
 								<td></td>
 								<td></td>
 								<td class="text-right"><strong>Received Amount</strong></td>
-								<td><input class="form-control" id="paidAmount" value="0" type="text"></td>
+								<td><input class="form-control" id="paidAmount" value="{{ invoice.paid_amount|floatformat:-2 }}" type="text"></td>
 							</tr>
                             <tr>
 								<td></td>
 								<td></td>
 								<td class="text-right"><strong>Remaining Amount</strong></td>
-								<td><span id="remainingAmount">0</span></td>
+								<td><span id="remainingAmount">{{ invoice.remaining_amount|floatformat:-2 }}</span></td>
 							</tr>
 							</tbody>
 						</table>
 					</div>
-					<a id="invoice_update" href="javascript:;" title="Update Invoice" class="btn btn-primary pull-right" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing Order">Create Invoice</a>
+					<a id="invoice_update" href="javascript:;" title="Update Invoice" class="btn btn-primary pull-right">Update Invoice</a>
 				</div>
 			</div>
 		</div>
@@ -268,7 +268,7 @@
                     products['qty'] = $('.item-row').eq(i).find('.qty').val();
                     products['perdiscount'] = $('.item-row').eq(i).find('.perdiscount').val();
                     products['total'] = $('.item-row').eq(i).find('.total').text();
-                    products['item_id'] = $('.item-row').eq(i).find('.item-id').val();
+                    products['item_id'] = $('.item-row').eq(i).find('#item-id').val();
                     if ($('.item-row').eq(i).find('#invoice-item').val() != "") {
                         items.push(products);
                         total_quantity += Number(products['qty']);
@@ -284,8 +284,6 @@
 
                 var customer_value = $('.customer').val();
                 var customer_id = $('#customer-list [value="' + customer_value + '"]').data('id');
-
-                console.log('ali ----------------------- 1');
                 $.post("{% url 'sales:update_invoice_api' %}", {
                         customer_id: customer_id,
                         customer_name: customer_name,
