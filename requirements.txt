@@ -1,5 +1,5 @@
 bootstrap-admin==0.3.7.1
-django==1.11.10
+django==1.11.23
 django-mailviews==0.6.3
 #gnureadline==6.3.3
 ipython==2.3.1
@@ -8,7 +8,7 @@ olefile==0.44
 Pillow==4.0.0
 python-dateutil==2.6.0
 pytz==2018.3
-requests==2.13.0
+requests==2.20.0
 six==1.10.0
 whitenoise==3.3.1
 django-environ==0.4.4
