@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from django.views.generic import TemplateView
 from django.views.generic import FormView, DeleteView, ListView
 from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse, reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.shortcuts import render
 from django.http import Http404
 
@@ -16,7 +16,7 @@ class AddNewEmployee(FormView):
     template_name = "employee/create.html"
 
     def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return HttpResponseRedirect(reverse('login'))
 
         return super(AddNewEmployee, self).dispatch(request, *args, **kwargs)

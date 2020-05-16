@@ -31,7 +31,7 @@ class Supplier(models.Model):
 class SupplierStatement(models.Model):
     supplier = models.ForeignKey(
         Supplier, related_name='supplier',
-        null=True, blank=True
+        null=True, blank=True,on_delete=models.CASCADE
                                  )
     supplier_amount = models.DecimalField(
         max_digits=100, decimal_places=2, null=True, blank=True, default=0)

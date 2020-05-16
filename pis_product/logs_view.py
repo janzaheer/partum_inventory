@@ -2,7 +2,7 @@ from django.db.models import Sum, Count
 from django.views.generic import ListView
 from django.utils import timezone
 from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from pis_product.models import StockOut
 
@@ -19,7 +19,7 @@ class DailyStockLogs(ListView):
         self.today_date = ''
 
     def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return HttpResponseRedirect(reverse('login'))
 
         return super(
@@ -89,7 +89,7 @@ class MonthlyStockLogs(ListView):
         self.year = ''
 
     def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return HttpResponseRedirect(reverse('login'))
 
         return super(

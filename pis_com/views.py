@@ -7,7 +7,7 @@ from django.contrib.auth import authenticate
 from django.views.generic import TemplateView, RedirectView, UpdateView
 from django.views.generic import FormView
 from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse, reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.db.models import Sum
 from django.utils import timezone
 
@@ -25,7 +25,7 @@ class LoginView(FormView):
     
     def dispatch(self, request, *args, **kwargs):
 
-        if self.request.user.is_authenticated():
+        if self.request.user.is_authenticated:
             if (
                 self.request.user.retailer_user.role_type ==
                 self.request.user.retailer_user.ROLE_TYPE_LEDGER_VIEW
@@ -73,7 +73,7 @@ class RegisterView(FormView):
     template_name = 'register.html'
 
     def dispatch(self, request, *args, **kwargs):
-        if self.request.user.is_authenticated():
+        if self.request.user.is_authenticated:
             return HttpResponseRedirect(reverse('index'))
 
         return super(RegisterView, self).dispatch(request, *args, **kwargs)
@@ -131,7 +131,10 @@ class HomePageView(TemplateView):
     template_name = 'index.html'
 
     def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.is_authenticated():
+        a = self.request
+        print(a)
+
+        if not self.request.user.is_authenticated:
             return HttpResponseRedirect(reverse('login'))
         else:
 
@@ -190,7 +193,7 @@ class CreateCustomer(FormView):
     template_name = 'customer/create_customer.html'
 
     def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return HttpResponseRedirect(reverse('login'))
         return super(
             CreateCustomer, self).dispatch(request, *args, **kwargs)
@@ -218,7 +221,7 @@ class CustomerTemplateView(TemplateView):
     template_name = 'customer/customer_list.html'
 
     def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return HttpResponseRedirect(reverse('login'))
         return super(
             CustomerTemplateView, self).dispatch(request, *args, **kwargs)
@@ -243,7 +246,7 @@ class CustomerUpdateView(UpdateView):
     success_url = reverse_lazy('customers')
 
     def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return HttpResponseRedirect(reverse('login'))
         return super(
             CustomerUpdateView, self).dispatch(request, *args, **kwargs)
@@ -254,7 +257,7 @@ class CreateFeedBack(FormView):
     template_name = 'create_feedback.html'
 
     def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return HttpResponseRedirect(reverse('login'))
         return super(
             CreateFeedBack, self).dispatch(request, *args, **kwargs)
@@ -270,7 +273,7 @@ class ReportsView(TemplateView):
     template_name = 'reports.html'
 
     def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return HttpResponseRedirect(reverse('login'))
         else:
 

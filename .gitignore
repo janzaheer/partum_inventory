@@ -4,6 +4,7 @@
 /static/
 /locale/
 /logs/*
+.venv/
 
 # IDE Projects
 /.idea/

@@ -35,8 +35,8 @@ class RetailerUser(models.Model):
         (ROLE_TYPE_LEDGER_VIEW, 'Ledger Viewer'),
     )
 
-    user = models.OneToOneField(User, related_name='retailer_user')
-    retailer = models.ForeignKey(Retailer, related_name='u_retailer')
+    user = models.OneToOneField(User, related_name='retailer_user',on_delete=models.CASCADE)
+    retailer = models.ForeignKey(Retailer, related_name='u_retailer',on_delete=models.CASCADE)
     role_type = models.CharField(
         max_length=100, choices=ROLE_TYPES, default=ROLE_TYPE_OWNER
     )

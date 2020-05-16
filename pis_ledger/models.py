@@ -6,13 +6,13 @@ from pis_com.models import DatedModel
 
 class Ledger(DatedModel):
     retailer = models.ForeignKey(
-        'pis_retailer.Retailer', related_name='retailer_ledger', blank=True, null=True)
+        'pis_retailer.Retailer', related_name='retailer_ledger', blank=True, null=True,on_delete=models.CASCADE)
     customer = models.ForeignKey(
-        'pis_com.Customer', related_name='customer_ledger'
+        'pis_com.Customer', related_name='customer_ledger',on_delete=models.CASCADE
     )
     invoice = models.ForeignKey(
         'pis_sales.SalesHistory', related_name='ledger_invoice',
-        blank=True, null=True
+        blank=True, null=True,on_delete=models.CASCADE
     )
     person=models.CharField(max_length=200, default='customer', blank=True, null=True)
     amount = models.DecimalField(
