@@ -14,20 +14,20 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include,re_path
 from django.conf.urls.static import static
 from django.conf import settings
 
 
 urlpatterns = [
-   path('', include('pis_com.urls')),
-   path('product/', include(('pis_product.urls', 'product'),namespace='product'),),
-   path('retailer/', include(('pis_retailer.urls', 'retailer'), namespace='retailer')),
-   path('sales/', include(('pis_sales.urls', 'sales'), namespace='sales')),
-   path('ledger/', include(('pis_ledger.urls','ledger'), namespace='ledger')),
-   path('expense/', include(('pis_expense.urls','expense'), namespace='expense')),
-   path('employee/', include(('pis_employees.urls','employee'), namespace='employee')),
-   path('supplier/', include(('pis_supplier.urls','supplier'), namespace='supplier')),
+    re_path(r'^', include('pis_com.urls')),
+    re_path(r'^product/', include(('pis_product.urls', 'product'),namespace='product'),),
+    re_path(r'^retailer/', include(('pis_retailer.urls', 'retailer'), namespace='retailer')),
+    re_path(r'^sales/', include(('pis_sales.urls', 'sales'), namespace='sales')),
+    re_path(r'^ledger/', include(('pis_ledger.urls','ledger'), namespace='ledger')),
+    re_path(r'^expense/', include(('pis_expense.urls','expense'), namespace='expense')),
+    re_path(r'^employee/', include(('pis_employees.urls','employee'), namespace='employee')),
+    re_path(r'^supplier/', include(('pis_supplier.urls','supplier'), namespace='supplier')),
     path('admin/', admin.site.urls),
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

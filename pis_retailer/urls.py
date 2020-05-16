@@ -1,12 +1,8 @@
-from django.urls import path, include
+from django.urls import path, include,re_path
 
 from pis_retailer.views import RetailerProductsAPI
 
 
 urlpatterns = [
-    path(
-        r'^(?P<retailer_id>\d+)/products/$',
-        RetailerProductsAPI.as_view(),
-        name='retailer_products'
-    ),
+    re_path(r'^(?P<retailer_id>\d+)/products/$',RetailerProductsAPI.as_view(),name='retailer_products'),
 ]
