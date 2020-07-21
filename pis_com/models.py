@@ -31,7 +31,7 @@ class UserProfile(models.Model):
         (USER_TYPE_INDIVIDUAL, 'Individual'),
     )
 
-    user = models.OneToOneField(User, related_name='user_profile')
+    user = models.OneToOneField(User, related_name='user_profile', on_delete=models.CASCADE)
     user_type = models.CharField(
         max_length=100, choices=USER_TYPES, default=USER_TYPE_SHOP
     )
@@ -50,7 +50,8 @@ class UserProfile(models.Model):
 class Customer(models.Model):
     retailer = models.ForeignKey(
         'pis_retailer.Retailer',
-        related_name='retailer_customer'
+        related_name='retailer_customer',
+        on_delete=models.CASCADE
     )
     customer_name = models.CharField(max_length=200)
     customer_phone = models.CharField(max_length=20, blank=True, null=True)
@@ -65,7 +66,8 @@ class Customer(models.Model):
 class FeedBack(models.Model):
     retailer = models.ForeignKey(
         'pis_retailer.Retailer',
-        related_name='retailer_feedback', null=True, blank=True
+        related_name='retailer_feedback', null=True, blank=True,
+        on_delete=models.CASCADE
     )
     description= models.CharField(max_length=200, null=True, blank=True)
     date=date=models.DateField(default=timezone.now, null=True, blank=True)

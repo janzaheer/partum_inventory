@@ -27,7 +27,7 @@ class Product(models.Model):
     brand_name = models.CharField(max_length=200, blank=True, null=True)
     retailer = models.ForeignKey(
         'pis_retailer.Retailer',
-        related_name='retailer_product'
+        related_name='retailer_product',on_delete=models.CASCADE
     )
     bar_code = models.CharField(max_length=13, unique=True, blank=True,
                                 null=True)
@@ -130,7 +130,7 @@ post_save.connect(create_save_bar_code, sender=Product)
 
 class StockIn(models.Model):
     product = models.ForeignKey(
-        Product, related_name='stockin_product'
+        Product, related_name='stockin_product',on_delete=models.CASCADE
     )
     quantity = models.CharField(
         max_length=100, blank=True, null=True
@@ -159,7 +159,7 @@ class StockIn(models.Model):
 
 class ProductDetail(DatedModel):
     product = models.ForeignKey(
-        Product, related_name='product_detail'
+        Product, related_name='product_detail',on_delete=models.CASCADE
     )
     retail_price = models.DecimalField(
         max_digits=65, decimal_places=2, default=0
@@ -176,11 +176,11 @@ class ProductDetail(DatedModel):
 
 class PurchasedProduct(DatedModel):
     product = models.ForeignKey(
-        Product, related_name='purchased_product'
+        Product, related_name='purchased_product',on_delete=models.CASCADE
     )
     invoice = models.ForeignKey(
         'pis_sales.SalesHistory', related_name='purchased_invoice',
-        blank=True, null=True
+        blank=True, null=True,on_delete=models.CASCADE
     )
     quantity = models.DecimalField(
         max_digits=65, decimal_places=2, default=1, blank=True, null=True
@@ -201,7 +201,7 @@ class PurchasedProduct(DatedModel):
 
 class ExtraItems(DatedModel):
     retailer = models.ForeignKey(
-        'pis_retailer.Retailer', related_name='retailer_extra_items'
+        'pis_retailer.Retailer', related_name='retailer_extra_items',on_delete=models.CASCADE
     )
     item_name = models.CharField(
         max_length=100, blank=True, null=True)
@@ -219,10 +219,10 @@ class ExtraItems(DatedModel):
 
 
 class ClaimedProduct(DatedModel):
-    product = models.ForeignKey(Product, related_name='claimed_product')
+    product = models.ForeignKey(Product, related_name='claimed_product',on_delete=models.CASCADE)
     customer = models.ForeignKey(
         'pis_com.Customer', related_name='customer_claimed_items',
-        null=True, blank=True,
+        null=True, blank=True,on_delete=models.CASCADE
     )
     claimed_items = models.IntegerField(
         default=1, verbose_name='No. of Claimed Items')
@@ -235,15 +235,15 @@ class ClaimedProduct(DatedModel):
 
 class StockOut(models.Model):
     product = models.ForeignKey(
-        Product, related_name='stockout_product'
+        Product, related_name='stockout_product',on_delete=models.CASCADE
     )
     invoice = models.ForeignKey(
         'pis_sales.SalesHistory', related_name='out_invoice',
-        blank=True, null=True
+        blank=True, null=True,on_delete=models.CASCADE
     )
     purchased_item = models.ForeignKey(
         PurchasedProduct, related_name='out_purchased',
-        blank=True, null=True
+        blank=True, null=True,on_delete=models.CASCADE
     )
     stock_out_quantity=models.CharField(max_length=100, blank=True, null=True)
     selling_price = models.DecimalField(

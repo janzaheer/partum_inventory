@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.views.generic import TemplateView, UpdateView
 from django.views.generic import FormView, ListView
 from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse, reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.core.exceptions import ObjectDoesNotExist
 from pis_supplier.models import Supplier, SupplierStatement
 from pis_supplier.forms import SupplierForm, SupplierStatementForm
@@ -17,7 +17,7 @@ class AddSupplier(FormView):
     template_name = 'supplier/add_supplier.html'
 
     def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return HttpResponseRedirect(reverse('login'))
         return super(
             AddSupplier, self).dispatch(request, *args, **kwargs)
@@ -38,7 +38,7 @@ class SupplierList(ListView):
     paginate_by = 100
 
     def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return HttpResponseRedirect(reverse('login'))
         return super(
             SupplierList, self).dispatch(request, *args, **kwargs)
@@ -68,7 +68,7 @@ class SupplierStatementList(ListView):
     paginate_by = 100
 
     def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return HttpResponseRedirect(reverse('login'))
         return super(
             SupplierStatementList, self).dispatch(request, *args, **kwargs)
@@ -111,7 +111,7 @@ class AddSupplierStatement(FormView):
     template_name = 'supplier/add_supplier_statement.html'
 
     def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return HttpResponseRedirect(reverse('login'))
         return super(
             AddSupplierStatement, self).dispatch(request, *args, **kwargs)
@@ -125,7 +125,7 @@ class AddSupplierStatement(FormView):
                 'pk':obj.supplier.id}))
 
     def form_invalid(self, form):
-        print form.errors
+        print(form.errors)
         return super(AddSupplierStatement, self).form_invalid(form)
 
     def get_context_data(self, **kwargs):
@@ -169,7 +169,7 @@ class StatementPayment(FormView):
     template_name = 'supplier/payment.html'
 
     def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return HttpResponseRedirect(reverse('login'))
         return super(
             StatementPayment, self).dispatch(request, *args, **kwargs)

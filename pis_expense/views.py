@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from django.views.generic import TemplateView
 from django.views.generic import FormView, DeleteView, ListView
 from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse, reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.shortcuts import render
 
 from pis_com.models import Customer
@@ -15,7 +15,7 @@ class AddNewExpense(FormView):
     template_name = 'expense/create_expense.html'
 
     def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return HttpResponseRedirect(reverse('login'))
 
         return super(AddNewExpense, self).dispatch(request, *args, **kwargs)

@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.utils.decorators import method_decorator
 from django.views.generic import FormView, DeleteView, View, TemplateView, ListView
 from django.utils import timezone
-from django.core.urlresolvers import reverse, reverse_lazy
+from django.urls import reverse, reverse_lazy
 from pis_product.models import Product
 from pis_sales.models import SalesHistory
 from pis_product.forms import PurchasedProductForm
@@ -27,7 +27,7 @@ class CreateInvoiceView(FormView):
     form_class = BillingForm
     
     def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return HttpResponseRedirect(reverse('login'))
         return super(
             CreateInvoiceView, self).dispatch(request, *args, **kwargs)
@@ -53,7 +53,7 @@ class CreateInvoiceView(FormView):
 class ProductItemAPIView(View):
     
     def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return HttpResponseRedirect(reverse('login'))
         return super(
             ProductItemAPIView, self).dispatch(request, *args, **kwargs)
@@ -123,7 +123,7 @@ class GenerateInvoiceAPIView(View):
 
     @csrf_exempt
     def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return HttpResponseRedirect(reverse('login'))
         return super(
             GenerateInvoiceAPIView, self).dispatch(request, *args, **kwargs)
@@ -262,7 +262,7 @@ class InvoiceDetailView(TemplateView):
     template_name = 'sales/invoice_detail.html'
     
     def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return HttpResponseRedirect(reverse('login'))
         return super(
             InvoiceDetailView, self).dispatch(request, *args, **kwargs)
@@ -284,7 +284,7 @@ class InvoicesList(ListView):
     paginate_by = 200
     
     def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return HttpResponseRedirect(reverse('login'))
         return super(InvoicesList, self).dispatch(request, *args, **kwargs)
 
@@ -311,7 +311,7 @@ class UpdateInvoiceView(FormView):
     form_class = BillingForm
 
     def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return HttpResponseRedirect(reverse('login'))
         return super(
             UpdateInvoiceView, self).dispatch(request, *args, **kwargs)
@@ -345,7 +345,7 @@ class UpdateInvoiceAPIView(View):
 
     @csrf_exempt
     def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return HttpResponseRedirect(reverse('login'))
         return super(
             UpdateInvoiceAPIView, self).dispatch(request, *args, **kwargs)
@@ -437,7 +437,7 @@ class ProductDetailsAPIView(View):
 
     @csrf_exempt
     def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return HttpResponseRedirect(reverse('login'))
         return super(
             ProductDetailsAPIView, self).dispatch(request, *args, **kwargs)

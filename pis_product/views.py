@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.views.generic import TemplateView, UpdateView
 from django.views.generic import FormView, ListView
 from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse, reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 from django.db.models import Sum
@@ -18,7 +18,7 @@ class ProductItemList(TemplateView):
     template_name = 'products/product_list.html'
 
     def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return HttpResponseRedirect(reverse('login'))
 
         return super(
@@ -39,7 +39,7 @@ class ProductDetailList(TemplateView):
     template_name = 'products/item_details.html'
 
     def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return HttpResponseRedirect(reverse('login'))
 
         return super(
@@ -69,7 +69,7 @@ class AddNewProduct(FormView):
     template_name = 'products/add_product.html'
 
     def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return HttpResponseRedirect(reverse('login'))
         return super(
             AddNewProduct, self).dispatch(request, *args, **kwargs)
@@ -88,7 +88,7 @@ class AddProductItems(FormView):
     form_class = ProductDetailsForm
 
     def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return HttpResponseRedirect(reverse('login'))
         return super(AddProductItems, self).dispatch(request, *args, **kwargs)
 
@@ -123,7 +123,7 @@ class PurchasedItems(TemplateView):
     template_name = 'products/purchased_items.html'
 
     def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return HttpResponseRedirect(reverse('login'))
         return super(PurchasedItems, self).dispatch(request, *args, **kwargs)
 
@@ -144,7 +144,7 @@ class ExtraItemsView(TemplateView):
     template_name = 'products/purchased_extraitems.html'
 
     def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return HttpResponseRedirect(reverse('login'))
         return super(ExtraItemsView, self).dispatch(request, *args, **kwargs)
 
@@ -166,7 +166,7 @@ class ClaimedProductFormView(FormView):
     form_class = ClaimedProductForm
 
     def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return HttpResponseRedirect(reverse('login'))
         return super(
             ClaimedProductFormView, self).dispatch(request, *args, **kwargs)
@@ -239,7 +239,7 @@ class ClaimedItemsListView(TemplateView):
     template_name = 'products/claimed_product_list.html'
 
     def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return HttpResponseRedirect(reverse('login'))
         return super(
             ClaimedItemsListView, self).dispatch(request, *args, **kwargs)
@@ -261,7 +261,7 @@ class StockItemList(ListView):
     ordering = 'name'
 
     def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return HttpResponseRedirect(reverse('login'))
 
         return super(
@@ -294,7 +294,7 @@ class AddStockItems(FormView):
     form_class = StockDetailsForm
 
     def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return HttpResponseRedirect(reverse('login'))
         return super(AddStockItems, self).dispatch(request, *args, **kwargs)
 
@@ -329,7 +329,7 @@ class StockOutItems(FormView):
     template_name = 'products/stock_out.html'
 
     def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return HttpResponseRedirect(reverse('login'))
         return super(StockOutItems, self).dispatch(request, *args, **kwargs)
 

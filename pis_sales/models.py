@@ -10,7 +10,7 @@ from pis_com.models import DatedModel
 
 class SalesHistory(DatedModel):
     retailer = models.ForeignKey(
-        'pis_retailer.Retailer', related_name='retailer_sales'
+        'pis_retailer.Retailer', related_name='retailer_sales',on_delete=models.CASCADE
     )
     receipt_no = models.CharField(
         max_length=20, unique=True, blank=True, null=True
@@ -19,7 +19,7 @@ class SalesHistory(DatedModel):
     customer = models.ForeignKey(
         'pis_com.Customer',
         related_name='customer_sales',
-        blank=True, null=True
+        blank=True, null=True,on_delete=models.CASCADE
     )
 
     product_details = models.TextField(
@@ -28,12 +28,12 @@ class SalesHistory(DatedModel):
 
     purchased_items = models.ManyToManyField(
         'pis_product.PurchasedProduct',
-        max_length=100, blank=True, null=True
+        max_length=100, blank=True
     )
 
     extra_items = models.ManyToManyField(
         'pis_product.ExtraItems',
-        max_length=200, blank=True, null=True
+        max_length=200, blank=True,
     )
 
     total_quantity = models.CharField(

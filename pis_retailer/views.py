@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.views.generic import View
 from django.http import JsonResponse, HttpResponseRedirect
 
@@ -16,7 +16,7 @@ class RetailerProductsAPI(View):
     """
 
     def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return HttpResponseRedirect(reverse('login'))
         return super(
             RetailerProductsAPI, self).dispatch(request, *args, **kwargs)
