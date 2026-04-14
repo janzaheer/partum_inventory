@@ -1,1 +1,1 @@
-web: gunicorn partum_inventory.wsgi --log-file -
+web: gunicorn partum_inventory.wsgi --bind 0.0.0.0:$PORT --log-file -

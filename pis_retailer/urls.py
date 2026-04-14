@@ -1,4 +1,4 @@
-from django.urls import path, include,re_path
+from django.urls import re_path
 
 from pis_retailer.views import RetailerProductsAPI
 

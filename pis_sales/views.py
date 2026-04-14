@@ -1,46 +1,34 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-import ast
 import json
+
 from django.db.models import Sum
 from django.http import JsonResponse, HttpResponseRedirect
-from django.views.decorators.csrf import csrf_exempt, csrf_protect
-from django.utils.decorators import method_decorator
 from django.views.generic import FormView, DeleteView, View, TemplateView, ListView
 from django.utils import timezone
-from django.urls import reverse, reverse_lazy
-from pis_product.models import Product
+from django.urls import reverse_lazy
+from django.db import transaction
+
+from pis_com.mixins import AuthRequiredMixin
+from pis_product.models import Product, PurchasedProduct, StockOut
 from pis_sales.models import SalesHistory
-from pis_product.forms import PurchasedProductForm
+from pis_product.forms import PurchasedProductForm, ExtraItemForm, StockOutForm
 from pis_sales.forms import BillingForm
-from pis_product.forms import ExtraItemForm, StockOutForm
 from pis_com.forms import CustomerForm
+from pis_com.models import Customer
 from pis_ledger.models import Ledger
 from pis_ledger.forms import LedgerForm
-from django.db import transaction
-from pis_product.models import PurchasedProduct, StockOut
-from pis_com.models import Customer
 
 
-class CreateInvoiceView(FormView):
+class CreateInvoiceView(AuthRequiredMixin, FormView):
     template_name = 'sales/create_invoice.html'
     form_class = BillingForm
-    
-    def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.is_authenticated:
-            return HttpResponseRedirect(reverse('login'))
-        return super(
-            CreateInvoiceView, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
-        context = super(CreateInvoiceView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         products = (
-            self.request.user.retailer_user.retailer.
-                retailer_product.all()
+            self.request.user.retailer_user.retailer.retailer_product.all()
         )
         customers = (
-            self.request.user.retailer_user.
-            retailer.retailer_customer.all()
+            self.request.user.retailer_user.retailer.retailer_customer.all()
         )
         context.update({
             'products': products,
@@ -50,23 +38,15 @@ class CreateInvoiceView(FormView):
         return context
 
 
-class ProductItemAPIView(View):
-    
-    def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.is_authenticated:
-            return HttpResponseRedirect(reverse('login'))
-        return super(
-            ProductItemAPIView, self).dispatch(request, *args, **kwargs)
-    
-    def get(self, request, *args, **kwargs):
+class ProductItemAPIView(AuthRequiredMixin, View):
 
-        products = (
-            self.request.user.retailer_user.retailer.
-            retailer_product.all()
-        )
+    def get(self, request, *args, **kwargs):
+        retailer = self.request.user.retailer_user.retailer
+        products = retailer.retailer_product.prefetch_related(
+            'stockin_product', 'stockout_product'
+        ).all()
 
         items = []
-
         for product in products:
             p = {
                 'id': product.id,
@@ -74,64 +54,44 @@ class ProductItemAPIView(View):
                 'brand_name': product.brand_name,
             }
 
-            if product.stockin_product.exists():
-                stock_detail = product.stockin_product.all().latest('id')
+            stock_ins = list(product.stockin_product.all())
+            if stock_ins:
+                stock_detail = max(stock_ins, key=lambda s: s.id)
                 p.update({
                     'retail_price': stock_detail.price_per_item,
                     'consumer_price': stock_detail.price_per_item,
                 })
 
-                all_stock = product.stockin_product.all()
-                if all_stock:
-                    all_stock = all_stock.aggregate(Sum('quantity'))
-                    all_stock = float(all_stock.get('quantity__sum') or 0)
-                else:
-                    all_stock = 0
-
-                purchased_stock = product.stockout_product.all()
-                if purchased_stock:
-                    purchased_stock = purchased_stock.aggregate(
-                        Sum('stock_out_quantity'))
-                    purchased_stock = float(
-                        purchased_stock.get('stock_out_quantity__sum') or 0)
-                else:
-                    purchased_stock = 0
+                all_stock = sum(s.quantity or 0 for s in stock_ins)
+                purchased_stock = sum(
+                    s.stock_out_quantity or 0
+                    for s in product.stockout_product.all()
+                )
 
                 p.update({
-                    'stock': all_stock - purchased_stock
+                    'stock': float(all_stock - purchased_stock)
                 })
-
             else:
-                p.update(
-                    {
-                        'retail_price':0,
-                        'consumer_price':0
-                    }
-                )
+                p.update({
+                    'retail_price': 0,
+                    'consumer_price': 0,
+                })
 
             items.append(p)
 
         return JsonResponse({'products': items})
 
 
-class GenerateInvoiceAPIView(View):
+class GenerateInvoiceAPIView(AuthRequiredMixin, View):
 
     def __init__(self, *args, **kwargs):
-        super(GenerateInvoiceAPIView, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.customer = None
         self.invoice = None
-
-    @csrf_exempt
-    def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.is_authenticated:
-            return HttpResponseRedirect(reverse('login'))
-        return super(
-            GenerateInvoiceAPIView, self).dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         customer_name = self.request.POST.get('customer_name')
         customer_phone = self.request.POST.get('customer_phone')
-        sub_total = self.request.POST.get('sub_total')
         discount = self.request.POST.get('discount')
         shipping = self.request.POST.get('shipping')
         grand_total = self.request.POST.get('grand_total')
@@ -140,12 +100,17 @@ class GenerateInvoiceAPIView(View):
         paid_amount = self.request.POST.get('paid_amount')
         cash_payment = self.request.POST.get('cash_payment')
         returned_cash = self.request.POST.get('returned_cash')
-        items = json.loads(self.request.POST.get('items'))
+
+        try:
+            items = json.loads(self.request.POST.get('items'))
+        except (TypeError, json.JSONDecodeError):
+            return JsonResponse(
+                {'error': 'Invalid items data'}, status=400)
+
         purchased_items_id = []
         extra_items_id = []
 
         with transaction.atomic():
-
             billing_form_kwargs = {
                 'discount': discount,
                 'grand_total': grand_total,
@@ -176,6 +141,9 @@ class GenerateInvoiceAPIView(View):
                     })
 
             billing_form = BillingForm(billing_form_kwargs)
+            if not billing_form.is_valid():
+                return JsonResponse(
+                    {'error': billing_form.errors}, status=400)
             self.invoice = billing_form.save()
 
             for item in items:
@@ -216,7 +184,7 @@ class GenerateInvoiceAPIView(View):
 
                         stock_out_form = StockOutForm(stock_out_form_kwargs)
                         if stock_out_form.is_valid():
-                            stock_out = stock_out_form.save()
+                            stock_out_form.save()
 
                 except Product.DoesNotExist:
                     extra_item_kwargs = {
@@ -232,8 +200,8 @@ class GenerateInvoiceAPIView(View):
                         extra_item = extra_item_form.save()
                         extra_items_id.append(extra_item.id)
 
-            self.invoice.purchased_items = purchased_items_id
-            self.invoice.extra_items = extra_items_id
+            self.invoice.purchased_items.set(purchased_items_id)
+            self.invoice.extra_items.set(extra_items_id)
             self.invoice.save()
 
             if self.customer or self.request.POST.get('customer_id'):
@@ -253,23 +221,27 @@ class GenerateInvoiceAPIView(View):
 
                     ledgerform = LedgerForm(ledger_form_kwargs)
                     if ledgerform.is_valid():
-                        ledger = ledgerform.save()
+                        ledgerform.save()
 
             return JsonResponse({'invoice_id': self.invoice.id})
 
 
-class InvoiceDetailView(TemplateView):
+class InvoiceDetailView(AuthRequiredMixin, TemplateView):
     template_name = 'sales/invoice_detail.html'
-    
-    def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.is_authenticated:
-            return HttpResponseRedirect(reverse('login'))
-        return super(
-            InvoiceDetailView, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
-        context = super(InvoiceDetailView, self).get_context_data(**kwargs)
-        invoice = SalesHistory.objects.get(id=self.kwargs.get('invoice_id'))
+        context = super().get_context_data(**kwargs)
+        try:
+            invoice = SalesHistory.objects.select_related(
+                'retailer', 'customer'
+            ).get(
+                id=self.kwargs.get('invoice_id'),
+                retailer=self.request.user.retailer_user.retailer,
+            )
+        except SalesHistory.DoesNotExist:
+            from django.http import Http404
+            raise Http404('Invoice not found')
+
         context.update({
             'invoice': invoice,
             'product_details': invoice.product_details,
@@ -278,55 +250,37 @@ class InvoiceDetailView(TemplateView):
         return context
 
 
-class InvoicesList(ListView):
+class InvoicesList(AuthRequiredMixin, ListView):
     template_name = 'sales/invoice_list.html'
     model = SalesHistory
     paginate_by = 200
-    
-    def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.is_authenticated:
-            return HttpResponseRedirect(reverse('login'))
-        return super(InvoicesList, self).dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
-        queryset = (
-            self.request.user.retailer_user.retailer.
-            retailer_sales.all().order_by('-created_at')
-        )
-        return queryset
-
-    def get_sales_history(self):
         return (
             self.request.user.retailer_user.retailer.
-            retailer_sales.all().order_by('-created_at')
+            retailer_sales.select_related('customer').all().order_by('-created_at')
         )
 
-    def get_context_data(self, **kwargs):
-        context = super(InvoicesList, self).get_context_data(**kwargs)
-        return context
 
-
-class UpdateInvoiceView(FormView):
+class UpdateInvoiceView(AuthRequiredMixin, FormView):
     template_name = 'sales/update_invoice.html'
     form_class = BillingForm
 
-    def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.is_authenticated:
-            return HttpResponseRedirect(reverse('login'))
-        return super(
-            UpdateInvoiceView, self).dispatch(request, *args, **kwargs)
-
     def get_context_data(self, **kwargs):
-        context = super(UpdateInvoiceView, self).get_context_data(**kwargs)
-        products = (
-            self.request.user.retailer_user.retailer.
-                retailer_product.all()
-        )
-        customers = (
-            self.request.user.retailer_user.
-                retailer.retailer_customer.all()
-        )
-        invoice = SalesHistory.objects.get(id=self.kwargs.get('id'))
+        context = super().get_context_data(**kwargs)
+        retailer = self.request.user.retailer_user.retailer
+        products = retailer.retailer_product.all()
+        customers = retailer.retailer_customer.all()
+
+        try:
+            invoice = SalesHistory.objects.get(
+                id=self.kwargs.get('id'),
+                retailer=retailer,
+            )
+        except SalesHistory.DoesNotExist:
+            from django.http import Http404
+            raise Http404('Invoice not found')
+
         context.update({
             'products': products,
             'customers': customers,
@@ -336,24 +290,14 @@ class UpdateInvoiceView(FormView):
         return context
 
 
-class UpdateInvoiceAPIView(View):
+class UpdateInvoiceAPIView(AuthRequiredMixin, View):
 
     def __init__(self, *args, **kwargs):
-        super(UpdateInvoiceAPIView, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.customer = None
         self.invoice = None
 
-    @csrf_exempt
-    def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.is_authenticated:
-            return HttpResponseRedirect(reverse('login'))
-        return super(
-            UpdateInvoiceAPIView, self).dispatch(request, *args, **kwargs)
-
     def post(self, request, *args, **kwargs):
-        customer_name = self.request.POST.get('customer_name')
-        customer_phone = self.request.POST.get('customer_phone')
-        sub_total = self.request.POST.get('sub_total')
         discount = self.request.POST.get('discount')
         shipping = self.request.POST.get('shipping')
         grand_total = self.request.POST.get('grand_total')
@@ -361,30 +305,30 @@ class UpdateInvoiceAPIView(View):
         remaining_payment = self.request.POST.get('remaining_amount')
         paid_amount = self.request.POST.get('paid_amount')
         invoice_id = self.request.POST.get('invoice_id')
-        items = json.loads(self.request.POST.get('items'))
+
+        try:
+            items = json.loads(self.request.POST.get('items'))
+        except (TypeError, json.JSONDecodeError):
+            return JsonResponse(
+                {'error': 'Invalid items data'}, status=400)
+
         purchased_items_id = []
         extra_items_id = []
+        retailer = self.request.user.retailer_user.retailer
 
         with transaction.atomic():
             for item in items:
-
                 if item.get('item_id'):
-                    # Getting Purchased Item by using Item ID or Invoice ID
-                    # We are getting that by using Item ID
                     purchased_item = PurchasedProduct.objects.get(
                         id=item.get('item_id'),
                     )
 
-                    # Delete the previous Stock Out Object,
-                    # We need to create new one if quantity would not be same
-
-                    if not purchased_item.quantity == item.get('qty'):
+                    if purchased_item.quantity != item.get('qty'):
                         StockOut.objects.filter(
                             invoice__id=invoice_id,
                             stock_out_quantity='%g' % purchased_item.quantity,
                         ).delete()
 
-                        # Update Purchased Product Details
                         purchased_item.price = item.get('price')
                         purchased_item.quantity = item.get('qty')
                         purchased_item.discount_percentage = item.get('perdiscount')
@@ -392,7 +336,6 @@ class UpdateInvoiceAPIView(View):
                         purchased_item.save()
                         purchased_items_id.append(purchased_item.id)
 
-                        # Creating New stock iif quantity would get changed
                         stock_out_form_kwargs = {
                             'invoice': invoice_id,
                             'product': purchased_item.product.id,
@@ -405,16 +348,16 @@ class UpdateInvoiceAPIView(View):
                         if stock_out_form.is_valid():
                             stock_out_form.save()
 
-            invoice = SalesHistory.objects.get(id=invoice_id)
+            invoice = SalesHistory.objects.get(id=invoice_id, retailer=retailer)
             invoice.discount = discount
             invoice.grand_total = grand_total
             invoice.total_quantity = totalQty
             invoice.shipping = shipping
-            invoice.purchased_items = purchased_items_id
-            invoice.extra_items = extra_items_id
+            invoice.purchased_items.set(purchased_items_id)
+            invoice.extra_items.set(extra_items_id)
             invoice.paid_amount = paid_amount
             invoice.remaining_payment = remaining_payment
-            invoice.retailer = self.request.user.retailer_user.retailer
+            invoice.retailer = retailer
 
             if self.request.POST.get('customer_id'):
                 invoice.customer = Customer.objects.get(
@@ -423,52 +366,44 @@ class UpdateInvoiceAPIView(View):
             invoice.save()
 
             if invoice.customer:
-                ledger = Ledger.objects.get(
-                    customer__id=invoice.customer.id,
-                    invoice__id=invoice.id
-                )
-                ledger.amount = remaining_payment
-                ledger.save()
+                try:
+                    ledger = Ledger.objects.get(
+                        customer__id=invoice.customer.id,
+                        invoice__id=invoice.id
+                    )
+                    ledger.amount = remaining_payment
+                    ledger.save()
+                except Ledger.DoesNotExist:
+                    pass
+                except Ledger.MultipleObjectsReturned:
+                    Ledger.objects.filter(
+                        customer__id=invoice.customer.id,
+                        invoice__id=invoice.id
+                    ).update(amount=remaining_payment)
 
         return JsonResponse({'invoice_id': invoice.id})
 
 
-class ProductDetailsAPIView(View):
-
-    @csrf_exempt
-    def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.is_authenticated:
-            return HttpResponseRedirect(reverse('login'))
-        return super(
-            ProductDetailsAPIView, self).dispatch(request, *args, **kwargs)
+class ProductDetailsAPIView(AuthRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
         try:
             product_item = Product.objects.get(
-                bar_code=self.request.POST.get('code'))
+                bar_code=self.request.POST.get('code'),
+                retailer=self.request.user.retailer_user.retailer,
+            )
         except Product.DoesNotExist:
             return JsonResponse({
                 'status': False,
-                'message': 'Item with not exists',
+                'message': 'Item does not exist',
             })
 
         latest_stock = product_item.stockin_product.all().latest('id')
 
-        all_stock = product_item.stockin_product.all()
-        if all_stock:
-            all_stock = all_stock.aggregate(Sum('quantity'))
-            all_stock = float(all_stock.get('quantity__sum') or 0)
-        else:
-            all_stock = 0
-
-        purchased_stock = product_item.stockout_product.all()
-        if purchased_stock:
-            purchased_stock = purchased_stock.aggregate(
-                Sum('stock_out_quantity'))
-            purchased_stock = float(
-                purchased_stock.get('stock_out_quantity__sum') or 0)
-        else:
-            purchased_stock = 0
+        all_stock = product_item.stockin_product.aggregate(
+            total=Sum('quantity'))['total'] or 0
+        purchased_stock = product_item.stockout_product.aggregate(
+            total=Sum('stock_out_quantity'))['total'] or 0
 
         return JsonResponse({
             'status': True,
@@ -481,15 +416,19 @@ class ProductDetailsAPIView(View):
         })
 
 
-class SalesDeleteView(DeleteView):
+class SalesDeleteView(AuthRequiredMixin, DeleteView):
     model = SalesHistory
     success_url = reverse_lazy('sales:invoice_list')
 
-    def get(self, request, *args, **kwargs):
-        PurchasedProduct.objects.filter(
-            invoice__id=self.kwargs.get('pk')).delete()
-        StockOut.objects.filter(
-            invoice__id=self.kwargs.get('pk')).delete()
-        Ledger.objects.filter(
-            invoice__id=self.kwargs.get('pk')).delete()
-        return self.delete(request, *args, **kwargs)
+    def get_queryset(self):
+        return SalesHistory.objects.filter(
+            retailer=self.request.user.retailer_user.retailer
+        )
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        PurchasedProduct.objects.filter(invoice__id=self.object.pk).delete()
+        StockOut.objects.filter(invoice__id=self.object.pk).delete()
+        Ledger.objects.filter(invoice__id=self.object.pk).delete()
+        self.object.delete()
+        return HttpResponseRedirect(self.get_success_url())

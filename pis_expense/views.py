@@ -1,60 +1,54 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-from django.views.generic import TemplateView
-from django.views.generic import FormView, DeleteView, ListView
+from django.views.generic import TemplateView, FormView, DeleteView
 from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
-from django.shortcuts import render
 
 from pis_com.models import Customer
+from pis_com.mixins import AuthRequiredMixin
 from pis_expense.forms import ExtraExpenseForm
 from pis_expense.models import ExtraExpense
 
-class AddNewExpense(FormView):
+
+class AddNewExpense(AuthRequiredMixin, FormView):
     form_class = ExtraExpenseForm
     template_name = 'expense/create_expense.html'
 
-    def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.is_authenticated:
-            return HttpResponseRedirect(reverse('login'))
-
-        return super(AddNewExpense, self).dispatch(request, *args, **kwargs)
-
     def form_valid(self, form):
-     form.save()
-     return HttpResponseRedirect(reverse('expense:expense_list'))
+        form.save()
+        return HttpResponseRedirect(reverse('expense:expense_list'))
 
     def form_invalid(self, form):
-        return super(AddNewExpense, self).form_invalid(form)
+        return super().form_invalid(form)
 
     def get_context_data(self, **kwargs):
-        context = super(AddNewExpense, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         customers = Customer.objects.filter(
             retailer=self.request.user.retailer_user.retailer)
-
         context.update({
             'customers': customers
         })
-
         return context
 
-class ExpenseListView(ListView):
+
+class ExpenseListView(AuthRequiredMixin, TemplateView):
     template_name = 'expense/expense_list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'object_list': ExtraExpense.objects.all().order_by('-date')
+        })
+        return context
+
+
+class ExpenseDelete(AuthRequiredMixin, DeleteView):
     model = ExtraExpense
-    paginate_by = 150
-    is_paginated = True
+    success_url = reverse_lazy('expense:expense_list')
 
-    def get_queryset(self):
-        query_set = ExtraExpense.objects.all().order_by('-date')
-        return query_set
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.delete()
+        return HttpResponseRedirect(self.get_success_url())
 
-class ExpenseDelete(DeleteView):
-    model= ExtraExpense
-    success_url= reverse_lazy('expense:expense_list')
-    success_message=''
 
-    def get(self, request, *args, **kwargs):
-        return self.post(request, *args, **kwargs)
-
-class dashboard(TemplateView):
+class dashboard(AuthRequiredMixin, TemplateView):
     template_name = 'expense/dashboard.html'

@@ -1,0 +1,17 @@
+.git
+.gitignore
+.venv
+.env
+*.pyc
+__pycache__
+db.sqlite3
+db.local_inventory
+static/
+media_root/
+.vscode
+.idea
+*.sublime-project
+*.sublime-workspace
+.coverage
+htmlcov/
+.pytest_cache/

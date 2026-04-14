@@ -1,148 +1,139 @@
-from django.db.models import Sum, Count
+from django.db.models import Sum, Count, Max
 from django.views.generic import ListView
-from django.utils import timezone
-from django.http import HttpResponseRedirect
-from django.urls import reverse
 
+from django.utils import timezone
+
+from pis_com.mixins import AuthRequiredMixin
 from pis_product.models import StockOut
 
 
-class DailyStockLogs(ListView):
+class DailyStockLogs(AuthRequiredMixin, ListView):
     model = StockOut
     template_name = 'logs/daily_stock_logs.html'
     paginate_by = 200
-    is_paginated = True
 
     def __init__(self, *args, **kwargs):
-        super(DailyStockLogs, self).__init__(*args, **kwargs)
-        self.logs_date = ''
-        self.today_date = ''
+        super().__init__(*args, **kwargs)
+        self._target_date = None
 
-    def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.is_authenticated:
-            return HttpResponseRedirect(reverse('login'))
+    def _resolve_target_date(self):
+        if self._target_date is not None:
+            return self._target_date
 
-        return super(
-            DailyStockLogs, self).dispatch(request, *args, **kwargs)
+        date_param = self.request.GET.get('date', '')
+        if date_param:
+            self._target_date = date_param
+            return self._target_date
+
+        retailer = self.request.user.retailer_user.retailer
+        today = timezone.now().date()
+        has_today = StockOut.objects.filter(
+            product__retailer=retailer, dated=today
+        ).exists()
+        if has_today:
+            self._target_date = today.strftime('%Y-%m-%d')
+            return self._target_date
+
+        latest = StockOut.objects.filter(
+            product__retailer=retailer
+        ).aggregate(latest=Max('dated'))['latest']
+        if latest:
+            self._target_date = latest.strftime('%Y-%m-%d')
+        else:
+            self._target_date = today.strftime('%Y-%m-%d')
+
+        return self._target_date
+
+    def _get_base_queryset(self):
+        date_str = self._resolve_target_date()
+        parts = date_str.split('-')
+        year, month, day = parts[0], parts[1], parts[2]
+        retailer = self.request.user.retailer_user.retailer
+        return StockOut.objects.filter(
+            product__retailer=retailer,
+            dated__year=year, dated__month=month, dated__day=day,
+        )
 
     def get_queryset(self):
-        self.logs_date = self.request.GET.get('date')
-        if self.logs_date:
-            logs_date = self.logs_date.split('-')
-            year = logs_date[0]
-            month = logs_date[1]
-            day = logs_date[2]
-
-            try:
-                queryset = StockOut.objects.filter(
-                    dated__year=year,
-                    dated__month=month,
-                    dated__day=day,
-                ).values('product__name').annotate(
-                    receipt_item=Count('product__name'),
-                    total_qty=Sum('stock_out_quantity')
-                )
-            except:
-                queryset = []
-        else:
-            self.today_date = timezone.now().date()
-            queryset = StockOut.objects.filter(
-                dated__year=self.today_date.year,
-                dated__month=self.today_date.month,
-                dated__day=self.today_date.day,
-            ).values('product__name').annotate(
-                receipt_item=Count('product__name'),
-                total_qty=Sum('stock_out_quantity')
-            )
-
-        return queryset.order_by('product__name')
+        return self._get_base_queryset().values('product__name').annotate(
+            receipt_item=Count('product__name'),
+            total_qty=Sum('stock_out_quantity'),
+        ).order_by('product__name')
 
     def get_context_data(self, **kwargs):
-        context = super(DailyStockLogs, self).get_context_data(**kwargs)
-        queryset = self.get_queryset()
-        if queryset:
-            total = queryset.aggregate(Sum('selling_price'))
-            total = total.get('selling_price__sum') or 0
-        else:
-            total = 0
+        context = super().get_context_data(**kwargs)
+        base_qs = self._get_base_queryset()
+        total = base_qs.aggregate(total=Sum('selling_price'))['total'] or 0
 
+        date_str = self._resolve_target_date()
+        date_param = self.request.GET.get('date', '')
         context.update({
             'total': total,
-            'today_date': (
-                timezone.now().strftime('%Y-%m-%d')
-                if self.today_date else None),
-            'logs_date': self.logs_date,
+            'today_date': date_str if not date_param else None,
+            'logs_date': date_param or date_str,
         })
         return context
 
 
-class MonthlyStockLogs(ListView):
+class MonthlyStockLogs(AuthRequiredMixin, ListView):
     model = StockOut
     template_name = 'logs/monthly_stock_logs.html'
     paginate_by = 200
-    is_paginated = True
+
+    MONTHS = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+    ]
 
     def __init__(self, *args, **kwargs):
-        super(MonthlyStockLogs, self).__init__(*args, **kwargs)
-        self.logs_month = ''
-        self.current_month = ''
-        self.year = ''
+        super().__init__(*args, **kwargs)
+        self._month_label = ''
+        self._year = ''
+        self._base_qs = None
 
-    def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.is_authenticated:
-            return HttpResponseRedirect(reverse('login'))
+    def _get_base_queryset(self):
+        if self._base_qs is not None:
+            return self._base_qs
 
-        return super(
-            MonthlyStockLogs, self).dispatch(request, *args, **kwargs)
-
-    def get_queryset(self):
-        self.logs_month = self.request.GET.get('month')
+        retailer = self.request.user.retailer_user.retailer
+        logs_month = self.request.GET.get('month')
         current_date = timezone.now().date()
-        months = [
-            'January', 'February', 'March', 'April', 'May', 'June',
-            'July', 'August', 'September', 'October', 'November', 'December'
-        ]
 
-        if self.logs_month:
-            self.year = current_date.year
-            month = self.logs_month
-
-            if month < months.index(self.logs_month) + 1:
-                self.year = self.year - 1
-
-            queryset = StockOut.objects.filter(
-                dated__year=self.year,
-                dated__month=months.index(self.logs_month) + 1,
-            ).values('product__name').annotate(
-                receipt_item=Count('product__name'),
-                total_qty=Sum('stock_out_quantity')
+        if logs_month:
+            self._year = current_date.year
+            month_index = self.MONTHS.index(logs_month) + 1
+            if month_index > current_date.month:
+                self._year -= 1
+            self._month_label = logs_month
+            self._base_qs = StockOut.objects.filter(
+                product__retailer=retailer,
+                dated__year=self._year, dated__month=month_index,
             )
-
         else:
-            self.current_month = months[current_date.month - 1]
-            self.year = current_date.year
-            queryset = StockOut.objects.filter(
+            self._month_label = self.MONTHS[current_date.month - 1]
+            self._year = current_date.year
+            self._base_qs = StockOut.objects.filter(
+                product__retailer=retailer,
                 dated__year=current_date.year,
                 dated__month=current_date.month,
-            ).values('product__name').annotate(
-                receipt_item=Count('product__name'),
-                total_qty=Sum('stock_out_quantity')
             )
 
-        return queryset.order_by('product__name')
+        return self._base_qs
+
+    def get_queryset(self):
+        return self._get_base_queryset().values('product__name').annotate(
+            receipt_item=Count('product__name'),
+            total_qty=Sum('stock_out_quantity'),
+        ).order_by('product__name')
 
     def get_context_data(self, **kwargs):
-        context = super(MonthlyStockLogs, self).get_context_data(**kwargs)
-        queryset = self.get_queryset()
-        if queryset:
-            total = queryset.aggregate(Sum('selling_price'))
-            total = total.get('selling_price__sum') or 0
-        else:
-            total = 0
+        context = super().get_context_data(**kwargs)
+        base_qs = self._get_base_queryset()
+        total = base_qs.aggregate(total=Sum('selling_price'))['total'] or 0
 
         context.update({
             'total': total,
-            'month': self.logs_month or self.current_month,
-            'year': self.year
+            'month': self._month_label,
+            'year': self._year,
         })
         return context

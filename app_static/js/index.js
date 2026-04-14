@@ -1,233 +1,187 @@
-$.get('/api/sales/daily/', function(result, status){
+function escapeHtml(str) {
+    if (str === null || str === undefined) return '';
+    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+$.get('/api/sales/daily/').done(function(result){
 
     var sales = [];
     var profit = [];
     var sales_date = [];
 
     $.each(result.sales_data, function(index, value){
-
-        $('.daily-sales-tbody').append('<tr><td>'+ value.date + '</td><td>' + value.sales + '</td><td>' + value.profit + '</td></tr>');
+        $('.daily-sales-tbody').append(
+            '<tr><td>'+ escapeHtml(value.date) + '</td><td>' +
+            escapeHtml(value.sales) + '</td><td>' +
+            escapeHtml(value.profit) + '</td></tr>'
+        );
 
         sales.push(value.sales);
         profit.push(value.profit);
         sales_date.push(value.date);
-
     });
-    Highcharts.chart('daily_graph', {
-        chart: {
-            type: 'area'
-        },
-        title: {
-            text: 'Daily Sales Weekly'
-        },
-        subtitle: {
-            text: 'Inventory'
-        },
-        xAxis: {
-            categories: sales_date.reverse(),
-            tickmarkPlacement: 'on',
-            title: {
-                enabled: false
-            }
-        },
-        yAxis: {
-            title: {
-                text: ''
+
+    if (typeof Highcharts !== 'undefined' && document.getElementById('daily_graph')) {
+        Highcharts.chart('daily_graph', {
+            chart: { type: 'area' },
+            title: { text: 'Daily Sales Weekly' },
+            subtitle: { text: 'Inventory' },
+            xAxis: {
+                categories: sales_date.reverse(),
+                tickmarkPlacement: 'on',
+                title: { enabled: false }
             },
-            labels: {
-                formatter: function () {
-                    return this.value;
-                }
-            }
-        },
-        tooltip: {
-            split: true,
-            valueSuffix: 'Rs'
-        },
-        plotOptions: {
-            area: {
-                stacking: 'normal',
-                lineColor: '#666666',
-                lineWidth: 1,
-                marker: {
+            yAxis: {
+                title: { text: '' },
+                labels: { formatter: function () { return this.value; } }
+            },
+            tooltip: { split: true, valueSuffix: 'Rs' },
+            plotOptions: {
+                area: {
+                    stacking: 'normal',
+                    lineColor: '#666666',
                     lineWidth: 1,
-                    lineColor: '#666666'
+                    marker: { lineWidth: 1, lineColor: '#666666' }
                 }
-            }
-        },
-
-        series: [{
-            name: 'Sales',
-            data: sales.reverse()
-        }]
-    });
-
+            },
+            series: [
+                { name: 'Sales', data: sales.reverse() },
+                { name: 'Profit', data: profit.reverse() }
+            ]
+        });
+    }
+}).fail(function() {
+    $('.daily-sales-tbody').append('<tr><td colspan="3">Failed to load daily sales data</td></tr>');
 });
 
-$.get('/api/sales/weekly/', function(result, status){
+$.get('/api/sales/weekly/').done(function(result){
 
     var sales = [];
     var profit = [];
     var sales_date = [];
 
     $.each(result.sales_data, function (index, value) {
-
-        $('.weekly-sales-tbody').append('<tr><td>'+ value.date + '</td><td>' + value.sales + '</td><td>' + value.profit + '</td></tr>');
+        $('.weekly-sales-tbody').append(
+            '<tr><td>'+ escapeHtml(value.date) + '</td><td>' +
+            escapeHtml(value.sales) + '</td><td>' +
+            escapeHtml(value.profit) + '</td></tr>'
+        );
         sales.push(value.sales);
         profit.push(value.profit);
         sales_date.push(value.date);
     });
 
-
-    Highcharts.chart('weekly-graph', {
-        chart: {
-            type: 'area'
-        },
-        title: {
-            text: 'Sales Graph Weekly'
-        },
-        subtitle: {
-            text: 'Inventory'
-        },
-        xAxis: {
-            categories: sales_date.reverse(),
-            tickmarkPlacement: 'on',
-            title: {
-                enabled: false
-            }
-        },
-        yAxis: {
-            title: {
-                text: ''
+    if (typeof Highcharts !== 'undefined' && document.getElementById('weekly-graph')) {
+        Highcharts.chart('weekly-graph', {
+            chart: { type: 'area' },
+            title: { text: 'Sales Graph Weekly' },
+            subtitle: { text: 'Inventory' },
+            xAxis: {
+                categories: sales_date.reverse(),
+                tickmarkPlacement: 'on',
+                title: { enabled: false }
             },
-            labels: {
-                formatter: function () {
-                    return this.value;
-                }
-            }
-        },
-        tooltip: {
-            split: true,
-            valueSuffix: 'Rs'
-        },
-        plotOptions: {
-            area: {
-                stacking: 'normal',
-                lineColor: '#666666',
-                lineWidth: 1,
-                marker: {
+            yAxis: {
+                title: { text: '' },
+                labels: { formatter: function () { return this.value; } }
+            },
+            tooltip: { split: true, valueSuffix: 'Rs' },
+            plotOptions: {
+                area: {
+                    stacking: 'normal',
+                    lineColor: '#666666',
                     lineWidth: 1,
-                    lineColor: '#666666'
+                    marker: { lineWidth: 1, lineColor: '#666666' }
                 }
-            }
-        },
-        series: [{
-            name: 'Sales',
-            data: sales.reverse()
-        }]
-    });
-
+            },
+            series: [
+                { name: 'Sales', data: sales.reverse() },
+                { name: 'Profit', data: profit.reverse() }
+            ]
+        });
+    }
+}).fail(function() {
+    $('.weekly-sales-tbody').append('<tr><td colspan="3">Failed to load weekly sales data</td></tr>');
 });
 
-$.get('/api/sales/monthly/', function (result, status) {
+$.get('/api/sales/monthly/').done(function(result) {
     var sales = [];
     var profit = [];
     var day = [];
-    $.each(result.sales_data , function (index, value) {
-        $('.monthly-sales-tbody').append('<tr><td>'+ value.day + '</td><td>' + value.sales + '</td><td>' + value.profit + '</td></tr>');
 
+    $.each(result.sales_data , function (index, value) {
+        $('.monthly-sales-tbody').append(
+            '<tr><td>'+ escapeHtml(value.day) + '</td><td>' +
+            escapeHtml(value.sales) + '</td><td>' +
+            escapeHtml(value.profit) + '</td></tr>'
+        );
 
         sales.push(value.sales);
         profit.push(value.profit);
         day.push(value.day);
     });
 
-    Highcharts.chart('monthly-graph', {
-        chart: {
-            type: 'area'
-        },
-        title: {
-            text: 'Monthly Sales Graph'
-        },
-        subtitle: {
-            text: 'Inventory'
-        },
-        xAxis: {
-            categories: day.reverse(),
-            tickmarkPlacement: 'on',
-            title: {
-                enabled: false
-            }
-        },
-        yAxis: {
-            title: {
-                text: 'Billions'
+    if (typeof Highcharts !== 'undefined' && document.getElementById('monthly-graph')) {
+        Highcharts.chart('monthly-graph', {
+            chart: { type: 'area' },
+            title: { text: 'Monthly Sales Graph' },
+            subtitle: { text: 'Inventory' },
+            xAxis: {
+                categories: day.reverse(),
+                tickmarkPlacement: 'on',
+                title: { enabled: false }
             },
-            labels: {
-                formatter: function () {
-                    return this.value;
-                }
-            }
-        },
-        tooltip: {
-            split: true,
-            valueSuffix: ' Rupees'
-        },
-        plotOptions: {
-            area: {
-                stacking: 'normal',
-                lineColor: '#666666',
-                lineWidth: 1,
-                marker: {
+            yAxis: {
+                title: { text: '' },
+                labels: { formatter: function () { return this.value; } }
+            },
+            tooltip: { split: true, valueSuffix: ' Rs' },
+            plotOptions: {
+                area: {
+                    stacking: 'normal',
+                    lineColor: '#666666',
                     lineWidth: 1,
-                    lineColor: '#666666'
+                    marker: { lineWidth: 1, lineColor: '#666666' }
                 }
-            }
-        },
-        series: [{
-            name: 'sales',
-            data: sales.reverse()
-        }]
-    });
+            },
+            series: [
+                { name: 'Sales', data: sales.reverse() },
+                { name: 'Profit', data: profit.reverse() }
+            ]
+        });
+    }
+}).fail(function() {
+    $('.monthly-sales-tbody').append('<tr><td colspan="3">Failed to load monthly sales data</td></tr>');
 });
 
-// Dashboard daily profit chart code
+$(document).ready(function() {
+    var todaySalesEl = document.getElementById("todays-sales");
+    var todaysProfitEl = document.getElementById("todays-profit");
+    var serverStatusEl = document.getElementById("serverstatus002");
 
-var doughnutData = [
-    {
-        value: 70,
-        color:"#68dff0"
-    },
-    {
-        value : 30,
-        color : "#fdfdfd"
+    if (typeof Chart !== 'undefined') {
+        if (todaySalesEl) {
+            var todaySalesVal = parseInt(todaySalesEl.getAttribute('data-value') || '0', 10);
+            var remaining = Math.max(0, 100 - todaySalesVal);
+            new Chart(todaySalesEl.getContext("2d")).Doughnut([
+                { value: todaySalesVal || 1, color: "#68dff0" },
+                { value: remaining || 1, color: "#fdfdfd" }
+            ]);
+        }
+        if (todaysProfitEl) {
+            var todayProfitVal = parseInt(todaysProfitEl.getAttribute('data-value') || '0', 10);
+            var profitRemaining = Math.max(0, 100 - todayProfitVal);
+            new Chart(todaysProfitEl.getContext("2d")).Doughnut([
+                { value: todayProfitVal || 1, color: "#68dff0" },
+                { value: profitRemaining || 1, color: "#fdfdfd" }
+            ]);
+        }
+        if (serverStatusEl) {
+            new Chart(serverStatusEl.getContext("2d")).Doughnut([
+                { value: 60, color: "#68dff0" },
+                { value: 40, color: "#fdfdfd" }
+            ]);
+        }
     }
-];
-var myDoughnut = new Chart(document.getElementById("todays-sales").getContext("2d")).Doughnut(doughnutData);
-
-
-// dashboard profit chart code
-var doughnutData = [
-    {
-        value: 20,
-        color:"#68dff0"
-    },
-    {
-        value : 80,
-        color : "#fdfdfd"
-    }
-];
-var myDoughnut = new Chart(document.getElementById("todays-profit").getContext("2d")).Doughnut(doughnutData);
-
-//dashboard daily loan chart code
-var doughnutData = [
-    {
-        value: 60,
-        color:"#68dff0"
-    },
-    {
-        value : 40,
-        color : "#fdfdfd"
-    }
-];
-var myDoughnut = new Chart(document.getElementById("serverstatus002").getContext("2d")).Doughnut(doughnutData);
+});

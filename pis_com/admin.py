@@ -1,4 +1,3 @@
-from __future__ import unicode_literals
 from django.contrib import admin
 
 from pis_com.models import UserProfile
@@ -8,7 +7,7 @@ from pis_com.models import AdminConfiguration
 
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = (
-        '__unicode__', 'first_name', 'last_name', 'phone_no',
+        '__str__', 'first_name', 'last_name', 'phone_no',
         'email', 'user_type'
     )
     search_fields = (
@@ -31,12 +30,12 @@ class UserProfileAdmin(admin.ModelAdmin):
 
 class CustomerAdmin(admin.ModelAdmin):
     list_display = (
-        '__unicode__', 'customer_phone','customer_type', 'retailer'
+        '__str__', 'customer_phone','customer_type', 'retailer'
     )
 
 class FeedbackAdmin(admin.ModelAdmin):
     list_display = (
-        '__unicode__', 'retailer','description','date'
+        '__str__', 'retailer','description','date'
     )
 
 

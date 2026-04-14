@@ -1,4 +1,3 @@
-from __future__ import unicode_literals
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -16,7 +15,7 @@ class Retailer(DatedModel):
         blank=True, null=True
     )
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
@@ -35,12 +34,11 @@ class RetailerUser(models.Model):
         (ROLE_TYPE_LEDGER_VIEW, 'Ledger Viewer'),
     )
 
-    user = models.OneToOneField(User, related_name='retailer_user',on_delete=models.CASCADE)
-    retailer = models.ForeignKey(Retailer, related_name='u_retailer',on_delete=models.CASCADE)
+    user = models.OneToOneField(User, related_name='retailer_user', on_delete=models.CASCADE)
+    retailer = models.ForeignKey(Retailer, related_name='u_retailer', on_delete=models.CASCADE)
     role_type = models.CharField(
         max_length=100, choices=ROLE_TYPES, default=ROLE_TYPE_OWNER
     )
 
-    def __unicode__(self):
+    def __str__(self):
         return self.user.username
-

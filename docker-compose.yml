@@ -1,0 +1,41 @@
+name: partum_inventory
+
+services:
+  web:
+    build: .
+    container_name: partum_inventory_web
+    ports:
+      - "8010:8010"
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+      - static_data:/app/static
+      - media_data:/app/media_root
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  db:
+    image: postgres:16-alpine
+    container_name: partum_inventory_db
+    ports:
+      - "5434:5432"
+    environment:
+      POSTGRES_DB: ${DB_NAME:-partum_inventory}
+      POSTGRES_USER: ${DB_USER:-partum_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-partum_pass}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-partum_user} -d ${DB_NAME:-partum_inventory}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  static_data:
+  media_data:

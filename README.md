@@ -1,78 +1,174 @@
-# Inventory Management System #
+# Inventory Management System
 
-Inventory Management System is a web based Application developed in Python/Django. The Software is designed for the small business to maintain there records, customer ledger, sales and etc.<br>
-<br>Designed by <a href="partumsolutions.com">Partum Solutions</a> (New Startup in Quetta, Pakistan. Provides Services and Solutions).
+Inventory Management System is a web based Application developed in Python/Django. The Software is designed for small businesses to maintain their records, customer ledger, sales, and more.
+
+Designed by [Partum Solutions](http://partumsolutions.com) (Startup in Quetta, Pakistan. Provides Services and Solutions).
 
 ## Features
 
-Retailers (Multi Tenancy)<br>
-Customer and Ledgers <br>
-Stock Management <br>
-Low Stock Notification <br>
-Sales <br>
-Employees <br>
-Expenses <br>
-Suppliers <br>
-Feedback <br>
-Sales Reports (Daily, Weekly, Monthly) <br>
-Stocks Logs (Daily, Monthly) <br>
+- Retailers (Multi Tenancy)
+- Customers and Ledgers
+- Stock Management
+- Low Stock Notification
+- Sales & Invoicing
+- Employees
+- Expenses
+- Suppliers
+- Feedback
+- Sales Reports (Daily, Weekly, Monthly)
+- Stock Logs (Daily, Monthly)
 
-## Python Version
-2.7.10<br>
+## Tech Stack
 
-Using Django Framework and JQuery on the Frontend
+- **Python**: 3.12
+- **Django**: 5.1
+- **Database**: SQLite (dev) / PostgreSQL (Docker)
+- **Frontend**: Django Templates + jQuery
 
+---
 
-## Demo URL
+## Getting Started
 
-<a href="http://demo-inventory.herokuapp.com/"> You can find the Demo here</a>
+### Option 1: Docker (Recommended)
 
+1. Clone the repository:
 
-## To Get Started ##
-
-1. Create a Virtual Environment
-
-2. Create a Fork and Clone Project by using the following command
-
-> git clone git@github.com:janzaheer/partum_inventory.git
-
-3. Create local settings file and add the local database configuration, You can use any database SQLite, Mysql or Postgress SQL etc. Following is the configuration code for SQLite database.
-```
-# settings_local.py
-
-import os
-
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.local'),
-    }
-}
+```bash
+git clone git@github.com:janzaheer/partum_inventory.git
+cd partum_inventory
 ```
 
-4. Go to the main directory where `manage.py` file exists abd install all the requirements by running the command:
-> pip install -r requirements.txt
+2. Copy the environment file:
 
-4. Migrate by runnning the following command.
-> python manage.py migrate
+```bash
+cp .env.example .env
+```
 
-5. Create super user to access the admin
-> python manage.py createsuperuser
+3. Build and run with Docker Compose:
 
-6. Run the Django Server by using following command.
-> python manage.py runserver
+```bash
+docker compose up --build
+```
 
-Now you can access the application in your browser by URL `http://localhost:8000`
+4. In a separate terminal, run migrations and create superuser:
 
-## Need Help? ##
-<ul>
-<li>You can ask me any question any time, email me zaheerjanbadini@gmail.com</li>
-<li>Please use GitHub issues to report issues.</li>
-</ul>
+```bash
+docker compose exec web python manage.py migrate
+docker compose exec web python manage.py createsuperuser
+```
+
+5. Access the application at `http://localhost:8010`
+
+### Option 2: Local Development
+
+1. Clone the repository:
+
+```bash
+git clone git@github.com:janzaheer/partum_inventory.git
+cd partum_inventory
+```
+
+2. Create and activate a virtual environment:
+
+```bash
+python3.12 -m venv .venv
+source .venv/bin/activate
+```
+
+3. Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+4. Run migrations:
+
+```bash
+python manage.py migrate
+```
+
+5. Create a superuser:
+
+```bash
+python manage.py createsuperuser
+```
+
+6. Run the development server:
+
+```bash
+python manage.py runserver
+```
+
+7. Access the application at `http://localhost:8000`
+
+---
+
+## Running Tests
+
+```bash
+# Run all tests
+pytest
+
+# Run with coverage
+pytest --cov=. --cov-report=html
+
+# Run tests for a specific app
+pytest pis_com/tests.py
+pytest pis_product/tests.py
+pytest pis_sales/tests.py
+```
+
+---
+
+## Docker Configuration
+
+| Service | Container Name | Host Port | Internal Port |
+|---------|---------------|-----------|---------------|
+| Web App | partum_inventory_web | 8010 | 8010 |
+| PostgreSQL | partum_inventory_db | 5434 | 5432 |
+
+### Environment Variables
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `DJANGO_SECRET_KEY` | (dev key) | Django secret key |
+| `DJANGO_DEBUG` | `True` | Enable debug mode |
+| `DJANGO_ALLOWED_HOSTS` | `*` | Comma-separated allowed hosts |
+| `DB_ENGINE` | `sqlite3` | Database engine |
+| `DB_NAME` | `db.sqlite3` | Database name |
+| `DB_USER` | | Database user |
+| `DB_PASSWORD` | | Database password |
+| `DB_HOST` | | Database host |
+| `DB_PORT` | | Database port |
+
+---
+
+## Project Structure
+
+```
+partum_inventory/
+├── partum_inventory/     # Django project settings
+├── pis_com/              # Core: auth, customers, feedback
+├── pis_product/          # Products & stock management
+├── pis_retailer/         # Retailer/tenant management
+├── pis_sales/            # Sales & invoicing
+├── pis_ledger/           # Customer ledgers
+├── pis_expense/          # Expense tracking
+├── pis_employees/        # Employee management
+├── pis_supplier/         # Supplier management
+├── templates/            # HTML templates
+├── app_static/           # Static assets (CSS/JS)
+├── tests/                # Shared test utilities
+├── Dockerfile
+├── docker-compose.yml
+└── requirements.txt
+```
+
+## Need Help?
+
+- Email: zaheerjanbadini@gmail.com
+- Please use GitHub issues to report issues.
 
 ## Contribute
-As an open source project with a strong focus on the user community, we welcome contributions as GitHub pull requests. See our Contributor Guides to get going. Discussions and RFCs for features happen on the design discussions section of our Forum.
 
-
+As an open source project with a strong focus on the user community, we welcome contributions as GitHub pull requests.

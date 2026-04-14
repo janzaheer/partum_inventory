@@ -1,9 +1,7 @@
-from __future__ import unicode_literals
 from django.db import models
 from django.db.models.signals import post_save
 from django.contrib.auth.models import User
 from django.utils import timezone
-
 
 
 class DatedModel(models.Model):
@@ -18,6 +16,9 @@ class AdminConfiguration(models.Model):
     production = models.BooleanField(default=False)
     demo = models.BooleanField(default=False)
     local = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"AdminConfiguration(id={self.pk})"
 
 
 class UserProfile(models.Model):
@@ -43,7 +44,7 @@ class UserProfile(models.Model):
     )
     date_of_birth = models.DateField(blank=True, null=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.user.username
 
 
@@ -55,11 +56,14 @@ class Customer(models.Model):
     )
     customer_name = models.CharField(max_length=200)
     customer_phone = models.CharField(max_length=20, blank=True, null=True)
-    customer_type=models.CharField(max_length=200, default='customer', blank=True, null=True)
-    address = models.TextField(max_length=500, blank=True,null=True)
+    customer_type = models.CharField(max_length=200, default='customer', blank=True, null=True)
+    address = models.TextField(max_length=500, blank=True, null=True)
     shop = models.CharField(max_length=200, blank=True, null=True)
 
-    def __unicode__(self):
+    class Meta:
+        ordering = ['customer_name']
+
+    def __str__(self):
         return self.customer_name
 
 
@@ -69,28 +73,19 @@ class FeedBack(models.Model):
         related_name='retailer_feedback', null=True, blank=True,
         on_delete=models.CASCADE
     )
-    description= models.CharField(max_length=200, null=True, blank=True)
-    date=date=models.DateField(default=timezone.now, null=True, blank=True)
+    description = models.CharField(max_length=200, null=True, blank=True)
+    date = models.DateField(default=timezone.now, null=True, blank=True)
 
-    def __unicode__(self):
-        return self.description
+    class Meta:
+        ordering = ['-date']
 
-# Signal Functions
+    def __str__(self):
+        return self.description or ''
+
+
 def create_profile(sender, instance, created, **kwargs):
-    """
-    The functions used to check if user profile is not created
-    and created the user profile without saving role and hospital
-    :param sender:
-    :param instance:
-    :param created:
-    :param kwargs:
-    :return:
-    """
-    if created and not UserProfile.objects.filter(user=instance):
-        return UserProfile.objects.create(
-            user=instance
-        )
+    if created and not UserProfile.objects.filter(user=instance).exists():
+        UserProfile.objects.create(user=instance)
 
 
-# Signals
 post_save.connect(create_profile, sender=User)

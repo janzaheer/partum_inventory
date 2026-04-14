@@ -1,34 +1,73 @@
-*.pyc
-*~
-/media/*
-/static/
-/locale/
-/logs/*
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+*.egg
+dist/
+build/
+*.whl
+
+# Virtual environments
 .venv/
+venv/
+env/
+ENV/
 
-### VisualStudioCode ###
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-
-### VisualStudioCode Patch ###
-# Ignore all local history of files
-.history
-
-# IDE Projects
-/.idea/
+# IDE / Editors
+.vscode/
+.idea/
 *.sublime-project
 *.sublime-workspace
 .project
 .pydevproject
+.history
+*.swp
+*.swo
+*~
 
-# Installation-specific
+# Cursor
+.cursor/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# Database
+db.sqlite3
+db.sqlite3-journal
+*.sqlite3
+db.local_inventory
+
+# Django
+/static/
+/media/*
+/media_root/
+/locale/
+/logs/*
+/partum_inventory/settings_local.py
+
+# Environment
 .env
 
-# testing related files
+# Testing
 .coverage
+.coverage.*
+htmlcov/
+.pytest_cache/
+.tox/
+.nox/
 
-/partum_inventory/settings_local.py
-db.local_inventory
+# Docker
+postgres_data/
+
+# Misc
+*.log
+*.pid
+*.seed
+Thumbs.db

@@ -30,7 +30,6 @@ urlpatterns = [
     re_path(r'^items/extra/purchased/$', ExtraItemsView.as_view(),name='purchased_extra_items'),
     re_path(r'^items/claimed/$', ClaimedProductFormView.as_view(),name='claimed_items'),
     re_path(r'^items/claimed/list/$', ClaimedItemsListView.as_view(),name='claimed_items_list'),
-    re_path(r'^retailer/(?P<retailer_id>\d+)/add/$',AddNewProduct.as_view(),name='add_product'),
     re_path(r'^stock/items/list/$', StockItemList.as_view(), name='stock_items_list'),
     re_path(r'^stock/item/(?P<product_id>\d+)/add/$',AddStockItems.as_view(),name='add_stock_items'),
     re_path(r'^stock/item/(?P<product_id>\d+)/out/$',StockOutItems.as_view(),name='stock_out_items'),

@@ -1,4 +1,3 @@
-from __future__ import unicode_literals
 from django.contrib import admin
 
 from pis_retailer.models import Retailer
@@ -7,7 +6,7 @@ from pis_retailer.models import RetailerUser
 
 class RetailerAdmin(admin.ModelAdmin):
     list_display = (
-        '__unicode__', 'slug', 'created_at', 'updated_at',
+        '__str__', 'slug', 'created_at', 'updated_at',
         'package', 'package_price', 'package_expiry'
     )
     search_fields = ('name', 'slug',)
@@ -16,7 +15,7 @@ class RetailerAdmin(admin.ModelAdmin):
 
 class RetailerUserAdmin(admin.ModelAdmin):
     list_display = (
-        '__unicode__', 'retailer', 'employee_name', 'email', 'phone_no', 'mobile_no',)
+        '__str__', 'retailer', 'employee_name', 'email', 'phone_no', 'mobile_no',)
     search_fields = (
         'user__username', 'user__first_name', 'user__last_name',
         'user__email', 'user__user_profile__phone_no',

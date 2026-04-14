@@ -18,8 +18,13 @@ from django.urls import path, include,re_path
 from django.conf.urls.static import static
 from django.conf import settings
 
+from pis_sales.report_views import DailySalesAPI, WeeklySalesAPI, MonthlySalesAPI
+
 
 urlpatterns = [
+    path('api/sales/daily/', DailySalesAPI.as_view(), name='api_sales_daily'),
+    path('api/sales/weekly/', WeeklySalesAPI.as_view(), name='api_sales_weekly'),
+    path('api/sales/monthly/', MonthlySalesAPI.as_view(), name='api_sales_monthly'),
     re_path(r'^', include('pis_com.urls')),
     re_path(r'^product/', include(('pis_product.urls', 'product'),namespace='product'),),
     re_path(r'^retailer/', include(('pis_retailer.urls', 'retailer'), namespace='retailer')),
