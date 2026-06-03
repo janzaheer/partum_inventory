@@ -29,92 +29,78 @@
             </div>
         </div>
     </div>
-    <script>
-        $('document').ready(function () {
+{% endblock %}
 
-            $('.ledger-submit-btn').on ('click', function () {
-                $(this).addClass('disabled');
-                $(this).html('<i class="fa fa-circle-o-notch fa-spin"></i> Loading...');
+{% block scripts %}
+    {{ block.super }}
+    <script>
+        $(document).ready(function () {
+            var btn = null;
+
+            $('.ledger-submit-btn').on('click', function () {
+                btn = $(this);
+                btn.addClass('disabled');
+                btn.html('<i class="fa fa-circle-o-notch fa-spin"></i> Loading...');
+
                 var error = false;
 
-                if ($('.name').val() ==""){
+                if ($('.customer-name').val().trim() === "") {
                     $('.name-error').show();
-                    error= true;
-                }
-                else {
+                    error = true;
+                } else {
                     $('.name-error').hide();
                 }
-                if ($('.salary_amount').val() ==""){
+
+                if ($('.salary_amount').val().trim() === "") {
                     $('.salary_amount-error').show();
-                    error= true;
-                }
-                else {
+                    error = true;
+                } else {
                     $('.salary_amount-error').hide();
                 }
-                if ($('.date').val() ==""){
+
+                if ($('.date').val().trim() === "") {
                     $('.date-error').show();
-                    error= true;
-                }
-                else {
+                    error = true;
+                } else {
                     $('.date-error').hide();
                 }
-                if (error == true ) {
-                    $(this).removeClass('disabled');
-                    $(this).html('Save');
+
+                if (error) {
+                    btn.removeClass('disabled');
+                    btn.html('Save Salary');
                     return;
                 }
 
-                if (error == false) {
-                    $('.add-ledger-form').submit();
-                }
-                 else {
-                     $(this).removeClass('disabled');
-                     $(this).html('Save');
-                     return;
-                 }
+                $('.add-ledger-form').submit();
             });
 
-            $('.customer').keyup(function () {
-                $('.customer-error').hide();
+            $('.customer-name').keyup(function () {
+                $('.name-error').hide();
             });
 
-
-            $('.customer_phone').keyup(function () {
-               $('.customer-phone-error').hide();
-               checkDec(this);
-            });
-            function checkDec(el){
-            var ex = /^[0-9]+\.?[0-9]*$/;
-            if(ex.test(el.value)==false){
-                el.value = el.value.substring(0,el.value.length - 1);
-            }
-        }
             $('.salary_amount').keyup(function () {
-               $('.salary_amount-error').hide();
-                checkDec(this);
+                $('.salary_amount-error').hide();
+                validateDecimal(this);
             });
-            function checkDec(el){
-            var ex = /^[0-9]+\.?[0-9]*$/;
-            if(ex.test(el.value)==false){
-                el.value = el.value.substring(0,el.value.length - 1);
-            }
-        }
+
             $('.date').keyup(function () {
                 $('.date-error').hide();
             });
+
+            function validateDecimal(el) {
+                var ex = /^[0-9]+\.?[0-9]*$/;
+                if (ex.test(el.value) === false) {
+                    el.value = el.value.substring(0, el.value.length - 1);
+                }
+            }
+
+            $('#empolyee').on('click', function() {
+                var $this = $(this);
+                $this.button('loading');
+                setTimeout(function() {
+                   $this.button('reset');
+                }, 5000);
+            });
         });
-
     </script>
-<script>
-
-$('#empolyee').on('click', function() {
-    var $this = $(this);
-  $this.button('loading');
-    setTimeout(function() {
-       $this.button('reset');
-   }, 5000);
-});
-
-    </script>
-
 {% endblock %}

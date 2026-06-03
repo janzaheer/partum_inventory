@@ -9,17 +9,33 @@
         <div class="content-panel">
             <h3 class="text-center">{{ request.user.retailer_user.retailer.name }} | Stock ({{ product.name }})</h3>
             <div class="panel-body">
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger alert-dismissible">
+                        <button type="submit" class="close" data-dismiss="alert">&times;</button>
+                        <strong>Error:</strong>
+                        {% for error in form.non_field_errors %}
+                            <div>{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
                 <form class="form-horizontal product_item_form" action="{% url 'product:stock_out_items' product_id=product.id %}" method="post" autocomplete="off">
                     <div class="form-group">
                         <div class="col-sm-12">
                             {% csrf_token %}
                             <label><strong>Stock Out Quantity</strong></label>
-                            <span class="item-error" style="color:red; display:none">This field is required..</span>
-                            <input type="text"  class="form-control stock_out_quantity"  name="stock_out_quantity"  onkeyup="checkDec(this);" placeholder="Stock Out Quantity"><br>
+                            {% if form.stock_out_quantity.errors %}
+                                <span class="item-error" style="color:red;">{{ form.stock_out_quantity.errors.0 }}</span>
+                            {% else %}
+                                <span class="item-error" style="color:red; display:none">This field is required..</span>
+                            {% endif %}
+                            <input type="text"  class="form-control stock_out_quantity"  name="stock_out_quantity" value="{{ form.stock_out_quantity.value|default:'' }}" onkeyup="checkDec(this);" placeholder="Stock Out Quantity"><br>
                             <label><strong>Date Stock out </strong></label>
-                            <input type="text"  class="form-control dated"  name="dated"  onkeyup="checkDec(this);" placeholder="Date Stockout" onfocus="(this.type='date')" onblur="(this.type='text')"><br>
+                            {% if form.dated.errors %}
+                                <span class="date-error" style="color:red;">{{ form.dated.errors.0 }}</span>
+                            {% endif %}
+                            <input type="text"  class="form-control dated"  name="dated" value="{{ form.dated.value|default:'' }}" onkeyup="checkDec(this);" placeholder="Date Stockout" onfocus="(this.type='date')" onblur="(this.type='text')"><br>
                             <input type="hidden" name="product" value="{{ product.id }}">
-                            <button type="button" id="save" class="btn btn-primary product-sub-btn" style="float: right" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing Order">Save Stock</button>
+                            <button type="submit" id="save" class="btn btn-primary product-sub-btn" style="float: right" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing Order">Save Stock</button>
                         </div>
                     </div>
                 </form>
@@ -27,80 +43,53 @@
         </div>
     </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
 <script>
+    function checkDec(el){
+        var ex = /^[0-9]+\.?[0-9]*$/;
+        if(ex.test(el.value)==false){
+            el.value = el.value.substring(0,el.value.length - 1);
+        }
+    }
+
     $(document).ready(function(){
-        $(".product-sub-btn").on ('click', function(){
-            var error= false;
-            if ($('.stock_out_quantity').val () == ""){
+        // Stock list button loading effect
+        $('#stock-list').on('click', function() {
+            var $this = $(this);
+            $this.button('loading');
+            setTimeout(function() {
+                $this.button('reset');
+            }, 5000);
+        });
+
+        // Save button - validate and submit form
+        $(".product-sub-btn").on('click', function(){
+            var error = false;
+            var stock_quantity = $('.stock_out_quantity').val().trim();
+            
+            if (stock_quantity == ""){
                 $('.item-error').show();
                 error = true;
-            }
-            else {
+            } else {
                 $('.item-error').hide();
             }
-            if (error == true) {
-
-                return;
-            }
-            else
-            {
+            
+            if (error == false) {
                 $('.product_item_form').submit();
+            }
+            
+            return false; // Prevent default button behavior
+        });
 
+        // Clear error messages on field change
+        $('.form-control').on('keyup change', function(){
+            if($(this).hasClass('stock_out_quantity')) {
+                if($(this).val().trim() != "") {
+                    $('.item-error').hide();
+                }
             }
         });
     });
-
-    $('.product-error').keyup (function(){
-        $('.product-error').hide();
-    });
-
-    function checkDec(el){
-        var ex = /^[0-9]+\.?[0-9]*$/;
-        if(ex.test(el.value)==false){
-            el.value = el.value.substring(0,el.value.length - 1);
-        }
-    }
-
-    $('.quantity').keyup (function(){
-        $('.item-error').hide();
-    });
-
-    function checkDec(el){
-        var ex = /^[0-9]+\.?[0-9]*$/;
-        if(ex.test(el.value)==false){
-            el.value = el.value.substring(0,el.value.length - 1);
-        }
-    }
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/bootstrap.min.js"></script>
-<script>
-$('#stock-list').on('click', function() {
-    var $this = $(this);
-  $this.button('loading');
-    setTimeout(function() {
-       $this.button('reset');
-   }, 5000);
-});
-
-$('.form-control').click (function () {
-    $('.list-error').hide();
-    checkDec(this);
-
-});
-    </script>
-<script>
-$('#save').on('click', function() {
-    var $this = $(this);
-  $this.button('loading');
-    setTimeout(function() {
-       $this.button('reset');
-   }, 5000);
-});
-
-$('.form-control').click (function () {
-    $('.list-error').hide();
-    checkDec(this);
-
-});
-    </script>
 {% endblock %}

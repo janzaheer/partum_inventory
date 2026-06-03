@@ -6,18 +6,33 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from pis_com.mixins import AuthRequiredMixin
 from pis_com.models import Customer
-from pis_ledger.forms import LedgerForm
+from pis_ledger.forms import LedgerForm, NewLedgerForm
 from pis_ledger.models import Ledger
 
 
 class AddNewLedger(AuthRequiredMixin, FormView):
-    form_class = LedgerForm
+    form_class = NewLedgerForm
     template_name = 'ledger/create_ledger.html'
 
     def form_valid(self, form):
+        retailer = self.request.user.retailer_user.retailer
+
+        # Step 1: Create or get the customer
+        customer, created = Customer.objects.get_or_create(
+            customer_phone=self.request.POST.get('customer_phone'),
+            retailer=retailer,
+            defaults={
+                'customer_name': self.request.POST.get('customer_name'),
+                'customer_type': self.request.POST.get('customer_type'),
+            }
+        )
+
+        # Step 2: Create the ledger entry
         ledger = form.save(commit=False)
-        ledger.retailer = self.request.user.retailer_user.retailer
+        ledger.retailer = retailer
+        ledger.customer = customer
         ledger.save()
+
         return HttpResponseRedirect(reverse('ledger:customer_ledger_list'))
 
     def form_invalid(self, form):

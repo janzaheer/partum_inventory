@@ -27,7 +27,7 @@
                         <label><strong>Date of Joining</strong></label>
                         <input type="text" class="form-control date" name="date_of_joining" placeholder=" Date of joining" onfocus="(this.type='date')" onblur="(this.type='text')"><br>
                         <input type="hidden" name="retailer" value="{{ request.user.retailer_user.retailer.id }}">
-                        <button type="button" id="save" class="btn btn-primary ledger-submit-btn" style="float: right" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing Order">Save Employee</button>
+                        <button type="submit" id="save" class="btn btn-primary ledger-submit-btn" style="float: right" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing Order">Save Employee</button>
                     </div>
                 </div>
             </form>

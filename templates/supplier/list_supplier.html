@@ -63,14 +63,26 @@
 </div>
 </div>
 
-<script>
- function PrintInvoice(divName) {
-     var printContents = document.getElementById(divName).innerHTML;
-     var originalContents = document.body.innerHTML;
-     document.body.innerHTML = printContents;
-     window.print();
-     document.body.innerHTML = originalContents;
- }
-</script>
+{% endblock %}
 
+{% block scripts %}
+    {{ block.super }}
+    <script>
+        $(document).ready(function(){
+            $('.search-order').on('keyup', function() {
+                var value = $(this).val().toLowerCase();
+                $('.order-table-body tr').filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
+            });
+        });
+
+        function PrintInvoice(divName) {
+            var printContents = document.getElementById(divName).innerHTML;
+            var originalContents = document.body.innerHTML;
+            document.body.innerHTML = printContents;
+            window.print();
+            document.body.innerHTML = originalContents;
+        }
+    </script>
 {% endblock %}

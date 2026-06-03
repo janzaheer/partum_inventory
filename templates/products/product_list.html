@@ -33,8 +33,8 @@
                     {% for item in products %}
                         <tr>
                             <td><a href="{% url 'product:item_details' pk=item.id %}">{{ item.name}}</a></td>
-                            <td class="#">{{ item.brand_name }}</td>
-                            <td class="#">{{ item.unit_type }}</td>
+                            <td class="#">{{ item.brand_name|default:"" }}</td>
+                            <td class="#">{{ item.unit_type|default:"" }}</td>
                             <td>{{ item.product_available_items|floatformat:-2 }}</td>
                             <td>{{ item.product_purchased_items|floatformat:-2 }}</td>
                             <td>{{ item.bar_code}}</td>
@@ -48,31 +48,31 @@
                 </table>
             </div>
         </div>
-        <script>
-            $(document).ready(function(){
-              $(".search-product").on("keyup", function() {
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script>
+        $(document).ready(function(){
+            $(".search-product").on("keyup", function() {
                 var value = $(this).val().toLowerCase();
                 $(".product-table-body tr").filter(function() {
-                  $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
                 });
-              });
             });
-        </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/bootstrap.min.js"></script>
-<script>
-$('#add-product').on('click', function() {
-    var $this = $(this);
-  $this.button('loading');
-    setTimeout(function() {
-       $this.button('reset');
-   }, 5000);
-});
 
-$('.form-control').click (function () {
-    $('.list-error').hide();
-    checkDec(this);
+            $('#add-product').on('click', function() {
+                var $this = $(this);
+                $this.button('loading');
+                setTimeout(function() {
+                    $this.button('reset');
+                }, 5000);
+            });
 
-});
+            $('.form-control').click(function () {
+                $('.list-error').hide();
+                checkDec(this);
+            });
+        });
     </script>
-
 {% endblock %}

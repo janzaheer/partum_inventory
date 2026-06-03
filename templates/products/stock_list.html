@@ -11,7 +11,7 @@
                     <h2 class="text-center">Stock Products</h2>
                     <div class="row" style="padding: 5px">
                         <div class="col-lg-4">
-                            <input type="text" class="form-control name_search" placeholder="Search by Item Name ..." value="{{ search_value_name }}">
+                            <input type="text" class="form-control name_search search-product" placeholder="Search..." value="{{ search_value_name }}">
                         </div>
                         <div class="col-lg-2">
                             <button class="btn btn-primary search">Search</button>
@@ -65,6 +65,13 @@
     {{ block.super }}
     <script>
         $(function () {
+            $('.search-product').on('keyup', function () {
+                var value = $(this).val().toLowerCase();
+                $('.product-table-body tr').filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
+            });
+
             $('.search').on('click', function () {
                 var url = '{% url "product:stock_items_list" %}';
                 window.location.href  = url + '?' + 'name=' + $('.name_search').val();

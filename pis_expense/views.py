@@ -44,6 +44,11 @@ class ExpenseDelete(AuthRequiredMixin, DeleteView):
     model = ExtraExpense
     success_url = reverse_lazy('expense:expense_list')
 
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.delete()
+        return HttpResponseRedirect(self.get_success_url())
+
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         self.object.delete()
