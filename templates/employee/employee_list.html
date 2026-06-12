@@ -40,7 +40,10 @@
                         <td>{{ employee.address }}</td>
                         <td>{{ employee.date_of_joining }}</td>
                         <td>
-                            <a href="{% url 'employee:delete_employee' pk=employee.id %}"><button class="btn btn-danger btn-xs" title="Delete"><i class="fa  fa-trash-o"></i></button></a>
+                            <form method="post" action="{% url 'employee:delete_employee' pk=employee.id %}" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger btn-xs" title="Delete" onclick="return confirm('Are you sure you want to delete this employee?');"><i class="fa  fa-trash-o"></i></button>
+                            </form>
                             <a href="{% url 'employee:employee_salary' pk=employee.pk %}"><button class="btn btn-primary btn-xs" title="Salary"><i class="fa  fa-money"></i></button></a>
                             <a href="{% url 'employee:employee_salary_detail' pk=employee.pk %}"><button class="btn btn-info btn-xs" title="Employee Salary Record"><i class="fa fa-bar-chart-o"></i></button></a>
                         </td>
@@ -62,7 +65,11 @@
     </div>
 </div>
 
-<script>
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script>
         $(document).ready(function(){
           $(".search-order").on("keyup", function() {
             var value = $(this).val().toLowerCase();
@@ -70,17 +77,14 @@
               $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
             });
           });
+
+          $('#empolyee').on('click', function() {
+              var $this = $(this);
+              $this.button('loading');
+              setTimeout(function() {
+                 $this.button('reset');
+              }, 5000);
+          });
         });
-    </script>
-<script>
-
-$('#empolyee').on('click', function() {
-    var $this = $(this);
-  $this.button('loading');
-    setTimeout(function() {
-       $this.button('reset');
-   }, 5000);
-});
-
     </script>
 {% endblock %}

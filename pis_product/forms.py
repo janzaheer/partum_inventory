@@ -45,4 +45,4 @@ class StockDetailsForm(forms.ModelForm):
 class StockOutForm(forms.ModelForm):
     class Meta:
         model = StockOut
-        fields = "__all__"
+        fields = ['product', 'stock_out_quantity', 'dated']

@@ -1,10 +1,12 @@
 from django import forms
-
 from pis_ledger.models import Ledger
-
 
 class LedgerForm(forms.ModelForm):
     class Meta:
         model = Ledger
-        fields = "__all__"
+        fields = '__all__'
 
+class NewLedgerForm(forms.ModelForm):
+    class Meta:
+        model = Ledger
+        exclude = ('customer', 'retailer')

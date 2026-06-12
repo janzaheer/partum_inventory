@@ -54,26 +54,26 @@
         </table>
     </div>
 </div>
-<script>
-       $(document).ready(function(){
-          $('.extra-items').on("keyup", function() {
-              var value = $(this).val().toLowerCase();
-              $(".ledger-table-body tr").filter(function() {
-                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-              });
-          });
-       })
+{% endblock %}
 
-    </script>
-<script>
+{% block scripts %}
+    {{ block.super }}
+    <script>
+        $(document).ready(function(){
+            $('.extra-items').on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $(".ledger-table-body tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
 
-$('#back-customer').on('click', function() {
-    var $this = $(this);
-  $this.button('loading');
-    setTimeout(function() {
-       $this.button('reset');
-   }, 5000);
-});
-
+            $('#back-customer').on('click', function() {
+                var $this = $(this);
+                $this.button('loading');
+                setTimeout(function() {
+                    $this.button('reset');
+                }, 5000);
+            });
+        });
     </script>
 {% endblock %}

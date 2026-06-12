@@ -179,11 +179,11 @@
 		});
         $(function () {
 
-            $('.invoice-item').live('focusout', function(){
+            $(document).on('focusout', '.invoice-item', function(){
                 var item_price = $(this).parent().parent().find("option[value='" + $(this).val() + "']").data('price');
                 $(this).parent().parent().parent().find('.price').val(item_price);
             });
-            $('#invoice_update').live('click', function () {
+            $(document).on('click', '#invoice_update', function () {
 
                 if ($('#item-name').hasClass('item-name') == false ) {
                     $('.item-error').show();
@@ -298,7 +298,7 @@
                         invoice_id: '{{ invoice.id }}',
                         items: JSON.stringify(items)
                     }, function (result, status) {
-                        window.location.href = '/sales/invoice/'+ result.invoice_id +/detail/;
+                        window.location.href = '/sales/invoice/' + result.invoice_id + '/detail/';
                     }
                 ).fail(function (xhr, status, errors) {
                     alert('Something is wrong! please check all fields and try again');

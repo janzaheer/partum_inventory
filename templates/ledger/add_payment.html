@@ -33,72 +33,74 @@
     </div>
 </div>
 
-<script>
-        $('.document').ready(function () {
-            $('.ledger-submit-btn').on('click', function () {
-                $(this).addClass('disabled');
-               $(this).html('<i class="fa fa-circle-o-notch fa-spin"></i> Loading...');
-                 var error= false;
+{% endblock %}
 
-                if ($('.amount').val() ==""){
+{% block scripts %}
+    {{ block.super }}
+    <script>
+        $(document).ready(function () {
+            var btn = null;
+
+            $('.ledger-submit-btn').on('click', function () {
+                btn = $(this);
+                btn.addClass('disabled');
+                btn.html('<i class="fa fa-circle-o-notch fa-spin"></i> Loading...');
+
+                var error = false;
+
+                if ($('.amount').val().trim() === "") {
                     $('.amount-error').show();
                     error = true;
-                }
-                else {
+                } else {
                     $('.amount-error').hide();
                 }
-                if ($('.date').val() ==""){
+
+                if ($('.date').val().trim() === "") {
                     $('.date-error').show();
                     error = true;
-                }
-                else {
+                } else {
                     $('.date-error').hide();
                 }
-                if ($('.description').val() == ""){
+
+                if ($('.description').val().trim() === "") {
                     $('.description-error').show();
                     error = true;
-                }
-                else {
+                } else {
                     $('.description-error').hide();
-
                 }
-                if (error == false){
-                    $('.new_ledger').submit();
-                }
-                 else
-                 {
-                     $(this).removeClass('disabled');
-                     $(this).html('Save Ledger');
-                     return;
-                 }
 
+                if (error) {
+                    btn.removeClass('disabled');
+                    btn.html('Save Ledger');
+                    return;
+                }
+
+                $('.new_ledger').submit();
             });
-        });
 
             $('.amount').keyup(function () {
                 $('.amount-error').hide();
-                checkDec(this);
+                validateDecimal(this);
             });
-            function checkDec(el){
-                var ex = /^[0-9]+\.?[0-9]*$/;
-                if(ex.test(el.value)==false){
-                    el.value = el.value.substring(0,el.value.length - 1);
-                }
-            }
+
             $('.description').keyup(function () {
                 $('.description-error').hide();
             });
 
+            function validateDecimal(el) {
+                var ex = /^[0-9]+\.?[0-9]*$/;
+                if (ex.test(el.value) === false) {
+                    el.value = el.value.substring(0, el.value.length - 1);
+                }
+            }
 
+            $('#back-customer').on('click', function() {
+                var $this = $(this);
+                $this.button('loading');
+                setTimeout(function() {
+                   $this.button('reset');
+                }, 5000);
+            });
+        });
     </script>
-<script>
-$('#back-customer').on('click', function() {
-    var $this = $(this);
-  $this.button('loading');
-    setTimeout(function() {
-       $this.button('reset');
-   }, 5000);
-});
-    </script>
-
 {% endblock %}

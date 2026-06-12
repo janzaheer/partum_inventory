@@ -209,8 +209,10 @@ class AddStockItems(AuthRequiredMixin, FormView):
     form_class = StockDetailsForm
 
     def form_valid(self, form):
-        form.save()
-        return HttpResponseRedirect(reverse('product:stock_items_list'))
+        stock_in = form.save()
+        return HttpResponseRedirect(reverse('product:stockin_list', kwargs={
+            'product_id': stock_in.product.id
+        }))
 
     def form_invalid(self, form):
         return super().form_invalid(form)
@@ -240,7 +242,7 @@ class StockOutItems(AuthRequiredMixin, FormView):
         return HttpResponseRedirect(reverse('product:stock_items_list'))
 
     def form_invalid(self, form):
-        return super().form_invalid(form)
+        return self.render_to_response(self.get_context_data(form=form))
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

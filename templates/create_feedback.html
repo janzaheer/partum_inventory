@@ -15,7 +15,7 @@
                         <label><strong>Feedback</strong></label>
                         <textarea class="form-control description" name="description" placeholder="FeedBack" rows="10"></textarea><br>
                         <input type="hidden" name="retailer" value="{{ request.user.retailer_user.retailer.id }}">
-                        <button type="button"  id="save" class="btn btn-primary ledger-submit-btn" style="float: right" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing Order">Done</button>
+                        <button type="submit"  id="save" class="btn btn-primary ledger-submit-btn" style="float: right" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing Order">Done</button>
                     </div>
                 </div>
             </form>
@@ -25,7 +25,7 @@
 <script>
         $('document').ready(function () {
 
-            $('.ledger-submit-btn').on ('click', function () {
+            $('.ledger-submit-btn').on ('click', function (event) {
                 var error = false;
 
                 if ($('.description').val() ==""){
@@ -43,8 +43,8 @@
                         $('.add-ledger-form').submit();
                 })
                 }
-                if (error == false) {
-
+                if (error) {
+                    event.preventDefault();
                 }
             });
 

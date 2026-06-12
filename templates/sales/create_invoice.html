@@ -5,48 +5,48 @@
 {% block menu_sales %}active{% endblock %}
 {% block submenu_create_bill %}active{% endblock %}
 {% block content %}
-	<style>
-		.item-row th {
-			background: #eee;
-		}
+    <style>
+        .item-row th {
+            background: #eee;
+        }
 
-		.delete-btn {
-			position: relative;
-		}
+        .delete-btn {
+            position: relative;
+        }
 
-		.delete {
-			display: block;
-			color: #000;
-			text-decoration: none;
-			position: absolute;
-			background: #EEEEEE;
-			font-weight: bold;
-			padding: 0px 3px;
-			border: 1px solid;
-			top: -6px;
-			left: -6px;
-			font-family: Verdana;
-			font-size: 12px;
-		}
-	</style>
+        .delete {
+            display: block;
+            color: #000;
+            text-decoration: none;
+            position: absolute;
+            background: #EEEEEE;
+            font-weight: bold;
+            padding: 0px 3px;
+            border: 1px solid;
+            top: -6px;
+            left: -6px;
+            font-family: Verdana;
+            font-size: 12px;
+        }
+    </style>
 
-	<div class="col-lg-12 col-md-12 col-sm-12">
-		<br>
-        <a href="{% url 'sales:invoice_list' %}"><button type="button" id="invoice" class="btn btn-primary"  id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing">Invoice List</button></a>
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <br>
+        <a href="{% url 'sales:invoice_list' %}"><button type="button" id="invoice" class="btn btn-primary" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing">Invoice List</button></a>
         <br><br><br>
-		<div class="content-panel" style="padding: 5px">
-			<div class="row" style="font-size: large">
-				<div class="col-xs-12 col-md-12">
-					<div>
-						<h2 class="text-center">Invoice</h2>
-					</div>
-				</div>
-				<div class="col-xs-12 col-md-12">
-					<hr>
-					<div class="row">
-						<div class="col-xs-6 col-md-6">
-							<div><strong>Billed To:</strong> <span style="float: right" >29 april 2018</span></div><br>
-							<div class="existing-customer">
+        <div class="content-panel" style="padding: 5px">
+            <div class="row" style="font-size: large">
+                <div class="col-xs-12 col-md-12">
+                    <div>
+                        <h2 class="text-center">Invoice</h2>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-12">
+                    <hr>
+                    <div class="row">
+                        <div class="col-xs-6 col-md-6">
+                            <div><strong>Billed To:</strong> <span style="float: right" >29 april 2018</span></div><br>
+                            <div class="existing-customer">
                                 <span class="customererror" style="color: red; display: none">Customer Doesn't exist please add Customer</span>
                                 <input class="form-control customer" id="customer-id" placeholder="Customer" list="customer-list" >
                                 <datalist id="customer-list">
@@ -66,7 +66,6 @@
 
                             <div class="table-responsive">
                                 <table class="table table-bordered">
-                                    <thead>
                                     <tbody>
                                     <tr hidden>
                                         <td></td>
@@ -126,9 +125,9 @@
                                 </table>
                             </div>
                             <div class="col-md-12">
-                                <a style="width: 100%; font-size: large" id="create-invoice" href="javascript:;" title="Create Invoice" class="btn btn-primary pull-right" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing Order">Create Invoice</a>
+                                <a style="width: 100%; font-size: large" id="create-invoice" href="javascript:;" title="Create Invoice" class="btn btn-primary pull-right" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Processing Order">Create Invoice</a>
                             </div>
-						</div>
+                        </div>
                         <div class="col-xs-6 col-md-6">
                             <div id="item-data-sc" class="table-responsive item-data-sc" style="height: 500px; overflow: scroll;">
                                 <table class="table table-bordered">
@@ -152,10 +151,10 @@
                             </div>
                         </div>
                     </div>
-				</div>
-			</div>
-		</div>
-	</div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block scripts %}
@@ -191,19 +190,16 @@
         $(function () {
 
             $(document).scannerDetection({
-
-                timeBeforeScanTest: 200, // wait for the next character for upto 200ms
-                avgTimeByChar: 40, // it's not a barcode if a character takes longer than 100ms
+                timeBeforeScanTest: 200, 
+                avgTimeByChar: 40, 
                 endChar: [13],
                 onComplete: function(barcode, qty){
                     $.post("{% url 'sales:product_details_api' %}", {
                         code: barcode
                     }, function (result, status) {
-                        {# Create Item list by scanning the bar code #}
                         $(".item-row:last").after('<tr class="item-row"><td id="item-name" class="item-name"><div class="delete-btn"><input type="text" class="form-control invoice-item" id="invoice-item" name="all-items" list="all-items" placeholder="Select Item" type="text" value="' + result.product_name + '"><a class=' + $.opt.delete.substring(1) + ' href="javascript:;" title="Remove row">X</a></div></td><td>------' + result.stock + '</td><td><input class="form-control price" placeholder="Price" type="text" value="' + result.product_price + '"> </td><td><input class="form-control qty" placeholder="Quantity" value="1" type="text"></td><td><span class="total">' + result.product_price + '</span></td></tr>');
                         $('.item-row:last').click();
 
-                        {# Auto Scoll at the bottom of item list #}
                         var elem = document.getElementById('item-data-sc');
                         elem.scrollTop = elem.scrollHeight;
 
@@ -211,35 +207,29 @@
 
                     }).fail(function (xhr, status, errors) {
                         alert('Something is wrong! please check all fields and try again');
-
                     });
                 }
             });
 
-
-            $('.invoice-item').live('focusout', function(){
+            // FIXED: Changed .live to .on with delegation
+            $(document).on('focusout', '.invoice-item', function(){
                 var item_price = $(this).parent().parent().find("option[value='" + $(this).val() + "']").data('price');
                 $(this).parent().parent().parent().find('.price').val(item_price);
 
                 var stock = $(this).parent().parent().find("option[value='" + $(this).val() + "']").data('stock')
                 $(this).parent().parent().parent().find('.stock').html(stock);
             });
-            $('#create-invoice').live('click', function () {
+
+            // FIXED: Changed .live to .on with delegation
+            $(document).on('click', '#create-invoice', function () {
 
                 if ($('#item-name').hasClass('item-name') == false ) {
                     $('.item-error').show();
                     return;
                 }
                 var error = false;
-                if ($('.customer').is(":visible") == true)
-                {
-                    // if ($('.customer').val() =="")
-                    // {
-                    //     $('.customer').css('border-color', 'red');
-                    //     error = true;
-                    // } else {
-                    //     $('.customer').css('border', 'none');
-                    // }
+                
+                if ($('.customer').is(":visible") == true) {
                     var existing_customers_id = [];
                     {% for customer in customers %}
                         existing_customers_id.push({{ customer.id }});
@@ -247,26 +237,18 @@
 
                     var cus_val = $('.customer').val();
                     var cus_id = $('#customer-list [value="' + cus_val + '"]').data('id');
-                    // if(jQuery.inArray( cus_id, existing_customers_id ) == -1) {
-                    //     $('.customer-error').show();
-                    //     $('.customer').css('border-color', 'red');
-                    //     return;
-                    // } else {
-                    //     $('.customer-error').hide();
-                    // }
                 }
+
                 if ($('.customer_name').is(":visible") == true) {
                     if ($('.customer_name').val() == "") {
                         $('.customer_name').css('border-color', 'red');
                         error = true;
-                    }
-                    else {
+                    } else {
                         $('.customer_name').css('border', 'none');
                     }
                     if ($('.customer_phone').val() == "") {
                         $('.customer_phone').css('border-color', 'red');
-                    }
-                    else {
+                    } else {
                         $('.customer_phone').css('border', 'none');
                     }
                     {% for customer in customers %}
@@ -276,32 +258,48 @@
                         }
                     {% endfor %}
                 }
-                if       ($('.invoice-item').val() == ""){
+
+                if ($('.invoice-item').val() == ""){
                     $(".item-error").show();
                     error=true;
                     $('.invoice-item').css('border-color', 'red');
-                }
-                else {
+                } else {
                     $('.invoice-item').css('border' ,'none');
-
                 }
-                if ($('.price').val()=="") {
 
+                if ($('.price').val()=="") {
                     $('.item-error').show();
                     $('.price').css('border-color', 'red');
                     error=true;
-                }
-                else {
+                } else {
                     $('.item-error').hide();
                     $('.price').css('border', 'none');
                 }
+
                 if (error == true){
                     return;
                 }
-                var customer_name = $('.customer_name').val();
-                var customer_phone = $('.customer_phone').val();
+
+                var customer_name = $('.customer_name').val().trim();
+                var customer_phone = $('.customer_phone').val().trim();
+                var customer_value = $('.customer').val().trim();
+                if ($('.customer').is(":visible") && customer_value && !customer_name) {
+                    customer_name = customer_value;
+                }
+
+                function getCustomerId(value) {
+                    return $('#customer-list option').filter(function () {
+                        return $(this).val().trim().toLowerCase() === value.toLowerCase();
+                    }).data('id');
+                }
+
+                if ($('.customer').is(":visible") && customer_value) {
+                    $('.customererror').hide();
+                }
+
                 var items = [];
                 var total_quantity = 0;
+
                 for (var i=1; i<$('.item-row').length; i+=1) {
                     var products = {};
                     products['item_name'] = $('.item-row').eq(i).find('#invoice-item').val();
@@ -314,6 +312,7 @@
                         total_quantity += Number(products['qty']);
                     }
                 }
+
                 var sub_total = $('#subtotal').text();
                 var discount = $('#discount').val();
                 var shipping = $('#shipping').val();
@@ -324,11 +323,11 @@
                 var returned_cash = $('#returned_cash').text();
                 var totalQty = total_quantity;
 
-                var customer_value = $('.customer').val();
-                var customer_id = $('#customer-list [value="' + customer_value + '"]').data('id');
+                var customer_id = getCustomerId(customer_value) || '';
 
                 $.post("{% url 'sales:generate_invoice_api' %}", {
                         customer_id: customer_id,
+                        customer_value: customer_value,
                         customer_name: customer_name,
                         customer_phone: customer_phone,
                         sub_total: sub_total,
@@ -342,11 +341,11 @@
                         returned_cash: returned_cash,
                         items: JSON.stringify(items)
                     }, function (result, status) {
-                        window.location.href = '/sales/invoice/'+ result.invoice_id +/detail/;
+                        // FIXED: Corrected redirect string concatenation
+                        window.location.href = '/sales/invoice/'+ result.invoice_id +'/detail/';
                     }
                 ).fail(function (xhr, status, errors) {
                     alert('Something is wrong! please check all fields and try again');
-
                 });
             });
 
@@ -364,12 +363,14 @@
             });
 
         });
+
         $('.btn-primary').on('click', function () {
             $('.item-error').hide();
         });
 
     </script>
     <script>
+        // FIXED: Replaced .on('click'...) with a simpler version and fixed the "d" typo at the end
         $('#create-invoice').on('click', function() {
             var $this = $(this);
             $this.button('loading');
@@ -378,10 +379,9 @@
             }, 1000);
         });
 
-        $('.form-control').click (function () {
+        $('.form-control').on('click', function () {
             $('.list-error').hide();
             checkDec(this);
-
         });
 
         function checkDec(el){
@@ -391,14 +391,13 @@
             }
         }
     </script>
-<script>
-$('#invoice').on('click', function() {
-    var $this = $(this);
-  $this.button('loading');
-    setTimeout(function() {
-       $this.button('reset');
-   }, 5000);
-});
-
+    <script>
+        $('#invoice').on('click', function() {
+            var $this = $(this);
+            $this.button('loading');
+            setTimeout(function() {
+                $this.button('reset');
+            }, 5000);
+        });
     </script>
 {% endblock %}

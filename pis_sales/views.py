@@ -8,6 +8,7 @@ from django.urls import reverse_lazy
 from django.db import transaction
 
 from pis_com.mixins import AuthRequiredMixin
+from pis_com.models import Customer
 from pis_product.models import Product, PurchasedProduct, StockOut
 from pis_sales.models import SalesHistory
 from pis_product.forms import PurchasedProductForm, ExtraItemForm, StockOutForm
@@ -100,6 +101,7 @@ class GenerateInvoiceAPIView(AuthRequiredMixin, View):
         paid_amount = self.request.POST.get('paid_amount')
         cash_payment = self.request.POST.get('cash_payment')
         returned_cash = self.request.POST.get('returned_cash')
+        customer_value = self.request.POST.get('customer_value')
 
         try:
             items = json.loads(self.request.POST.get('items'))
@@ -123,22 +125,53 @@ class GenerateInvoiceAPIView(AuthRequiredMixin, View):
                 'retailer': self.request.user.retailer_user.retailer.id,
             }
 
-            if self.request.POST.get('customer_id'):
-                billing_form_kwargs.update({
-                    'customer': self.request.POST.get('customer_id')
-                })
-            else:
-                customer_form_kwargs = {
-                    'customer_name': customer_name,
-                    'customer_phone': customer_phone,
-                    'retailer': self.request.user.retailer_user.retailer.id
-                }
-                customer_form = CustomerForm(customer_form_kwargs)
-                if customer_form.is_valid():
-                    self.customer = customer_form.save()
+            customer_id = self.request.POST.get('customer_id')
+            if customer_id in ('undefined', 'null'):
+                customer_id = None
+
+            if customer_id and str(customer_id).isdigit():
+                try:
+                    customer = Customer.objects.get(
+                        id=int(customer_id),
+                        retailer=self.request.user.retailer_user.retailer
+                    )
                     billing_form_kwargs.update({
-                        'customer': self.customer.id
+                        'customer': customer.id
                     })
+                except Customer.DoesNotExist:
+                    customer_id = None
+
+            if not customer_id:
+                customer_name_to_find = (customer_name or customer_value or '').strip()
+                customer_qs = Customer.objects.filter(
+                    retailer=self.request.user.retailer_user.retailer
+                )
+                if customer_name_to_find:
+                    customer_qs = customer_qs.filter(
+                        customer_name__iexact=customer_name_to_find
+                    )
+                    if customer_phone:
+                        customer_qs = customer_qs.filter(
+                            customer_phone=customer_phone
+                        )
+                customer = customer_qs.first()
+
+                if customer:
+                    billing_form_kwargs.update({
+                        'customer': customer.id
+                    })
+                elif customer_name_to_find:
+                    customer_form_kwargs = {
+                        'customer_name': customer_name_to_find,
+                        'customer_phone': customer_phone,
+                        'retailer': self.request.user.retailer_user.retailer.id
+                    }
+                    customer_form = CustomerForm(customer_form_kwargs)
+                    if customer_form.is_valid():
+                        self.customer = customer_form.save()
+                        billing_form_kwargs.update({
+                            'customer': self.customer.id
+                        })
 
             billing_form = BillingForm(billing_form_kwargs)
             if not billing_form.is_valid():
@@ -167,7 +200,14 @@ class GenerateInvoiceAPIView(AuthRequiredMixin, View):
                         purchased_items_id.append(purchased_item.id)
 
                         latest_stock_in = (
-                            product.stockin_product.all().latest('id'))
+                            product.stockin_product.order_by('id').last())
+                        if latest_stock_in is None:
+                            return JsonResponse({
+                                'error': (
+                                    'No stock entry found for product "%s". '
+                                    'Please add stock before creating an invoice.'
+                                ) % item_name
+                            }, status=400)
 
                         stock_out_form_kwargs = {
                             'product': product.id,
@@ -204,13 +244,11 @@ class GenerateInvoiceAPIView(AuthRequiredMixin, View):
             self.invoice.extra_items.set(extra_items_id)
             self.invoice.save()
 
-            if self.customer or self.request.POST.get('customer_id'):
+            if self.invoice.customer:
                 if float(remaining_payment):
                     ledger_form_kwargs = {
                         'retailer': self.request.user.retailer_user.retailer.id,
-                        'customer': (
-                            self.request.POST.get('customer_id') or
-                            self.customer.id),
+                        'customer': self.invoice.customer.id,
                         'invoice': self.invoice.id,
                         'amount': remaining_payment,
                         'description': (
@@ -398,7 +436,12 @@ class ProductDetailsAPIView(AuthRequiredMixin, View):
                 'message': 'Item does not exist',
             })
 
-        latest_stock = product_item.stockin_product.all().latest('id')
+        latest_stock = product_item.stockin_product.order_by('id').last()
+        if latest_stock is None:
+            return JsonResponse({
+                'status': False,
+                'message': 'Item has no stock records',
+            })
 
         all_stock = product_item.stockin_product.aggregate(
             total=Sum('quantity'))['total'] or 0

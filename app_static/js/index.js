@@ -164,24 +164,51 @@ $(document).ready(function() {
         if (todaySalesEl) {
             var todaySalesVal = parseInt(todaySalesEl.getAttribute('data-value') || '0', 10);
             var remaining = Math.max(0, 100 - todaySalesVal);
-            new Chart(todaySalesEl.getContext("2d")).Doughnut([
-                { value: todaySalesVal || 1, color: "#68dff0" },
-                { value: remaining || 1, color: "#fdfdfd" }
-            ]);
+            new Chart(todaySalesEl, {
+                type: 'doughnut',
+                data: {
+                    datasets: [{
+                        data: [todaySalesVal || 1, remaining || 1],
+                        backgroundColor: ['#68dff0', '#fdfdfd']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
         }
         if (todaysProfitEl) {
             var todayProfitVal = parseInt(todaysProfitEl.getAttribute('data-value') || '0', 10);
             var profitRemaining = Math.max(0, 100 - todayProfitVal);
-            new Chart(todaysProfitEl.getContext("2d")).Doughnut([
-                { value: todayProfitVal || 1, color: "#68dff0" },
-                { value: profitRemaining || 1, color: "#fdfdfd" }
-            ]);
+            new Chart(todaysProfitEl, {
+                type: 'doughnut',
+                data: {
+                    datasets: [{
+                        data: [todayProfitVal || 1, profitRemaining || 1],
+                        backgroundColor: ['#68dff0', '#fdfdfd']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
         }
         if (serverStatusEl) {
-            new Chart(serverStatusEl.getContext("2d")).Doughnut([
-                { value: 60, color: "#68dff0" },
-                { value: 40, color: "#fdfdfd" }
-            ]);
+            new Chart(serverStatusEl, {
+                type: 'doughnut',
+                data: {
+                    datasets: [{
+                        data: [60, 40],
+                        backgroundColor: ['#68dff0', '#fdfdfd']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
         }
     }
 });

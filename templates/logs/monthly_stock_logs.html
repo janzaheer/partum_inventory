@@ -62,8 +62,8 @@
                     {% if paginator.page_range|length > 1 %}
                         <div class="text-center">
                             <ul class="pagination">
-                                <li><a  style="background-color: #3070A8; color: white" class="page_previous" href="{% if page_obj.has_previous %}{% url 'product:monthly_stock_logs' %}?page={{ page_obj.previous_page_number }}{% else %}#{% endif %}" title="Previous"><<</a></li>
-                                <li><a style="background-color: #3070A8; color: white" class="page_next" href="{% if page_obj.has_next %}{% url 'product:monthly_stock_logs' %}?page={{ page_obj.next_page_number }}{% else %}#{% endif %}" title="Next">>></a></li>
+                                <li><a  style="background-color: #3070A8; color: white" class="page_previous" href="{% if page_obj.has_previous %}{% url 'product:monthly_stock_logs' %}?month={{ month }}&page={{ page_obj.previous_page_number }}{% else %}#{% endif %}" title="Previous"><<</a></li>
+                                <li><a style="background-color: #3070A8; color: white" class="page_next" href="{% if page_obj.has_next %}{% url 'product:monthly_stock_logs' %}?month={{ month }}&page={{ page_obj.next_page_number }}{% else %}#{% endif %}" title="Next">>></a></li>
                             </ul>
                         </div>
                     {% endif %}
@@ -71,16 +71,28 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
     <script>
         $(document).ready(function(){
+            $('#month').val("{{ month }}");
 
-            $('#month option:contains("{{ month }}")').prop('selected',true);
-
-            $(".search-logs").on("keyup", function() {
-                var value = $(this).val().toLowerCase();
-                $(".logs-table-body tr").filter(function() {
-                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                });
+            $(document).on("keyup", ".search-logs", function() {
+                var value = $(this).val().toLowerCase().trim();
+                if (value === "") {
+                  $(".logs-table-body tr").show();
+                } else {
+                  $(".logs-table-body tr").each(function() {
+                    var text = $(this).text().toLowerCase();
+                    if (text.includes(value)) {
+                      $(this).show();
+                    } else {
+                      $(this).hide();
+                    }
+                  });
+                }
             });
 
             $('.month').on('change', function () {
@@ -89,16 +101,16 @@
                 } else {
                     window.location.href = '{% url "product:monthly_stock_logs" %}' + '?month=' + $(this).val();
                 }
-            })
+            });
         });
     </script>
-<script>
-$('#stock-log').on('click', function() {
-    var $this = $(this);
-  $this.button('loading');
-    setTimeout(function() {
-       $this.button('reset');
-   }, 5000);
-});
+    <script>
+        $('#stock-log').on('click', function() {
+            var $this = $(this);
+            $this.button('loading');
+            setTimeout(function() {
+               $this.button('reset');
+           }, 5000);
+        });
     </script>
 {% endblock %}
